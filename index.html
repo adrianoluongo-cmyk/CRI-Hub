@@ -13,23 +13,22 @@
             --blue: #00d4ff;
             --yellow: #ffcc00;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
-        h1 { margin: 0; color: var(--blue); text-transform: uppercase; font-size: 2em; }
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 20px; height: 82vh; }
-        .colonna { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #30363d; }
-        .colonna-titolo { text-align: center; font-weight: bold; font-size: 1.4em; color: var(--yellow); padding-bottom: 10px; margin-bottom: 15px; border-bottom: 2px solid #333; text-transform: uppercase; }
-        .lista-cards { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex-grow: 1; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
+        .header { text-align: center; margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+        h1 { margin: 0; color: var(--blue); text-transform: uppercase; font-size: 1.8em; letter-spacing: 1px; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 15px; height: 85vh; }
+        .colonna { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #30363d; min-width: 0; }
+        .colonna-titolo { text-align: center; font-weight: bold; font-size: 1.3em; color: var(--yellow); padding-bottom: 10px; margin-bottom: 15px; border-bottom: 2px solid #444; text-transform: uppercase; }
+        .lista-cards { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
         .grid-secondari { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { background: var(--card-bg); border-radius: 8px; padding: 12px; border-left: 10px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+        .card { background: var(--card-bg); border-radius: 8px; padding: 10px; border-left: 10px solid; box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
         .bordo-verde { border-left-color: var(--green); }
         .bordo-arancio { border-left-color: var(--orange); }
         .bordo-rosso { border-left-color: var(--red); }
-        .sigla { font-size: 1.2em; font-weight: bold; display: block; }
-        .mezzo { font-size: 0.85em; color: #8b949e; display: block; text-transform: uppercase; }
-        .status-badge { font-weight: bold; font-size: 0.85em; color: #eee; margin-top: 5px; display: block; }
-        .info-footer { background: rgba(0, 212, 255, 0.1); color: var(--blue); padding: 10px; font-size: 0.9em; text-align: center; border-radius: 8px; margin-top: 15px; font-weight: bold; border: 1px dashed var(--blue); }
-        .no-data { color: #555; font-style: italic; text-align: center; padding: 20px; }
+        .sigla { font-size: 1.2em; font-weight: bold; display: block; color: white; }
+        .mezzo { font-size: 0.8em; color: #8b949e; display: block; text-transform: uppercase; margin: 2px 0; }
+        .status-badge { font-weight: bold; font-size: 0.85em; color: #eee; }
+        .info-footer { background: rgba(0, 212, 255, 0.05); color: var(--blue); padding: 8px; font-size: 0.85em; text-align: center; border-radius: 6px; margin-top: auto; font-weight: bold; border: 1px dashed var(--blue); }
     </style>
 </head>
 <body>
@@ -55,7 +54,6 @@
     </div>
 
     <script>
-        // Link aggiornato con gid=0 per puntare al primo foglio
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
         async function updateDashboard() {
@@ -63,7 +61,7 @@
                 const response = await fetch(sheetUrl + '&nocache=' + new Date().getTime());
                 const csvText = await response.text();
                 
-                // Gestione separatore
+                // Rileva se il separatore è virgola o punto e virgola
                 const sep = csvText.includes(';') ? ';' : ',';
                 const rows = csvText.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
                 
@@ -75,11 +73,6 @@
 
                 Object.values(containers).forEach(c => c.innerHTML = "");
 
-                if (rows.length === 0) {
-                    Object.values(containers).forEach(c => c.innerHTML = "<div class='no-data'>Nessun dato trovato</div>");
-                    return;
-                }
-
                 rows.forEach(row => {
                     const cols = row.split(sep).map(c => c.replace(/"/g, '').trim());
                     if (cols.length < 4) return;
@@ -87,8 +80,13 @@
                     const [categoria, sigla, veicolo, status] = cols;
                     const sU = status.toUpperCase();
 
+                    // Logica Colori
                     let colorClass = "bordo-rosso";
-                    const statusOperativi = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
+                    const statusOperativi = [
+                        "OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", 
+                        "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", 
+                        "BACKUP CONV SOMMA L.DO"
+                    ];
 
                     if (statusOperativi.includes(sU)) {
                         colorClass = "bordo-verde";
@@ -104,7 +102,7 @@
                         </div>
                     `;
 
-                    // Smistamento
+                    // SMISTAMENTO NELLE TRE COLONNE
                     if (sU.includes("GALLARATE") || sU.includes("BACKUP CONV 1") || sU.includes("BACKUP CONV 2")) {
                         containers.gallarate.innerHTML += cardHtml;
                     } else if (sU.includes("SOMMA")) {
@@ -113,15 +111,8 @@
                         containers.altri.innerHTML += cardHtml;
                     }
                 });
-
-                // Se una colonna rimane vuota dopo lo smistamento
-                Object.values(containers).forEach(c => {
-                    if (c.innerHTML === "") c.innerHTML = "<div class='no-data'>Nessun mezzo attivo</div>";
-                });
-
             } catch (e) {
                 console.error("Errore:", e);
-                document.body.innerHTML += "<div style='color:red; text-align:center;'>Errore di caricamento: verificare link CSV</div>";
             }
         }
 
