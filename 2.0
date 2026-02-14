@@ -31,47 +31,47 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .colonna-titolo {
             text-align: center;
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1.4em;
             color: #ffcc00;
             padding-bottom: 10px;
             border-bottom: 2px solid #333;
             margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
         .card {
             background: var(--card-bg);
             border-radius: 8px;
             padding: 15px;
-            border-left: 8px solid;
+            border-left: 10px solid;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            position: relative;
         }
 
         .bordo-verde { border-left-color: var(--green); }
         .bordo-arancio { border-left-color: var(--orange); }
         .bordo-rosso { border-left-color: var(--red); }
 
-        .label-ruolo { font-size: 0.7em; color: var(--blue); text-transform: uppercase; font-weight: bold; }
-        .sigla { font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; }
-        .mezzo { font-size: 0.85em; color: #8b949e; }
-        .status-txt { font-weight: bold; font-size: 0.9em; margin-top: 8px; display: block; }
+        .label-ruolo { font-size: 0.75em; color: var(--blue); text-transform: uppercase; font-weight: bold; }
+        .sigla { font-size: 1.4em; font-weight: bold; display: block; margin-top: 3px; }
+        .mezzo { font-size: 0.9em; color: #8b949e; margin-bottom: 5px; display: block; }
+        .status-txt { font-weight: bold; font-size: 1em; margin-top: 8px; display: block; }
 
-        /* Avviso speciale Somma */
         .info-marzo {
-            background: rgba(0, 212, 255, 0.1);
+            background: rgba(0, 212, 255, 0.05);
             border: 1px dashed var(--blue);
             color: var(--blue);
-            padding: 10px;
-            font-size: 0.8em;
+            padding: 12px;
+            font-size: 0.9em;
             text-align: center;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: auto;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -82,18 +82,18 @@
     </div>
 
     <div class="dashboard">
-        <div class="colonna" id="col-gallarate">
-            <div class="colonna-titolo">AREA GALLARATE</div>
-            <div id="data-gallarate"></div>
+        <div class="colonna">
+            <div class="colonna-titolo">GALLARATE</div>
+            <div id="data-gallarate" style="display: flex; flex-direction: column; gap: 12px;"></div>
         </div>
 
-        <div class="colonna" id="col-somma">
-            <div class="colonna-titolo">AREA SOMMA LOMBARDO</div>
-            <div id="data-somma"></div>
-            <div class="info-marzo">⚠️ Backup in arrivo: MARZO 2026</div>
+        <div class="colonna">
+            <div class="colonna-titolo">SOMMA LOMBARDO</div>
+            <div id="data-somma" style="display: flex; flex-direction: column; gap: 12px;"></div>
+            <div class="info-marzo">ℹ️ BACKUP IN ARRIVO: MARZO 2026</div>
         </div>
 
-        <div class="colonna" id="col-altri">
+        <div class="colonna">
             <div class="colonna-titolo">SECONDARI E VETTURE</div>
             <div id="data-altri" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
         </div>
@@ -111,4 +111,4 @@
                 const containers = {
                     gallarate: document.getElementById('data-gallarate'),
                     somma: document.getElementById('data-somma'),
-                    altri: document.getElementById('data-altri')
+                    altri: document.getElementById('data-altri
