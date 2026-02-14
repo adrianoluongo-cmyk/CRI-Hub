@@ -18,19 +18,14 @@
         .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #30363d; padding-bottom: 10px; position: relative; }
         h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 3px; font-size: 2em; }
         
-        /* OROLOGIO AGGIORNAMENTO */
-        .last-update { 
-            font-size: 0.9em; 
-            color: #8b949e; 
-            margin-top: 5px;
-            font-family: monospace;
-        }
+        .last-update { font-size: 0.9em; color: #8b949e; margin-top: 5px; font-family: monospace; }
         .update-flash { color: var(--green); font-weight: bold; }
 
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 82vh; }
+        /* Dashboard a 4 colonne ora */
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; height: 82vh; }
         
-        .colonna { display: flex; flex-direction: column; gap: 20px; }
-        .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.6em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+        .colonna { display: flex; flex-direction: column; gap: 15px; min-width: 0; }
+        .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
 
         .gruppo-mezzi {
             background: var(--panel);
@@ -41,31 +36,32 @@
         }
 
         .main-unit {
-            padding: 20px;
-            border-left: 15px solid;
+            padding: 15px;
+            border-left: 12px solid;
             background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
         }
-        .main-unit .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; }
-        .main-unit .mezzo { font-size: 1em; color: #8b949e; text-transform: uppercase; margin: 5px 0; }
-        .main-unit .status { font-size: 1.1em; font-weight: bold; color: #fff; }
+        .main-unit .sigla { font-size: 1.8em; font-weight: 900; line-height: 1; }
+        .main-unit .mezzo { font-size: 0.9em; color: #8b949e; text-transform: uppercase; margin: 5px 0; }
+        .main-unit .status { font-size: 1em; font-weight: bold; color: #fff; }
 
         .backup-unit {
-            padding: 10px 20px;
+            padding: 8px 15px;
             background: rgba(0,0,0,0.3);
-            border-left: 8px solid;
+            border-left: 6px solid;
             border-top: 1px solid #30363d;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .backup-unit .sigla { font-size: 1.2em; font-weight: bold; color: #c9d1d9; }
-        .backup-unit .status { font-size: 0.85em; font-weight: bold; }
-        .backup-label { font-size: 0.7em; color: var(--blue); font-weight: bold; }
+        .backup-unit .sigla { font-size: 1.1em; font-weight: bold; color: #c9d1d9; }
+        .backup-unit .status { font-size: 0.8em; font-weight: bold; }
+        .backup-label { font-size: 0.65em; color: var(--blue); font-weight: bold; }
         
-        .info-placeholder { color: var(--blue); font-style: italic; font-size: 0.9em; font-weight: bold; }
+        .info-placeholder { color: #555; font-style: italic; font-size: 0.85em; }
+        .info-somma { color: var(--blue); font-style: italic; font-size: 0.85em; font-weight: bold; }
 
-        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; }
-        .card-small { background: var(--panel); padding: 10px; border-radius: 6px; border-left: 6px solid; font-size: 0.9em; }
+        .grid-altri { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+        .card-small { background: var(--panel); padding: 8px; border-radius: 6px; border-left: 5px solid; font-size: 0.85em; }
 
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
@@ -86,11 +82,15 @@
         </div>
 
         <div class="colonna" id="col-somma">
-            <div class="colonna-titolo">SOMMA LOMBARDO</div>
+            <div class="colonna-titolo">SOMMA L.DO</div>
+        </div>
+
+        <div class="colonna" id="col-sumirago">
+            <div class="colonna-titolo">SUMIRAGO</div>
         </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">SECONDARI / VETTURE</div>
+            <div class="colonna-titolo">SECONDARI</div>
             <div id="col-altri" class="grid-altri"></div>
         </div>
     </div>
@@ -101,9 +101,11 @@
         function getStatusClass(status) {
             if (!status) return "status-off";
             const s = status.toUpperCase();
-            const ok = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
-            if (ok.includes(s)) return "status-ok";
+            const ok = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO", "MANUTENZIONE"];
+            
+            // Gestione specifica manutenzione come arancio
             if (s.includes("MANUTENZIONE")) return "status-man";
+            if (ok.includes(s)) return "status-ok";
             return "status-off";
         }
 
@@ -115,20 +117,25 @@
                 const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
                 
                 const data = rows.map(r => r.split(sep).map(c => c.replace(/"/g, '').trim()));
-                const find = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
+                
+                // Funzioni di ricerca avanzate
+                const findByStatus = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
+                const findBySigla = (siglaPart) => data.find(d => d[1].toUpperCase().includes(siglaPart)) || null;
 
-                // Aggiornamento orario
                 const oraAttuale = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 document.getElementById('update-time').innerHTML = `Ultimo aggiornamento dati: <span class="update-flash">${oraAttuale}</span>`;
 
-                const groups = [
-                    { title: "CONVENZIONE 1", main: find("GALLARATE CONV 1"), backup: find("BACKUP CONV 1"), target: "col-gallarate" },
-                    { title: "CONVENZIONE 2", main: find("GALLARATE CONV 2"), backup: find("BACKUP CONV 2"), target: "col-gallarate" },
-                    { title: "SOMMA", main: find("SOMMA LOMBARDO"), backup: "MARZO2026", target: "col-somma" }
-                ];
-
+                // Reset colonne
                 document.getElementById('col-gallarate').innerHTML = '<div class="colonna-titolo">GALLARATE</div>';
-                document.getElementById('col-somma').innerHTML = '<div class="colonna-titolo">SOMMA LOMBARDO</div>';
+                document.getElementById('col-somma').innerHTML = '<div class="colonna-titolo">SOMMA L.DO</div>';
+                document.getElementById('col-sumirago').innerHTML = '<div class="colonna-titolo">SUMIRAGO</div>';
+
+                const groups = [
+                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1") },
+                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2") },
+                    { target: "col-somma", main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026" },
+                    { target: "col-sumirago", main: findBySigla("VA11-81"), backup: "NONE" }
+                ];
 
                 groups.forEach(g => {
                     if (!g.main) return;
@@ -142,7 +149,12 @@
                     if (g.backup === "MARZO2026") {
                         html += `<div class="backup-unit status-off">
                             <div class="backup-label">BACKUP</div>
-                            <div class="info-placeholder">In arrivo a Marzo 2026</div>
+                            <div class="info-somma">In arrivo a Marzo 2026</div>
+                        </div>`;
+                    } else if (g.backup === "NONE") {
+                        html += `<div class="backup-unit status-off">
+                            <div class="backup-label">BACKUP</div>
+                            <div class="info-placeholder">Nessun backup previsto</div>
                         </div>`;
                     } else if (g.backup) {
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
@@ -154,23 +166,25 @@
                     document.getElementById(g.target).innerHTML += html;
                 });
 
+                // Renderizza Altri
                 const altriCont = document.getElementById('col-altri');
                 altriCont.innerHTML = "";
                 data.forEach(d => {
                     const s = d[3].toUpperCase();
-                    if (!s.includes("GALLARATE") && !s.includes("SOMMA") && !s.includes("BACKUP CONV")) {
+                    const sigla = d[1].toUpperCase();
+                    // Escludi quelli già mappati
+                    const isMapped = s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP CONV") || sigla.includes("VA11-81");
+                    if (!isMapped) {
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
-                                <strong>${d[1]}</strong><br>
-                                <small>${d[2]}</small><br>
-                                <span style="font-size:0.8em">${d[3]}</span>
+                                <strong>${d[1]}</strong> - ${d[2]}<br>
+                                <span style="font-size:0.8em; opacity:0.8">${d[3]}</span>
                             </div>`;
                     }
                 });
 
             } catch (e) { 
-                console.error(e);
-                document.getElementById('update-time').innerHTML = `<span style="color:var(--red)">Errore di sincronizzazione</span>`;
+                document.getElementById('update-time').innerHTML = `<span style="color:var(--red)">Errore sincronizzazione</span>`;
             }
         }
 
