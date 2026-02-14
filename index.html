@@ -2,39 +2,71 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Autoparco Live</title>
+    <title>Dashboard Autoparco Pro</title>
     <style>
         :root {
-            --bg: #0d1117;
-            --card-bg: #161b22;
+            --bg: #05070a;
+            --card-bg: #1c2128;
             --green: #2ecc71;
             --orange: #f39c12;
             --red: #e74c3c;
             --blue: #00d4ff;
-            --yellow: #ffcc00;
+            --gold: #ffcc00;
         }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
-        .header { text-align: center; margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
-        h1 { margin: 0; color: var(--blue); text-transform: uppercase; font-size: 1.8em; letter-spacing: 1px; }
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 15px; height: 85vh; }
-        .colonna { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #30363d; min-width: 0; }
-        .colonna-titolo { text-align: center; font-weight: bold; font-size: 1.3em; color: var(--yellow); padding-bottom: 10px; margin-bottom: 15px; border-bottom: 2px solid #444; text-transform: uppercase; }
-        .lista-cards { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
-        .grid-secondari { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { background: var(--card-bg); border-radius: 8px; padding: 10px; border-left: 10px solid; box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        h1 { margin: 0; color: var(--blue); text-transform: uppercase; font-size: 1.8em; letter-spacing: 2px; }
+
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 20px; height: 85vh; }
+        .colonna { background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #30363d; }
+        .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.5em; color: var(--gold); padding-bottom: 15px; margin-bottom: 15px; border-bottom: 2px solid #444; }
+
+        .lista-cards { display: flex; flex-direction: column; gap: 15px; }
+        
+        /* CARD PRINCIPALE (CONV 1, CONV 2, SOMMA) */
+        .card-main {
+            background: #2d333b;
+            border-radius: 10px;
+            padding: 18px;
+            border-left: 15px solid;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            position: relative;
+            transform: scale(1.02);
+            margin-bottom: 10px;
+        }
+        .card-main::after { content: "⭐ TITOLARE"; position: absolute; top: 10px; right: 10px; font-size: 0.65em; background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+
+        /* CARD BACKUP */
+        .card-backup {
+            background: #1c2128;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 8px solid;
+            margin-left: 20px; /* Rientro visivo */
+            opacity: 0.9;
+        }
+        .card-backup::after { content: "🔄 SOSTITUTO"; position: absolute; top: 10px; right: 10px; font-size: 0.6em; color: #8b949e; }
+
+        /* CARD ALTRI MEZZI */
+        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card-small { background: #161b22; border-radius: 6px; padding: 10px; border-left: 6px solid; font-size: 0.9em; }
+
         .bordo-verde { border-left-color: var(--green); }
         .bordo-arancio { border-left-color: var(--orange); }
         .bordo-rosso { border-left-color: var(--red); }
-        .sigla { font-size: 1.2em; font-weight: bold; display: block; color: white; }
-        .mezzo { font-size: 0.8em; color: #8b949e; display: block; text-transform: uppercase; margin: 2px 0; }
-        .status-badge { font-weight: bold; font-size: 0.85em; color: #eee; }
-        .info-footer { background: rgba(0, 212, 255, 0.05); color: var(--blue); padding: 8px; font-size: 0.85em; text-align: center; border-radius: 6px; margin-top: auto; font-weight: bold; border: 1px dashed var(--blue); }
+
+        .sigla { font-size: 1.4em; font-weight: bold; display: block; }
+        .mezzo { font-size: 0.8em; color: #8b949e; text-transform: uppercase; }
+        .status { font-weight: bold; font-size: 0.9em; margin-top: 5px; display: block; color: #fff; }
+
+        .info-footer { background: rgba(0, 212, 255, 0.1); color: var(--blue); padding: 10px; font-size: 0.9em; text-align: center; border-radius: 8px; margin-top: auto; font-weight: bold; border: 1px dashed var(--blue); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>SITUAZIONE OPERATIVA AUTOPARCO</h1>
+        <h1>SITUAZIONE OPERATIVA REAL-TIME</h1>
     </div>
 
     <div class="dashboard">
@@ -42,14 +74,16 @@
             <div class="colonna-titolo">GALLARATE</div>
             <div id="col-gallarate" class="lista-cards"></div>
         </div>
+
         <div class="colonna">
             <div class="colonna-titolo">SOMMA LOMBARDO</div>
             <div id="col-somma" class="lista-cards"></div>
-            <div class="info-footer">ℹ️ BACKUP IN ARRIVO: MARZO 2026</div>
+            <div class="info-footer">ℹ️ NUOVO BACKUP IN ARRIVO: MARZO 2026</div>
         </div>
+
         <div class="colonna">
-            <div class="colonna-titolo">SECONDARI E VETTURE</div>
-            <div id="col-altri" class="lista-cards grid-secondari"></div>
+            <div class="colonna-titolo">ALTRI MEZZI</div>
+            <div id="col-altri" class="grid-altri"></div>
         </div>
     </div>
 
@@ -58,10 +92,8 @@
 
         async function updateDashboard() {
             try {
-                const response = await fetch(sheetUrl + '&nocache=' + new Date().getTime());
+                const response = await fetch(sheetUrl + '&t=' + Date.now());
                 const csvText = await response.text();
-                
-                // Rileva se il separatore è virgola o punto e virgola
                 const sep = csvText.includes(';') ? ';' : ',';
                 const rows = csvText.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
                 
@@ -77,32 +109,30 @@
                     const cols = row.split(sep).map(c => c.replace(/"/g, '').trim());
                     if (cols.length < 4) return;
                     
-                    const [categoria, sigla, veicolo, status] = cols;
+                    const [cat, sigla, mezzo, status] = cols;
                     const sU = status.toUpperCase();
 
-                    // Logica Colori
-                    let colorClass = "bordo-rosso";
-                    const statusOperativi = [
-                        "OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", 
-                        "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", 
-                        "BACKUP CONV SOMMA L.DO"
-                    ];
+                    // LOGICA COLORI
+                    let color = "bordo-rosso";
+                    const operativi = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
+                    if (operativi.includes(sU)) color = "bordo-verde";
+                    else if (sU.includes("MANUTENZIONE")) color = "bordo-arancio";
 
-                    if (statusOperativi.includes(sU)) {
-                        colorClass = "bordo-verde";
-                    } else if (sU.includes("MANUTENZIONE")) {
-                        colorClass = "bordo-arancio";
+                    // LOGICA CLASSIFICAZIONE CARD
+                    let cardType = "card-small";
+                    if (sU.includes("CONV 1") || sU.includes("CONV 2") || sU === "SOMMA LOMBARDO") {
+                        cardType = sU.includes("BACKUP") ? "card-backup" : "card-main";
                     }
 
                     const cardHtml = `
-                        <div class="card ${colorClass}">
-                            <div class="sigla">${sigla}</div>
-                            <div class="mezzo">${veicolo}</div>
-                            <div class="status-badge">${status}</div>
+                        <div class="card ${cardType} ${color}" style="position:relative">
+                            <span class="sigla">${sigla}</span>
+                            <span class="mezzo">${mezzo}</span>
+                            <span class="status">${status}</span>
                         </div>
                     `;
 
-                    // SMISTAMENTO NELLE TRE COLONNE
+                    // SMISTAMENTO
                     if (sU.includes("GALLARATE") || sU.includes("BACKUP CONV 1") || sU.includes("BACKUP CONV 2")) {
                         containers.gallarate.innerHTML += cardHtml;
                     } else if (sU.includes("SOMMA")) {
@@ -111,9 +141,7 @@
                         containers.altri.innerHTML += cardHtml;
                     }
                 });
-            } catch (e) {
-                console.error("Errore:", e);
-            }
+            } catch (e) { console.error(e); }
         }
 
         updateDashboard();
