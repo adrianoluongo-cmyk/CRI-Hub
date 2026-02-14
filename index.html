@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Operatività Autoparco 118</title>
+    <title>Status Real Time Autoparco</title>
     <style>
         :root {
             --bg: #0a0c10;
@@ -15,15 +15,23 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
         
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #30363d; padding-bottom: 10px; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #30363d; padding-bottom: 10px; position: relative; }
         h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 3px; font-size: 2em; }
+        
+        /* OROLOGIO AGGIORNAMENTO */
+        .last-update { 
+            font-size: 0.9em; 
+            color: #8b949e; 
+            margin-top: 5px;
+            font-family: monospace;
+        }
+        .update-flash { color: var(--green); font-weight: bold; }
 
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 85vh; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 82vh; }
         
         .colonna { display: flex; flex-direction: column; gap: 20px; }
         .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.6em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
 
-        /* BOX ACCOPPIATO (TITOLARE + BACKUP) */
         .gruppo-mezzi {
             background: var(--panel);
             border-radius: 12px;
@@ -32,7 +40,6 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
-        /* STILE TITOLARE */
         .main-unit {
             padding: 20px;
             border-left: 15px solid;
@@ -42,7 +49,6 @@
         .main-unit .mezzo { font-size: 1em; color: #8b949e; text-transform: uppercase; margin: 5px 0; }
         .main-unit .status { font-size: 1.1em; font-weight: bold; color: #fff; }
 
-        /* STILE BACKUP */
         .backup-unit {
             padding: 10px 20px;
             background: rgba(0,0,0,0.3);
@@ -55,33 +61,33 @@
         .backup-unit .sigla { font-size: 1.2em; font-weight: bold; color: #c9d1d9; }
         .backup-unit .status { font-size: 0.85em; font-weight: bold; }
         .backup-label { font-size: 0.7em; color: var(--blue); font-weight: bold; }
+        
+        .info-placeholder { color: var(--blue); font-style: italic; font-size: 0.9em; font-weight: bold; }
 
-        /* ALTRI MEZZI */
-        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; }
         .card-small { background: var(--panel); padding: 10px; border-radius: 6px; border-left: 6px solid; font-size: 0.9em; }
 
-        /* COLORI */
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
 
-        .info-marzo { background: rgba(88, 166, 255, 0.1); border: 1px dashed var(--blue); color: var(--blue); padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>SITUAZIONE OPERATIVA FLOTTA</h1>
+        <h1>Status Real Time Autoparco</h1>
+        <div class="last-update" id="update-time">In attesa di sincronizzazione...</div>
     </div>
 
     <div class="dashboard">
         <div class="colonna" id="col-gallarate">
             <div class="colonna-titolo">GALLARATE</div>
-            </div>
+        </div>
 
         <div class="colonna" id="col-somma">
             <div class="colonna-titolo">SOMMA LOMBARDO</div>
-            </div>
+        </div>
 
         <div class="colonna">
             <div class="colonna-titolo">SECONDARI / VETTURE</div>
@@ -93,6 +99,7 @@
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
         function getStatusClass(status) {
+            if (!status) return "status-off";
             const s = status.toUpperCase();
             const ok = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
             if (ok.includes(s)) return "status-ok";
@@ -108,17 +115,18 @@
                 const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
                 
                 const data = rows.map(r => r.split(sep).map(c => c.replace(/"/g, '').trim()));
-                
-                // Organizzazione Dati
                 const find = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
+
+                // Aggiornamento orario
+                const oraAttuale = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                document.getElementById('update-time').innerHTML = `Ultimo aggiornamento dati: <span class="update-flash">${oraAttuale}</span>`;
 
                 const groups = [
                     { title: "CONVENZIONE 1", main: find("GALLARATE CONV 1"), backup: find("BACKUP CONV 1"), target: "col-gallarate" },
                     { title: "CONVENZIONE 2", main: find("GALLARATE CONV 2"), backup: find("BACKUP CONV 2"), target: "col-gallarate" },
-                    { title: "POSTAZIONE SOMMA", main: find("SOMMA LOMBARDO"), backup: null, target: "col-somma" }
+                    { title: "SOMMA", main: find("SOMMA LOMBARDO"), backup: "MARZO2026", target: "col-somma" }
                 ];
 
-                // Renderizza Gallarate e Somma
                 document.getElementById('col-gallarate').innerHTML = '<div class="colonna-titolo">GALLARATE</div>';
                 document.getElementById('col-somma').innerHTML = '<div class="colonna-titolo">SOMMA LOMBARDO</div>';
 
@@ -131,7 +139,12 @@
                             <div class="status">${g.main[3]}</div>
                         </div>`;
                     
-                    if (g.backup) {
+                    if (g.backup === "MARZO2026") {
+                        html += `<div class="backup-unit status-off">
+                            <div class="backup-label">BACKUP</div>
+                            <div class="info-placeholder">In arrivo a Marzo 2026</div>
+                        </div>`;
+                    } else if (g.backup) {
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
                             <div><span class="backup-label">BACKUP</span><br><span class="sigla">${g.backup[1]}</span></div>
                             <div class="status">${g.backup[3]}</div>
@@ -141,10 +154,6 @@
                     document.getElementById(g.target).innerHTML += html;
                 });
 
-                // Somma footer
-                document.getElementById('col-somma').innerHTML += '<div class="info-marzo">ℹ️ BACKUP IN ARRIVO: MARZO 2026</div>';
-
-                // Renderizza Altri
                 const altriCont = document.getElementById('col-altri');
                 altriCont.innerHTML = "";
                 data.forEach(d => {
@@ -159,7 +168,10 @@
                     }
                 });
 
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                console.error(e);
+                document.getElementById('update-time').innerHTML = `<span style="color:var(--red)">Errore di sincronizzazione</span>`;
+            }
         }
 
         update();
