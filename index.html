@@ -15,10 +15,21 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
         
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #30363d; padding-bottom: 15px; }
+        /* HEADER CON LOGO */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid #30363d; 
+            padding-bottom: 15px; 
+        }
+        .header-left { flex: 1; } /* Spazio vuoto a sinistra per bilanciare */
+        .header-center { flex: 2; text-align: center; }
+        .header-right { flex: 1; text-align: right; }
+
         h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 3px; font-size: 2.2em; }
         
-        /* OROLOGIO PIÙ GRANDE */
         .last-update { 
             font-size: 1.3em; 
             color: #8b949e; 
@@ -31,12 +42,16 @@
         }
         .update-flash { color: var(--green); font-weight: bold; }
 
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 78vh; }
-        
+        /* LOGO */
+        .logo-img {
+            max-height: 80px; /* Regola l'altezza come preferisci */
+            width: auto;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+        }
+
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 75vh; }
         .colonna { display: flex; flex-direction: column; gap: 15px; min-width: 0; }
         .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.6em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
-        
-        /* Sotto-titolo specifico per Sumirago */
         .sub-titolo { text-align: center; font-weight: 800; font-size: 1.3em; color: var(--blue); text-transform: uppercase; margin: 15px 0 5px 0; border-top: 1px solid #333; padding-top: 15px; }
 
         .gruppo-mezzi {
@@ -84,8 +99,14 @@
 <body>
 
     <div class="header">
-        <h1>Status Real Time Autoparco</h1>
-        <div class="last-update" id="update-time">SINCRONIZZAZIONE...</div>
+        <div class="header-left"></div> <div class="header-center">
+            <h1>Status Real Time Autoparco</h1>
+            <div class="last-update" id="update-time">SINCRONIZZAZIONE...</div>
+        </div>
+
+        <div class="header-right">
+            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        </div>
     </div>
 
     <div class="dashboard">
@@ -132,7 +153,6 @@
                 const oraAttuale = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 document.getElementById('update-time').innerHTML = `Aggiornato alle: <span class="update-flash">${oraAttuale}</span>`;
 
-                // Reset contenuti dinamici
                 document.getElementById('col-gallarate').innerHTML = '<div class="colonna-titolo">GALLARATE</div>';
                 document.getElementById('sub-somma').innerHTML = '';
                 document.getElementById('sub-sumirago').innerHTML = '';
@@ -167,7 +187,6 @@
                     document.getElementById(g.target).innerHTML += html;
                 });
 
-                // Altri Veicoli
                 const altriCont = document.getElementById('col-altri');
                 altriCont.innerHTML = "";
                 data.forEach(d => {
