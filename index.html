@@ -2,87 +2,89 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Autoparco Pro</title>
+    <title>Operatività Autoparco 118</title>
     <style>
         :root {
-            --bg: #05070a;
-            --card-bg: #1c2128;
+            --bg: #0a0c10;
+            --panel: #161b22;
             --green: #2ecc71;
             --orange: #f39c12;
             --red: #e74c3c;
-            --blue: #00d4ff;
-            --gold: #ffcc00;
+            --blue: #58a6ff;
+            --gold: #f1e05a;
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
         
-        .header { text-align: center; margin-bottom: 20px; }
-        h1 { margin: 0; color: var(--blue); text-transform: uppercase; font-size: 1.8em; letter-spacing: 2px; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #30363d; padding-bottom: 10px; }
+        h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 3px; font-size: 2em; }
 
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 20px; height: 85vh; }
-        .colonna { background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #30363d; }
-        .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.5em; color: var(--gold); padding-bottom: 15px; margin-bottom: 15px; border-bottom: 2px solid #444; }
-
-        .lista-cards { display: flex; flex-direction: column; gap: 15px; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 85vh; }
         
-        /* CARD PRINCIPALE (CONV 1, CONV 2, SOMMA) */
-        .card-main {
-            background: #2d333b;
-            border-radius: 10px;
-            padding: 18px;
+        .colonna { display: flex; flex-direction: column; gap: 20px; }
+        .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.6em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+
+        /* BOX ACCOPPIATO (TITOLARE + BACKUP) */
+        .gruppo-mezzi {
+            background: var(--panel);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #30363d;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* STILE TITOLARE */
+        .main-unit {
+            padding: 20px;
             border-left: 15px solid;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            position: relative;
-            transform: scale(1.02);
-            margin-bottom: 10px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
         }
-        .card-main::after { content: "⭐ TITOLARE"; position: absolute; top: 10px; right: 10px; font-size: 0.65em; background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .main-unit .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; }
+        .main-unit .mezzo { font-size: 1em; color: #8b949e; text-transform: uppercase; margin: 5px 0; }
+        .main-unit .status { font-size: 1.1em; font-weight: bold; color: #fff; }
 
-        /* CARD BACKUP */
-        .card-backup {
-            background: #1c2128;
-            border-radius: 8px;
-            padding: 12px;
+        /* STILE BACKUP */
+        .backup-unit {
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
             border-left: 8px solid;
-            margin-left: 20px; /* Rientro visivo */
-            opacity: 0.9;
+            border-top: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .card-backup::after { content: "🔄 SOSTITUTO"; position: absolute; top: 10px; right: 10px; font-size: 0.6em; color: #8b949e; }
+        .backup-unit .sigla { font-size: 1.2em; font-weight: bold; color: #c9d1d9; }
+        .backup-unit .status { font-size: 0.85em; font-weight: bold; }
+        .backup-label { font-size: 0.7em; color: var(--blue); font-weight: bold; }
 
-        /* CARD ALTRI MEZZI */
+        /* ALTRI MEZZI */
         .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card-small { background: #161b22; border-radius: 6px; padding: 10px; border-left: 6px solid; font-size: 0.9em; }
+        .card-small { background: var(--panel); padding: 10px; border-radius: 6px; border-left: 6px solid; font-size: 0.9em; }
 
-        .bordo-verde { border-left-color: var(--green); }
-        .bordo-arancio { border-left-color: var(--orange); }
-        .bordo-rosso { border-left-color: var(--red); }
+        /* COLORI */
+        .status-ok { border-color: var(--green) !important; }
+        .status-man { border-color: var(--orange) !important; }
+        .status-off { border-color: var(--red) !important; }
 
-        .sigla { font-size: 1.4em; font-weight: bold; display: block; }
-        .mezzo { font-size: 0.8em; color: #8b949e; text-transform: uppercase; }
-        .status { font-weight: bold; font-size: 0.9em; margin-top: 5px; display: block; color: #fff; }
-
-        .info-footer { background: rgba(0, 212, 255, 0.1); color: var(--blue); padding: 10px; font-size: 0.9em; text-align: center; border-radius: 8px; margin-top: auto; font-weight: bold; border: 1px dashed var(--blue); }
+        .info-marzo { background: rgba(88, 166, 255, 0.1); border: 1px dashed var(--blue); color: var(--blue); padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>SITUAZIONE OPERATIVA REAL-TIME</h1>
+        <h1>SITUAZIONE OPERATIVA FLOTTA</h1>
     </div>
 
     <div class="dashboard">
-        <div class="colonna">
+        <div class="colonna" id="col-gallarate">
             <div class="colonna-titolo">GALLARATE</div>
-            <div id="col-gallarate" class="lista-cards"></div>
-        </div>
+            </div>
 
-        <div class="colonna">
+        <div class="colonna" id="col-somma">
             <div class="colonna-titolo">SOMMA LOMBARDO</div>
-            <div id="col-somma" class="lista-cards"></div>
-            <div class="info-footer">ℹ️ NUOVO BACKUP IN ARRIVO: MARZO 2026</div>
-        </div>
+            </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">ALTRI MEZZI</div>
+            <div class="colonna-titolo">SECONDARI / VETTURE</div>
             <div id="col-altri" class="grid-altri"></div>
         </div>
     </div>
@@ -90,62 +92,78 @@
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
-        async function updateDashboard() {
+        function getStatusClass(status) {
+            const s = status.toUpperCase();
+            const ok = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
+            if (ok.includes(s)) return "status-ok";
+            if (s.includes("MANUTENZIONE")) return "status-man";
+            return "status-off";
+        }
+
+        async function update() {
             try {
                 const response = await fetch(sheetUrl + '&t=' + Date.now());
-                const csvText = await response.text();
-                const sep = csvText.includes(';') ? ';' : ',';
-                const rows = csvText.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
+                const csv = await response.text();
+                const sep = csv.includes(';') ? ';' : ',';
+                const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
                 
-                const containers = {
-                    gallarate: document.getElementById('col-gallarate'),
-                    somma: document.getElementById('col-somma'),
-                    altri: document.getElementById('col-altri')
-                };
+                const data = rows.map(r => r.split(sep).map(c => c.replace(/"/g, '').trim()));
+                
+                // Organizzazione Dati
+                const find = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
 
-                Object.values(containers).forEach(c => c.innerHTML = "");
+                const groups = [
+                    { title: "CONVENZIONE 1", main: find("GALLARATE CONV 1"), backup: find("BACKUP CONV 1"), target: "col-gallarate" },
+                    { title: "CONVENZIONE 2", main: find("GALLARATE CONV 2"), backup: find("BACKUP CONV 2"), target: "col-gallarate" },
+                    { title: "POSTAZIONE SOMMA", main: find("SOMMA LOMBARDO"), backup: null, target: "col-somma" }
+                ];
 
-                rows.forEach(row => {
-                    const cols = row.split(sep).map(c => c.replace(/"/g, '').trim());
-                    if (cols.length < 4) return;
+                // Renderizza Gallarate e Somma
+                document.getElementById('col-gallarate').innerHTML = '<div class="colonna-titolo">GALLARATE</div>';
+                document.getElementById('col-somma').innerHTML = '<div class="colonna-titolo">SOMMA LOMBARDO</div>';
+
+                groups.forEach(g => {
+                    if (!g.main) return;
+                    let html = `<div class="gruppo-mezzi">
+                        <div class="main-unit ${getStatusClass(g.main[3])}">
+                            <div class="sigla">${g.main[1]}</div>
+                            <div class="mezzo">${g.main[2]}</div>
+                            <div class="status">${g.main[3]}</div>
+                        </div>`;
                     
-                    const [cat, sigla, mezzo, status] = cols;
-                    const sU = status.toUpperCase();
-
-                    // LOGICA COLORI
-                    let color = "bordo-rosso";
-                    const operativi = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
-                    if (operativi.includes(sU)) color = "bordo-verde";
-                    else if (sU.includes("MANUTENZIONE")) color = "bordo-arancio";
-
-                    // LOGICA CLASSIFICAZIONE CARD
-                    let cardType = "card-small";
-                    if (sU.includes("CONV 1") || sU.includes("CONV 2") || sU === "SOMMA LOMBARDO") {
-                        cardType = sU.includes("BACKUP") ? "card-backup" : "card-main";
+                    if (g.backup) {
+                        html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
+                            <div><span class="backup-label">BACKUP</span><br><span class="sigla">${g.backup[1]}</span></div>
+                            <div class="status">${g.backup[3]}</div>
+                        </div>`;
                     }
+                    html += `</div>`;
+                    document.getElementById(g.target).innerHTML += html;
+                });
 
-                    const cardHtml = `
-                        <div class="card ${cardType} ${color}" style="position:relative">
-                            <span class="sigla">${sigla}</span>
-                            <span class="mezzo">${mezzo}</span>
-                            <span class="status">${status}</span>
-                        </div>
-                    `;
+                // Somma footer
+                document.getElementById('col-somma').innerHTML += '<div class="info-marzo">ℹ️ BACKUP IN ARRIVO: MARZO 2026</div>';
 
-                    // SMISTAMENTO
-                    if (sU.includes("GALLARATE") || sU.includes("BACKUP CONV 1") || sU.includes("BACKUP CONV 2")) {
-                        containers.gallarate.innerHTML += cardHtml;
-                    } else if (sU.includes("SOMMA")) {
-                        containers.somma.innerHTML += cardHtml;
-                    } else {
-                        containers.altri.innerHTML += cardHtml;
+                // Renderizza Altri
+                const altriCont = document.getElementById('col-altri');
+                altriCont.innerHTML = "";
+                data.forEach(d => {
+                    const s = d[3].toUpperCase();
+                    if (!s.includes("GALLARATE") && !s.includes("SOMMA") && !s.includes("BACKUP CONV")) {
+                        altriCont.innerHTML += `
+                            <div class="card-small ${getStatusClass(d[3])}">
+                                <strong>${d[1]}</strong><br>
+                                <small>${d[2]}</small><br>
+                                <span style="font-size:0.8em">${d[3]}</span>
+                            </div>`;
                     }
                 });
+
             } catch (e) { console.error(e); }
         }
 
-        updateDashboard();
-        setInterval(updateDashboard, 60000);
+        update();
+        setInterval(update, 60000);
     </script>
 </body>
 </html>
