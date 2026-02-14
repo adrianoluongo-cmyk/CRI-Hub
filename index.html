@@ -1,100 +1,114 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>Status Autoparco</title>
+    <meta charset="UTF-8">
+    <title>Controllo Flotta Autoparco</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --green: #2ecc71;
+            --orange: #f39c12;
+            --red: #e74c3c;
+            --blue: #00d4ff;
+        }
 
-<style>
-body {font-family:'Segoe UI',Arial;background:#0a0a0a;color:white;padding:20px;}
-h1{text-align:center;color:#00d4ff;margin-bottom:25px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px;}
-.categoria-titolo{grid-column:1/-1;background:#222;padding:10px;border-left:5px solid #ffcc00;color:#ffcc00;}
-.card{background:#181818;border-radius:8px;padding:15px;border-left:12px solid;}
-.bordo-verde{border-left-color:#2ecc71;}
-.bordo-arancio{border-left-color:#f39c12;}
-.bordo-rosso{border-left-color:#e74c3c;}
-#loader{text-align:center;color:#aaa;padding:20px;}
-</style>
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; overflow: hidden; }
+        
+        .header { text-align: center; padding-bottom: 20px; border-bottom: 1px solid #30363d; margin-bottom: 20px; }
+        h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; }
 
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            height: 85vh;
+        }
+
+        .colonna {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .colonna-titolo {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #ffcc00;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+            margin-bottom: 5px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 8px solid;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .bordo-verde { border-left-color: var(--green); }
+        .bordo-arancio { border-left-color: var(--orange); }
+        .bordo-rosso { border-left-color: var(--red); }
+
+        .label-ruolo { font-size: 0.7em; color: var(--blue); text-transform: uppercase; font-weight: bold; }
+        .sigla { font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; }
+        .mezzo { font-size: 0.85em; color: #8b949e; }
+        .status-txt { font-weight: bold; font-size: 0.9em; margin-top: 8px; display: block; }
+
+        /* Avviso speciale Somma */
+        .info-marzo {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px dashed var(--blue);
+            color: var(--blue);
+            padding: 10px;
+            font-size: 0.8em;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Status Real-Time Autoparco</h1>
+    <div class="header">
+        <h1>STATUS OPERATIVO AUTOPARCO</h1>
+    </div>
 
-<div id="loader">Caricamento dati...</div>
-<div id="fleet-grid" class="grid"></div>
+    <div class="dashboard">
+        <div class="colonna" id="col-gallarate">
+            <div class="colonna-titolo">AREA GALLARATE</div>
+            <div id="data-gallarate"></div>
+        </div>
 
-<script>
+        <div class="colonna" id="col-somma">
+            <div class="colonna-titolo">AREA SOMMA LOMBARDO</div>
+            <div id="data-somma"></div>
+            <div class="info-marzo">⚠️ Backup in arrivo: MARZO 2026</div>
+        </div>
 
-const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?output=csv";
+        <div class="colonna" id="col-altri">
+            <div class="colonna-titolo">SECONDARI E VETTURE</div>
+            <div id="data-altri" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
+        </div>
+    </div>
 
-const statiVerdi=[
-"OPERATIVO","BACKUP CONV 1","SOMMA LOMBARDO",
-"GALLARATE CONV 1","BACKUP CONV 2",
-"GALLARATE CONV 2","BACKUP CONV SOMMA L.DO"
-];
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
-async function loadData(){
-
-const loader=document.getElementById("loader");
-const container=document.getElementById("fleet-grid");
-
-try{
-
-const res=await fetch(CSV_URL+"&t="+Date.now());
-const text=await res.text();
-
-const rows=text.split("\n");
-
-let html="";
-let currentCat="";
-
-for(let i=1;i<rows.length;i++){
-
-const cols=rows[i].split(",");
-if(cols.length<4) continue;
-
-const categoria=cols[0].replace(/"/g,"").trim();
-const sigla=cols[1].replace(/"/g,"").trim();
-const veicolo=cols[2].replace(/"/g,"").trim();
-const status=cols[3].replace(/"/g,"").trim();
-
-let color="bordo-rosso";
-const s=status.toUpperCase();
-
-if(statiVerdi.includes(s)) color="bordo-verde";
-else if(s.includes("MANUTENZIONE")) color="bordo-arancio";
-
-if(categoria!==currentCat){
-currentCat=categoria;
-html+=`<div class="categoria-titolo">${currentCat}</div>`;
-}
-
-html+=`
-<div class="card ${color}">
-<div><b>${sigla}</b></div>
-<div>${veicolo}</div>
-<div>${status}</div>
-</div>`;
-
-}
-
-container.innerHTML=html;
-loader.style.display="none";
-
-}catch(e){
-
-loader.innerText="Errore caricamento CSV";
-console.log(e);
-
-}
-
-}
-
-loadData();
-setInterval(loadData,60000);
-
-</script>
-
-</body>
-</html>
+        async function updateData() {
+            try {
+                const response = await fetch(sheetUrl + '&cache=' + Date.now());
+                const csvText = await response.text();
+                const rows = csvText.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
+                
+                const containers = {
+                    gallarate: document.getElementById('data-gallarate'),
+                    somma: document.getElementById('data-somma'),
+                    altri: document.getElementById('data-altri')
