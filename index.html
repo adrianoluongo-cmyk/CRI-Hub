@@ -15,16 +15,29 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
         
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #30363d; padding-bottom: 10px; }
-        h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 3px; font-size: 2em; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #30363d; padding-bottom: 15px; }
+        h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 3px; font-size: 2.2em; }
         
-        .last-update { font-size: 0.9em; color: #8b949e; margin-top: 5px; font-family: monospace; }
+        /* OROLOGIO PIÙ GRANDE */
+        .last-update { 
+            font-size: 1.3em; 
+            color: #8b949e; 
+            margin-top: 8px; 
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.05);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 5px;
+        }
         .update-flash { color: var(--green); font-weight: bold; }
 
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 82vh; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 78vh; }
         
-        .colonna { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+        .colonna { display: flex; flex-direction: column; gap: 15px; min-width: 0; }
         .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.6em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+        
+        /* Sotto-titolo specifico per Sumirago */
+        .sub-titolo { text-align: center; font-weight: 800; font-size: 1.3em; color: var(--blue); text-transform: uppercase; margin: 15px 0 5px 0; border-top: 1px solid #333; padding-top: 15px; }
 
         .gruppo-mezzi {
             background: var(--panel);
@@ -32,7 +45,6 @@
             overflow: hidden;
             border: 1px solid #30363d;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            margin-bottom: 10px;
         }
 
         .main-unit {
@@ -40,8 +52,8 @@
             border-left: 14px solid;
             background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
         }
-        .main-unit .sigla { font-size: 2em; font-weight: 900; line-height: 1; }
-        .main-unit .mezzo { font-size: 0.95em; color: #8b949e; text-transform: uppercase; margin: 5px 0; }
+        .main-unit .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; }
+        .main-unit .mezzo { font-size: 1em; color: #8b949e; text-transform: uppercase; margin: 5px 0; }
         .main-unit .status { font-size: 1.1em; font-weight: bold; color: #fff; }
 
         .backup-unit {
@@ -73,7 +85,7 @@
 
     <div class="header">
         <h1>Status Real Time Autoparco</h1>
-        <div class="last-update" id="update-time">In attesa di sincronizzazione...</div>
+        <div class="last-update" id="update-time">SINCRONIZZAZIONE...</div>
     </div>
 
     <div class="dashboard">
@@ -81,10 +93,11 @@
             <div class="colonna-titolo">GALLARATE</div>
         </div>
 
-        <div class="colonna" id="col-somma-sumirago">
+        <div class="colonna">
             <div class="colonna-titolo">SOMMA & SUMIRAGO</div>
             <div id="sub-somma"></div>
-            <div id="sub-sumirago" style="margin-top: 10px;"></div>
+            <div class="sub-titolo">SUMIRAGO</div>
+            <div id="sub-sumirago"></div>
         </div>
 
         <div class="colonna">
@@ -117,9 +130,9 @@
                 const findBySigla = (siglaPart) => data.find(d => d[1].toUpperCase().includes(siglaPart)) || null;
 
                 const oraAttuale = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                document.getElementById('update-time').innerHTML = `Ultimo aggiornamento dati: <span class="update-flash">${oraAttuale}</span>`;
+                document.getElementById('update-time').innerHTML = `Aggiornato alle: <span class="update-flash">${oraAttuale}</span>`;
 
-                // Reset
+                // Reset contenuti dinamici
                 document.getElementById('col-gallarate').innerHTML = '<div class="colonna-titolo">GALLARATE</div>';
                 document.getElementById('sub-somma').innerHTML = '';
                 document.getElementById('sub-sumirago').innerHTML = '';
@@ -166,14 +179,16 @@
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
-                                <strong style="font-size:1.2em">${d[1]}</strong><br>
+                                <strong style="font-size:1.3em">${d[1]}</strong><br>
                                 <span style="font-size:0.85em; color:#8b949e">${d[2]}</span><br>
-                                <span style="font-size:0.9em; font-weight:bold">${d[3]}</span>
+                                <span style="font-size:0.95em; font-weight:bold">${d[3]}</span>
                             </div>`;
                     }
                 });
 
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                document.getElementById('update-time').innerHTML = `<span style="color:var(--red)">ERRORE CONNESSIONE</span>`;
+            }
         }
 
         update();
