@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Status Real Time Autoparco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0a0c10;
@@ -13,82 +14,99 @@
             --blue: #58a6ff;
             --gold: #f1e05a;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; overflow: hidden; }
         
-        /* HEADER CON LOGO */
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); 
+            color: white; 
+            margin: 0; 
+            padding: 20px; 
+            overflow: hidden; 
+        }
+        
+        /* HEADER MINIMAL */
         .header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            margin-bottom: 20px; 
-            border-bottom: 2px solid #30363d; 
-            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+            border-bottom: 1px solid #30363d; 
+            padding-bottom: 20px; 
         }
-        .header-left { flex: 1; } /* Spazio vuoto a sinistra per bilanciare */
+        .header-left { flex: 1; }
         .header-center { flex: 2; text-align: center; }
         .header-right { flex: 1; text-align: right; }
 
-        h1 { margin: 0; color: var(--blue); text-transform: uppercase; letter-spacing: 3px; font-size: 2.2em; }
+        h1 { 
+            margin: 0; 
+            color: white; 
+            text-transform: uppercase; 
+            letter-spacing: 6px; 
+            font-size: 2em; 
+            font-weight: 900;
+        }
         
         .last-update { 
-            font-size: 1.3em; 
+            font-size: 1.1em; 
             color: #8b949e; 
-            margin-top: 8px; 
-            font-family: 'Courier New', monospace;
-            background: rgba(255,255,255,0.05);
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 5px;
+            margin-top: 10px; 
+            font-family: monospace;
+            letter-spacing: 1px;
         }
-        .update-flash { color: var(--green); font-weight: bold; }
+        .update-flash { color: var(--blue); font-weight: bold; }
 
-        /* LOGO */
-        .logo-img {
-            max-height: 80px; /* Regola l'altezza come preferisci */
-            width: auto;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
-        }
+        .logo-img { max-height: 70px; width: auto; }
 
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; height: 75vh; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 30px; height: 78vh; }
+        
         .colonna { display: flex; flex-direction: column; gap: 15px; min-width: 0; }
-        .colonna-titolo { text-align: center; font-weight: 900; font-size: 1.6em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
-        .sub-titolo { text-align: center; font-weight: 800; font-size: 1.3em; color: var(--blue); text-transform: uppercase; margin: 15px 0 5px 0; border-top: 1px solid #333; padding-top: 15px; }
+        
+        /* TITOLI COLONNE IDENTICI (GALLARATE, SOMMA, SUMIRAGO) */
+        .colonna-titolo { 
+            text-align: center; 
+            font-weight: 900; 
+            font-size: 1.6em; 
+            color: var(--gold); 
+            text-transform: uppercase; 
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
 
         .gruppo-mezzi {
             background: var(--panel);
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
             border: 1px solid #30363d;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
         }
 
         .main-unit {
-            padding: 18px;
-            border-left: 14px solid;
-            background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            padding: 20px;
+            border-left: 12px solid;
         }
-        .main-unit .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; }
-        .main-unit .mezzo { font-size: 1em; color: #8b949e; text-transform: uppercase; margin: 5px 0; }
-        .main-unit .status { font-size: 1.1em; font-weight: bold; color: #fff; }
+        .main-unit .sigla { font-size: 2.4em; font-weight: 900; line-height: 1; letter-spacing: -1px; }
+        .main-unit .mezzo { font-size: 0.9em; color: #8b949e; text-transform: uppercase; margin: 5px 0; font-weight: 700; }
+        .main-unit .status { font-size: 1em; font-weight: bold; color: #fff; opacity: 0.9; }
 
         .backup-unit {
-            padding: 10px 18px;
-            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.03);
             border-left: 8px solid;
             border-top: 1px solid #30363d;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .backup-unit .sigla { font-size: 1.2em; font-weight: bold; color: #c9d1d9; }
-        .backup-label { font-size: 0.7em; color: var(--blue); font-weight: bold; }
+        .backup-unit .sigla { font-size: 1.2em; font-weight: 800; color: #c9d1d9; }
+        .backup-label { font-size: 0.7em; color: var(--blue); font-weight: 900; text-transform: uppercase; }
         
-        .info-somma { color: var(--blue); font-style: italic; font-size: 0.9em; font-weight: bold; }
-        .info-none { color: #555; font-style: italic; font-size: 0.85em; }
+        .info-somma { color: var(--blue); font-size: 0.85em; font-weight: 700; }
+        .info-none { color: #444; font-size: 0.8em; font-weight: 700; text-transform: uppercase; }
 
-        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; }
-        .card-small { background: var(--panel); padding: 12px; border-radius: 8px; border-left: 6px solid; position: relative; }
-        .card-small .cat-tag { font-size: 0.65em; color: var(--gold); font-weight: bold; text-transform: uppercase; border: 1px solid var(--gold); padding: 1px 4px; border-radius: 3px; position: absolute; top: 10px; right: 10px; }
+        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; overflow-y: auto; }
+        .card-small { background: var(--panel); padding: 15px; border-radius: 6px; border-left: 5px solid; position: relative; }
+        .card-small .cat-tag { font-size: 0.6em; color: var(--gold); font-weight: 900; text-transform: uppercase; border: 1px solid var(--gold); padding: 2px 5px; border-radius: 3px; position: absolute; top: 12px; right: 12px; }
 
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
@@ -99,13 +117,13 @@
 <body>
 
     <div class="header">
-        <div class="header-left"></div> <div class="header-center">
+        <div class="header-left"></div>
+        <div class="header-center">
             <h1>Status Real Time Autoparco</h1>
-            <div class="last-update" id="update-time">SINCRONIZZAZIONE...</div>
+            <div class="last-update" id="update-time">SYNC...</div>
         </div>
-
         <div class="header-right">
-            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <img src="logo.png" alt="" class="logo-img" onerror="this.style.display='none'">
         </div>
     </div>
 
@@ -117,7 +135,8 @@
         <div class="colonna">
             <div class="colonna-titolo">SOMMA LOMBARDO</div>
             <div id="sub-somma"></div>
-            <div class="sub-titolo">SUMIRAGO</div>
+            
+            <div class="colonna-titolo" style="margin-top: 20px;">SUMIRAGO</div>
             <div id="sub-sumirago"></div>
         </div>
 
@@ -135,8 +154,7 @@
             const s = status.toUpperCase();
             if (s.includes("MANUTENZIONE")) return "status-man";
             const ok = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
-            if (ok.includes(s)) return "status-ok";
-            return "status-off";
+            return ok.includes(s) ? "status-ok" : "status-off";
         }
 
         async function update() {
@@ -150,8 +168,8 @@
                 const findByStatus = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
                 const findBySigla = (siglaPart) => data.find(d => d[1].toUpperCase().includes(siglaPart)) || null;
 
-                const oraAttuale = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                document.getElementById('update-time').innerHTML = `Aggiornato alle: <span class="update-flash">${oraAttuale}</span>`;
+                const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('update-time').innerHTML = `Ultimo aggiornamento <span class="update-flash">${ora}</span>`;
 
                 document.getElementById('col-gallarate').innerHTML = '<div class="colonna-titolo">GALLARATE</div>';
                 document.getElementById('sub-somma').innerHTML = '';
@@ -174,9 +192,9 @@
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
-                        html += `<div class="backup-unit status-off"><div class="backup-label">BACKUP</div><div class="info-somma">In arrivo a Marzo 2026</div></div>`;
+                        html += `<div class="backup-unit status-off"><div class="backup-label">BACKUP</div><div class="info-somma">IN ARRIVO MARZO 2026</div></div>`;
                     } else if (g.backup === "NONE") {
-                        html += `<div class="backup-unit status-off"><div class="backup-label">BACKUP</div><div class="info-none">Nessun backup previsto</div></div>`;
+                        html += `<div class="backup-unit status-off" style="border-left-color: #333"><div class="backup-label">BACKUP</div><div class="info-none">NON PREVISTO</div></div>`;
                     } else if (g.backup) {
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
                             <div><span class="backup-label">BACKUP</span><br><span class="sigla">${g.backup[1]}</span></div>
@@ -198,16 +216,14 @@
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
-                                <strong style="font-size:1.3em">${d[1]}</strong><br>
-                                <span style="font-size:0.85em; color:#8b949e">${d[2]}</span><br>
-                                <span style="font-size:0.95em; font-weight:bold">${d[3]}</span>
+                                <strong style="font-size:1.3em; letter-spacing:-0.5px">${d[1]}</strong><br>
+                                <span style="font-size:0.8em; color:#8b949e; font-weight:700">${d[2]}</span><br>
+                                <span style="font-size:0.9em; font-weight:bold; color:white">${d[3]}</span>
                             </div>`;
                     }
                 });
 
-            } catch (e) { 
-                document.getElementById('update-time').innerHTML = `<span style="color:var(--red)">ERRORE CONNESSIONE</span>`;
-            }
+            } catch (e) { console.error(e); }
         }
 
         update();
