@@ -175,6 +175,127 @@
         </div>
         <div class="header-right">
             <img src="logo.png" alt="" class="logo-img" onerror="this.style.display='none'">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Status Real Time Autoparco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0c10;
+            --panel: #161b22;
+            --green: #2ecc71;
+            --orange: #f39c12;
+            --red: #e74c3c;
+            --blue: #58a6ff;
+            --gold: #f1e05a;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: white; margin: 0; padding: 20px; 
+            overflow: hidden; height: 100vh; display: flex; flex-direction: column;
+        }
+        
+        .header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 20px; border-bottom: 1px solid #30363d; padding-bottom: 15px; 
+        }
+        .header-left { flex: 1; }
+        .header-center { flex: 2; text-align: center; }
+        .header-right { flex: 1; text-align: right; }
+
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 5px; font-size: 1.8em; font-weight: 900; }
+        
+        .last-update { 
+            font-size: 1em; color: #8b949e; margin-top: 5px; font-family: monospace;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px; background-color: var(--green); border-radius: 50%;
+            display: inline-block; box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        .logo-img { max-height: 60px; width: auto; }
+
+        .dashboard { 
+            display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; 
+            flex-grow: 1; overflow: hidden; margin-bottom: 60px; 
+        }
+        
+        .colonna { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+        .colonna-titolo { 
+            text-align: center; font-weight: 900; font-size: 1.4em; color: var(--gold); 
+            text-transform: uppercase; margin-bottom: 5px; letter-spacing: 2px;
+        }
+
+        .gruppo-mezzi { background: var(--panel); border-radius: 8px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 5px; }
+
+        .main-unit { padding: 15px; border-left: 12px solid; }
+        
+        /* RISALTO CONVENZIONE */
+        .conv-label { 
+            color: var(--blue); 
+            font-weight: 900; 
+            font-size: 1.4em; 
+            text-transform: uppercase; 
+            display: block;
+            margin-bottom: 2px;
+            letter-spacing: 1px;
+        }
+
+        .main-unit .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; letter-spacing: -1px; }
+        .main-unit .mezzo { font-size: 0.85em; color: #8b949e; text-transform: uppercase; margin: 4px 0; font-weight: 700; }
+        .main-unit .targa { color: var(--gold); font-weight: 900; margin-left: 8px; border: 1px solid rgba(241, 224, 90, 0.3); padding: 1px 5px; border-radius: 3px; font-size: 0.85em; }
+        .main-unit .status-text { font-size: 0.95em; font-weight: bold; color: #fff; display: block; margin-top: 5px; }
+
+        .backup-unit {
+            padding: 8px 15px; background: rgba(255,255,255,0.03);
+            border-left: 8px solid; border-top: 1px solid #30363d;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .backup-unit .sigla { font-size: 1.1em; font-weight: 800; color: #c9d1d9; }
+        .backup-unit .targa-small { font-size: 0.75em; color: var(--gold); font-weight: 800; margin-left: 5px; }
+        .backup-label { font-size: 0.65em; color: var(--blue); font-weight: 900; }
+        
+        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; padding-right: 5px; }
+        .card-small { background: var(--panel); padding: 12px; border-radius: 6px; border-left: 5px solid; position: relative; }
+        .card-small .cat-tag { font-size: 0.55em; color: var(--gold); font-weight: 900; text-transform: uppercase; border: 1px solid var(--gold); padding: 1px 4px; border-radius: 3px; position: absolute; top: 10px; right: 10px; }
+
+        /* COLORI STATO */
+        .status-ok { border-color: var(--green) !important; }
+        .status-man { border-color: var(--orange) !important; }
+        .status-off { border-color: var(--red) !important; }
+
+        .ticker-wrap {
+            position: fixed; bottom: 0; left: 0; width: 100%; overflow: hidden;
+            height: 40px; background-color: rgba(0, 0, 0, 0.9); border-top: 2px solid var(--blue);
+            display: flex; align-items: center;
+        }
+        .ticker {
+            display: inline-block; white-space: nowrap; padding-right: 100%;
+            animation: ticker 30s linear infinite; font-weight: 700; font-size: 1.1em; color: var(--blue);
+        }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        .ticker span { padding: 0 50px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left"></div>
+        <div class="header-center">
+            <h1>Status Real Time Autoparco</h1>
+            <div class="last-update" id="update-time">
+                <span class="status-dot"></span>
+                <span>SINCRONIZZAZIONE...</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="logo.png" alt="" class="logo-img" onerror="this.style.display='none'">
         </div>
     </div>
 
@@ -182,15 +303,12 @@
         <div class="colonna" id="col-gallarate">
             <div class="colonna-titolo">GALLARATE</div>
         </div>
-
         <div class="colonna">
             <div class="colonna-titolo">SOMMA LOMBARDO</div>
             <div id="sub-somma"></div>
-            
             <div class="colonna-titolo" style="margin-top: 15px;">SUMIRAGO</div>
             <div id="sub-sumirago"></div>
         </div>
-
         <div class="colonna">
             <div class="colonna-titolo">FLOTTA VARIABILE</div>
             <div id="col-altri" class="grid-altri"></div>
@@ -210,9 +328,11 @@
         function getStatusClass(status) {
             if (!status) return "status-off";
             const s = status.toUpperCase();
+            if (s.includes("FUORI SERVIZIO") || s === "OFF") return "status-off";
             if (s.includes("MANUTENZIONE")) return "status-man";
-            const ok = ["OPERATIVO", "BACKUP CONV 1", "SOMMA LOMBARDO", "GALLARATE CONV 1", "BACKUP CONV 2", "GALLARATE CONV 2", "BACKUP CONV SOMMA L.DO"];
-            return ok.includes(s) ? "status-ok" : "status-off";
+            const okKeywords = ["OPERATIVO", "BACKUP", "SOMMA", "GALLARATE", "SUMIRAGO"];
+            if (okKeywords.some(keyword => s.includes(keyword))) return "status-ok";
+            return "status-off";
         }
 
         async function update() {
@@ -221,8 +341,8 @@
                 const csv = await response.text();
                 const sep = csv.includes(';') ? ';' : ',';
                 const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
-                
                 const data = rows.map(r => r.split(sep).map(c => c.replace(/"/g, '').trim()));
+                
                 const findByStatus = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
                 const findBySigla = (siglaPart) => data.find(d => d[1].toUpperCase().includes(siglaPart)) || null;
 
@@ -234,19 +354,23 @@
                 document.getElementById('sub-sumirago').innerHTML = '';
 
                 const mainSections = [
-                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1") },
-                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2") },
-                    { target: "sub-somma", main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026" },
-                    { target: "sub-sumirago", main: findBySigla("VA11-81"), backup: "NONE" }
+                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1"), label: "CONVENZIONE 1" },
+                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2"), label: "CONVENZIONE 2" },
+                    { target: "sub-somma", main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026", label: "" },
+                    { target: "sub-sumirago", main: findBySigla("VA11-81"), backup: "NONE", label: "" }
                 ];
 
                 mainSections.forEach(g => {
                     if (!g.main) return;
+                    let mainTarga = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
+                    let labelHtml = g.label ? `<span class="conv-label">${g.label}</span>` : "";
+                    
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
+                            ${labelHtml}
                             <div class="sigla">${g.main[1]}</div>
-                            <div class="mezzo">${g.main[2]}</div>
-                            <div class="status">${g.main[3]}</div>
+                            <div class="mezzo">${g.main[2]}${mainTarga}</div>
+                            <div class="status-text">${g.main[3]}</div>
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
@@ -254,8 +378,9 @@
                     } else if (g.backup === "NONE") {
                         html += `<div class="backup-unit status-off" style="border-left-color: #333"><div class="backup-label">BACKUP</div><div style="font-size:0.8em; font-weight:700; opacity:0.5">NON PREVISTO</div></div>`;
                     } else if (g.backup) {
+                        let backupTarga = g.backup[4] ? `<span class="targa-small">${g.backup[4]}</span>` : "";
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
-                            <div><span class="backup-label">BACKUP</span><br><span class="sigla" style="font-size:1.1em">${g.backup[1]}</span></div>
+                            <div><span class="backup-label">BACKUP</span><br><span class="sigla" style="font-size:1.1em">${g.backup[1]}</span>${backupTarga}</div>
                             <div class="status" style="font-size:0.8em">${g.backup[3]}</div>
                         </div>`;
                     }
@@ -280,14 +405,9 @@
                             </div>`;
                     }
                 });
-
-            } catch (e) { 
-                document.getElementById('update-time').innerHTML = `<span class="status-dot" style="background-color:var(--red); box-shadow:0 0 8px var(--red)"></span> ERRORE CONNESSIONE`;
-            }
+            } catch (e) { console.error(e); }
         }
-
-        update();
-        setInterval(update, 60000);
+        update(); setInterval(update, 60000);
     </script>
 </body>
 </html>
