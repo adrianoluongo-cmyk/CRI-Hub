@@ -17,22 +17,19 @@
         
         body { 
             font-family: 'Inter', -apple-system, sans-serif; 
-            background: var(--bg); color: white; margin: 0; padding: 20px; 
+            background: var(--bg); color: white; margin: 0; padding: 15px; 
             overflow: hidden; height: 100vh; display: flex; flex-direction: column;
         }
         
         .header { 
             display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 20px; border-bottom: 1px solid #30363d; padding-bottom: 15px; 
+            margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 10px; 
         }
-        .header-left { flex: 1; }
-        .header-center { flex: 2; text-align: center; }
-        .header-right { flex: 1; text-align: right; }
-
-        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 5px; font-size: 1.8em; font-weight: 900; }
+        .header-center { text-align: center; flex: 2; }
+        h1 { margin: 0; text-transform: uppercase; letter-spacing: 4px; font-size: 1.6em; font-weight: 900; }
         
         .last-update { 
-            font-size: 1em; color: #8b949e; margin-top: 5px; font-family: monospace;
+            font-size: 0.9em; color: #8b949e; margin-top: 5px; font-family: monospace;
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
@@ -42,51 +39,38 @@
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .logo-img { max-height: 60px; width: auto; }
+        .logo-img { max-height: 50px; width: auto; }
 
         .dashboard { 
-            display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; 
-            flex-grow: 1; overflow: hidden; margin-bottom: 60px; 
+            display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 20px; 
+            flex-grow: 1; overflow: hidden; margin-bottom: 50px; 
         }
         
-        .colonna { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+        .colonna { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
         .colonna-titolo { 
-            text-align: center; font-weight: 900; font-size: 1.4em; color: var(--gold); 
-            text-transform: uppercase; margin-bottom: 5px; letter-spacing: 2px;
+            text-align: center; font-weight: 900; font-size: 1.25em; color: var(--gold); 
+            text-transform: uppercase; margin-bottom: 2px; letter-spacing: 2px;
         }
 
-        .gruppo-mezzi { background: var(--panel); border-radius: 8px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 5px; }
+        .gruppo-mezzi { background: var(--panel); border-radius: 8px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 4px; }
 
-        .main-unit { padding: 15px; border-left: 12px solid; }
-        
-        /* RISALTO CONVENZIONE */
-        .conv-label { 
-            color: var(--blue); 
-            font-weight: 900; 
-            font-size: 1.4em; 
-            text-transform: uppercase; 
-            display: block;
-            margin-bottom: 2px;
-            letter-spacing: 1px;
-        }
-
+        .main-unit { padding: 12px 15px; border-left: 10px solid; }
         .main-unit .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; letter-spacing: -1px; }
-        .main-unit .mezzo { font-size: 0.85em; color: #8b949e; text-transform: uppercase; margin: 4px 0; font-weight: 700; }
-        .main-unit .targa { color: var(--gold); font-weight: 900; margin-left: 8px; border: 1px solid rgba(241, 224, 90, 0.3); padding: 1px 5px; border-radius: 3px; font-size: 0.85em; }
-        .main-unit .status-text { font-size: 0.95em; font-weight: bold; color: #fff; display: block; margin-top: 5px; }
+        .main-unit .mezzo { font-size: 0.8em; color: #8b949e; text-transform: uppercase; margin: 4px 0; font-weight: 700; }
+        .main-unit .targa { color: var(--gold); font-weight: 900; margin-left: 6px; border: 1px solid rgba(241, 224, 90, 0.3); padding: 1px 4px; border-radius: 3px; font-size: 0.8em; }
+        .main-unit .status-text { font-size: 0.9em; font-weight: bold; color: #fff; display: block; margin-top: 3px; }
 
         .backup-unit {
-            padding: 8px 15px; background: rgba(255,255,255,0.03);
-            border-left: 8px solid; border-top: 1px solid #30363d;
+            padding: 6px 15px; background: rgba(255,255,255,0.03);
+            border-left: 6px solid; border-top: 1px solid #30363d;
             display: flex; justify-content: space-between; align-items: center;
         }
         .backup-unit .sigla { font-size: 1.1em; font-weight: 800; color: #c9d1d9; }
-        .backup-unit .targa-small { font-size: 0.75em; color: var(--gold); font-weight: 800; margin-left: 5px; }
-        .backup-label { font-size: 0.65em; color: var(--blue); font-weight: 900; }
+        .backup-label { font-size: 0.6em; color: var(--blue); font-weight: 900; text-transform: uppercase; }
         
-        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; padding-right: 5px; }
-        .card-small { background: var(--panel); padding: 12px; border-radius: 6px; border-left: 5px solid; position: relative; }
-        .card-small .cat-tag { font-size: 0.55em; color: var(--gold); font-weight: 900; text-transform: uppercase; border: 1px solid var(--gold); padding: 1px 4px; border-radius: 3px; position: absolute; top: 10px; right: 10px; }
+        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow-y: auto; padding-right: 5px; }
+        .card-small { background: var(--panel); padding: 10px; border-radius: 6px; border-left: 4px solid; position: relative; }
+        .card-small .cat-tag { font-size: 0.5em; color: var(--gold); font-weight: 900; text-transform: uppercase; border: 1px solid var(--gold); padding: 1px 3px; border-radius: 2px; position: absolute; top: 8px; right: 8px; }
 
         /* COLORI STATO */
         .status-ok { border-color: var(--green) !important; }
@@ -95,12 +79,12 @@
 
         .ticker-wrap {
             position: fixed; bottom: 0; left: 0; width: 100%; overflow: hidden;
-            height: 40px; background-color: rgba(0, 0, 0, 0.9); border-top: 2px solid var(--blue);
+            height: 35px; background-color: rgba(0, 0, 0, 0.9); border-top: 2px solid var(--blue);
             display: flex; align-items: center;
         }
         .ticker {
             display: inline-block; white-space: nowrap; padding-right: 100%;
-            animation: ticker 30s linear infinite; font-weight: 700; font-size: 1.1em; color: var(--blue);
+            animation: ticker 35s linear infinite; font-weight: 700; font-size: 1em; color: var(--blue);
         }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         .ticker span { padding: 0 50px; }
@@ -109,7 +93,7 @@
 <body>
 
     <div class="header">
-        <div class="header-left"></div>
+        <div style="flex:1"></div>
         <div class="header-center">
             <h1>Status Real Time Autoparco</h1>
             <div class="last-update" id="update-time">
@@ -117,21 +101,27 @@
                 <span>SINCRONIZZAZIONE...</span>
             </div>
         </div>
-        <div class="header-right">
+        <div style="flex:1; text-align:right;">
             <img src="logo.png" alt="" class="logo-img" onerror="this.style.display='none'">
         </div>
     </div>
 
     <div class="dashboard">
-        <div class="colonna" id="col-gallarate">
+        <div class="colonna">
             <div class="colonna-titolo">GALLARATE</div>
+            <div id="sub-gallarate"></div>
+            
+            <div class="colonna-titolo" style="margin-top: 5px;">MALPENSA</div>
+            <div id="sub-malpensa"></div>
         </div>
+
         <div class="colonna">
             <div class="colonna-titolo">SOMMA LOMBARDO</div>
             <div id="sub-somma"></div>
-            <div class="colonna-titolo" style="margin-top: 15px;">SUMIRAGO</div>
+            <div class="colonna-titolo" style="margin-top: 5px;">SUMIRAGO</div>
             <div id="sub-sumirago"></div>
         </div>
+
         <div class="colonna">
             <div class="colonna-titolo">FLOTTA VARIABILE</div>
             <div id="col-altri" class="grid-altri"></div>
@@ -153,9 +143,7 @@
             const s = status.toUpperCase();
             if (s.includes("FUORI SERVIZIO") || s === "OFF") return "status-off";
             if (s.includes("MANUTENZIONE")) return "status-man";
-            const okKeywords = ["OPERATIVO", "BACKUP", "SOMMA", "GALLARATE", "SUMIRAGO"];
-            if (okKeywords.some(keyword => s.includes(keyword))) return "status-ok";
-            return "status-off";
+            return "status-ok";
         }
 
         async function update() {
@@ -172,39 +160,36 @@
                 const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
                 document.getElementById('update-time').innerHTML = `<span class="status-dot"></span> Ultimo aggiornamento ${ora}`;
 
-                document.getElementById('col-gallarate').innerHTML = '<div class="colonna-titolo">GALLARATE</div>';
+                document.getElementById('sub-gallarate').innerHTML = '';
+                document.getElementById('sub-malpensa').innerHTML = '';
                 document.getElementById('sub-somma').innerHTML = '';
                 document.getElementById('sub-sumirago').innerHTML = '';
 
                 const mainSections = [
-                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1"), label: "CONVENZIONE 1" },
-                    { target: "col-gallarate", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2"), label: "CONVENZIONE 2" },
-                    { target: "sub-somma", main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026", label: "" },
-                    { target: "sub-sumirago", main: findBySigla("VA11-81"), backup: "NONE", label: "" }
+                    { target: "sub-gallarate", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1") },
+                    { target: "sub-gallarate", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2") },
+                    { target: "sub-malpensa",  main: findByStatus("AGG. MXP"), backup: null },
+                    { target: "sub-somma",     main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026" },
+                    { target: "sub-sumirago",  main: findBySigla("VA11-81"), backup: null }
                 ];
 
                 mainSections.forEach(g => {
                     if (!g.main) return;
                     let mainTarga = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
-                    let labelHtml = g.label ? `<span class="conv-label">${g.label}</span>` : "";
-                    
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
-                            ${labelHtml}
                             <div class="sigla">${g.main[1]}</div>
                             <div class="mezzo">${g.main[2]}${mainTarga}</div>
                             <div class="status-text">${g.main[3]}</div>
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
-                        html += `<div class="backup-unit status-off" style="border-left-color:#333"><div class="backup-label">BACKUP</div><div style="font-size:0.8em; font-weight:700; color:var(--blue)">IN ARRIVO MARZO 2026</div></div>`;
-                    } else if (g.backup === "NONE") {
-                        html += `<div class="backup-unit status-off" style="border-left-color: #333"><div class="backup-label">BACKUP</div><div style="font-size:0.8em; font-weight:700; opacity:0.5">NON PREVISTO</div></div>`;
+                        html += `<div class="backup-unit status-off" style="border-left-color:#333"><div class="backup-label">BACKUP</div><div style="font-size:0.75em; font-weight:700; color:var(--blue)">MARZO 2026</div></div>`;
                     } else if (g.backup) {
-                        let backupTarga = g.backup[4] ? `<span class="targa-small">${g.backup[4]}</span>` : "";
+                        let backupTarga = g.backup[4] ? `<span style="font-size:0.8em; color:var(--gold); margin-left:5px">${g.backup[4]}</span>` : "";
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
-                            <div><span class="backup-label">BACKUP</span><br><span class="sigla" style="font-size:1.1em">${g.backup[1]}</span>${backupTarga}</div>
-                            <div class="status" style="font-size:0.8em">${g.backup[3]}</div>
+                            <div><span class="backup-label">BACKUP</span> <span class="sigla" style="font-size:1em">${g.backup[1]}</span>${backupTarga}</div>
+                            <div style="font-size:0.75em; font-weight:bold">${g.backup[3]}</div>
                         </div>`;
                     }
                     html += `</div>`;
@@ -216,15 +201,15 @@
                 data.forEach(d => {
                     const status = d[3].toUpperCase();
                     const sigla = d[1].toUpperCase();
-                    const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || sigla === "VA11-81";
+                    const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     
                     if (!isMapped) {
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
-                                <strong style="font-size:1.3em">${d[1]}</strong><br>
-                                <span style="font-size:0.8em; color:#8b949e; font-weight:700">${d[2]}</span><br>
-                                <span style="font-size:0.85em; font-weight:bold">${d[3]}</span>
+                                <strong style="font-size:1.2em">${d[1]}</strong><br>
+                                <span style="font-size:0.75em; color:#8b949e; font-weight:700">${d[2]}</span><br>
+                                <span style="font-size:0.8em; font-weight:bold">${d[3]}</span>
                             </div>`;
                     }
                 });
