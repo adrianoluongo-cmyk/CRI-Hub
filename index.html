@@ -3,91 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <title>Status Real Time Autoparco</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0c10;
+            --bg: #0d1117;
             --panel: #161b22;
-            --green: #2ecc71;
-            --orange: #f39c12;
-            --red: #e74c3c;
-            --blue: #58a6ff;
+            --green: #238636;
+            --green-glow: #2ea043;
+            --orange: #d29922;
+            --red: #da3633;
+            --blue: #2f81f7;
             --gold: #f1e05a;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
         }
         
         body { 
-            font-family: 'Inter', -apple-system, sans-serif; 
-            background: var(--bg); color: white; margin: 0; padding: 15px; 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); color: var(--text-main); margin: 0; padding: 20px; 
             overflow: hidden; height: 100vh; display: flex; flex-direction: column;
         }
         
         .header { 
             display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 10px; 
+            margin-bottom: 25px; padding: 0 10px;
         }
-        .header-center { text-align: center; flex: 2; }
-        h1 { margin: 0; text-transform: uppercase; letter-spacing: 4px; font-size: 1.6em; font-weight: 900; }
+        .header-center h1 { 
+            margin: 0; text-transform: uppercase; letter-spacing: 4px; 
+            font-size: 2em; font-weight: 900; background: linear-gradient(to bottom, #fff, #8b949e);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
         
-        .last-update { 
-            font-size: 0.9em; color: #8b949e; margin-top: 5px; font-family: monospace;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+        .sync-info { 
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: var(--text-dim);
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px;
         }
 
-        .status-dot {
-            width: 8px; height: 8px; background-color: var(--green); border-radius: 50%;
-            display: inline-block; box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite;
+        .pulse-dot {
+            width: 10px; height: 10px; background: var(--green-glow); border-radius: 50%;
+            box-shadow: 0 0 12px var(--green-glow); animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        .logo-img { max-height: 50px; width: auto; }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
 
         .dashboard { 
             display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 20px; 
-            flex-grow: 1; overflow: hidden; margin-bottom: 50px; 
+            flex-grow: 1; overflow: hidden; padding-bottom: 60px;
         }
         
-        .colonna { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
         .colonna-titolo { 
-            text-align: center; font-weight: 900; font-size: 1.25em; color: var(--gold); 
-            text-transform: uppercase; margin-bottom: 2px; letter-spacing: 2px;
+            text-align: left; font-weight: 800; font-size: 1.1em; color: var(--text-dim); 
+            text-transform: uppercase; margin-bottom: 12px; letter-spacing: 3px;
+            border-left: 4px solid var(--blue); padding-left: 10px;
         }
 
-        .gruppo-mezzi { background: var(--panel); border-radius: 8px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 4px; }
+        .gruppo-mezzi { 
+            background: var(--panel); border-radius: 12px; overflow: hidden; 
+            border: 1px solid #30363d; margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
 
-        .main-unit { padding: 12px 15px; border-left: 10px solid; }
-        .main-unit .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; letter-spacing: -1px; }
-        .main-unit .mezzo { font-size: 0.8em; color: #8b949e; text-transform: uppercase; margin: 4px 0; font-weight: 700; }
-        .main-unit .targa { color: var(--gold); font-weight: 900; margin-left: 6px; border: 1px solid rgba(241, 224, 90, 0.3); padding: 1px 4px; border-radius: 3px; font-size: 0.8em; }
-        .main-unit .status-text { font-size: 0.9em; font-weight: bold; color: #fff; display: block; margin-top: 3px; }
+        .main-unit { padding: 15px 20px; border-left: 8px solid; position: relative; }
+        .main-unit .sigla { font-size: 2.8em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -2px; }
+        .main-unit .mezzo { font-size: 0.85em; color: var(--text-dim); font-weight: 600; margin: 5px 0; }
+        .main-unit .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); font-size: 0.9em; margin-left: 10px; background: rgba(241, 224, 90, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .status-badge { font-size: 0.8em; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-top: 8px; display: inline-block; background: rgba(255,255,255,0.05); }
 
         .backup-unit {
-            padding: 6px 15px; background: rgba(255,255,255,0.03);
-            border-left: 6px solid; border-top: 1px solid #30363d;
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 20px; background: rgba(0,0,0,0.2);
+            border-top: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center;
         }
-        .backup-unit .sigla { font-size: 1.1em; font-weight: 800; color: #c9d1d9; }
-        .backup-label { font-size: 0.6em; color: var(--blue); font-weight: 900; text-transform: uppercase; }
+        .backup-label { font-size: 0.65em; font-weight: 900; color: var(--blue); letter-spacing: 1px; }
         
-        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow-y: auto; padding-right: 5px; }
-        .card-small { background: var(--panel); padding: 10px; border-radius: 6px; border-left: 4px solid; position: relative; }
-        .card-small .cat-tag { font-size: 0.5em; color: var(--gold); font-weight: 900; text-transform: uppercase; border: 1px solid var(--gold); padding: 1px 3px; border-radius: 2px; position: absolute; top: 8px; right: 8px; }
+        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; }
+        .card-small { background: var(--panel); padding: 15px; border-radius: 10px; border-top: 4px solid; position: relative; }
+        .card-small .cat-tag { font-size: 0.55em; color: var(--gold); border: 1px solid var(--gold); padding: 2px 5px; border-radius: 4px; position: absolute; top: 12px; right: 12px; font-weight: 800; }
 
-        /* COLORI STATO */
+        .ticker-container {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 45px;
+            background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; z-index: 100;
+        }
+        .ticker-label {
+            background: var(--blue); color: white; padding: 0 20px; height: 100%;
+            display: flex; align-items: center; font-weight: 900; font-size: 0.9em;
+            z-index: 2; position: relative; box-shadow: 10px 0 20px rgba(0,0,0,0.5);
+        }
+        .ticker-label::after {
+            content: ""; position: absolute; right: -15px; border-left: 15px solid var(--blue);
+            border-top: 22.5px solid transparent; border-bottom: 22.5px solid transparent;
+        }
+        .ticker-scroll { flex-grow: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
+        .ticker-text {
+            display: inline-block; padding-left: 100%; animation: ticker-move 45s linear infinite;
+            font-weight: 700; font-size: 1.1em; color: #fff;
+        }
+        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
-
-        .ticker-wrap {
-            position: fixed; bottom: 0; left: 0; width: 100%; overflow: hidden;
-            height: 35px; background-color: rgba(0, 0, 0, 0.9); border-top: 2px solid var(--blue);
-            display: flex; align-items: center;
-        }
-        .ticker {
-            display: inline-block; white-space: nowrap; padding-right: 100%;
-            animation: ticker 35s linear infinite; font-weight: 700; font-size: 1em; color: var(--blue);
-        }
-        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        .ticker span { padding: 0 50px; }
     </style>
 </head>
 <body>
@@ -96,42 +109,43 @@
         <div style="flex:1"></div>
         <div class="header-center">
             <h1>Status Real Time Autoparco</h1>
-            <div class="last-update" id="update-time">
-                <span class="status-dot"></span>
-                <span>SINCRONIZZAZIONE...</span>
+            <div class="sync-info" id="update-time">
+                <div class="pulse-dot"></div>
+                Sincronizzazione dati in corso...
             </div>
         </div>
-        <div style="flex:1; text-align:right;">
+        <div style="flex:1; text-align:right">
             <img src="logo.png" alt="" class="logo-img" onerror="this.style.display='none'">
         </div>
     </div>
 
     <div class="dashboard">
         <div class="colonna">
-            <div class="colonna-titolo">GALLARATE</div>
+            <div class="colonna-titolo">Gallarate</div>
             <div id="sub-gallarate"></div>
-            
-            <div class="colonna-titolo" style="margin-top: 5px;">MALPENSA</div>
+            <div class="colonna-titolo" style="margin-top:10px">Malpensa</div>
             <div id="sub-malpensa"></div>
         </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">SOMMA LOMBARDO</div>
+            <div class="colonna-titolo">Somma Lombardo</div>
             <div id="sub-somma"></div>
-            <div class="colonna-titolo" style="margin-top: 5px;">SUMIRAGO</div>
+            <div class="colonna-titolo" style="margin-top:10px">Sumirago</div>
             <div id="sub-sumirago"></div>
         </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">FLOTTA VARIABILE</div>
+            <div class="colonna-titolo">Flotta Variabile</div>
             <div id="col-altri" class="grid-altri"></div>
         </div>
     </div>
 
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <span>Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099</span>
-            <span>+++ Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 +++</span>
+    <div class="ticker-container">
+        <div class="ticker-label">AVVISI</div>
+        <div class="ticker-scroll">
+            <div class="ticker-text" id="ticker-content">
+                +++ È OBBLIGATORIO FARE RIFORNIMENTO AI MEZZI PRIMA CHE ARRIVINO A METÀ SERBATOIO, PRESTANDO ATTENZIONE AL TIPO DI CARBURANTE DEL VEICOLO IN USO +++ Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 +++
+            </div>
         </div>
     </div>
 
@@ -158,7 +172,7 @@
                 const findBySigla = (siglaPart) => data.find(d => d[1].toUpperCase().includes(siglaPart)) || null;
 
                 const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('update-time').innerHTML = `<span class="status-dot"></span> Ultimo aggiornamento ${ora}`;
+                document.getElementById('update-time').innerHTML = `<div class="pulse-dot"></div> SISTEMA OPERATIVO • ULTIMO AGGIORNAMENTO ${ora}`;
 
                 document.getElementById('sub-gallarate').innerHTML = '';
                 document.getElementById('sub-malpensa').innerHTML = '';
@@ -175,21 +189,21 @@
 
                 mainSections.forEach(g => {
                     if (!g.main) return;
-                    let mainTarga = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
+                    let targa = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
                             <div class="sigla">${g.main[1]}</div>
-                            <div class="mezzo">${g.main[2]}${mainTarga}</div>
-                            <div class="status-text">${g.main[3]}</div>
+                            <div class="mezzo">${g.main[2]}${targa}</div>
+                            <div class="status-badge">${g.main[3]}</div>
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
-                        html += `<div class="backup-unit status-off" style="border-left-color:#333"><div class="backup-label">BACKUP</div><div style="font-size:0.75em; font-weight:700; color:var(--blue)">MARZO 2026</div></div>`;
+                        html += `<div class="backup-unit"><span class="backup-label">PROSSIMO ARRIVO</span><span style="font-size:0.8em; font-weight:700; color:var(--blue)">MARZO 2026</span></div>`;
                     } else if (g.backup) {
-                        let backupTarga = g.backup[4] ? `<span style="font-size:0.8em; color:var(--gold); margin-left:5px">${g.backup[4]}</span>` : "";
+                        let bTarga = g.backup[4] ? `<span style="color:var(--gold); font-family:monospace; margin-left:8px">${g.backup[4]}</span>` : "";
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
-                            <div><span class="backup-label">BACKUP</span> <span class="sigla" style="font-size:1em">${g.backup[1]}</span>${backupTarga}</div>
-                            <div style="font-size:0.75em; font-weight:bold">${g.backup[3]}</div>
+                            <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:10px">BACKUP</span><strong style="font-size:1.1em">${g.backup[1]}</strong>${bTarga}</div>
+                            <span style="font-size:0.75em; font-weight:bold; opacity:0.8">${g.backup[3]}</span>
                         </div>`;
                     }
                     html += `</div>`;
@@ -199,23 +213,28 @@
                 const altriCont = document.getElementById('col-altri');
                 altriCont.innerHTML = "";
                 data.forEach(d => {
-                    const status = d[3].toUpperCase();
-                    const sigla = d[1].toUpperCase();
-                    const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
+                    const s = d[3].toUpperCase();
+                    const sig = d[1].toUpperCase();
+                    const isM = s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP CONV") || s.includes("AGG. MXP") || sig === "VA11-81";
                     
-                    if (!isMapped) {
+                    if (!isM) {
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
-                                <strong style="font-size:1.2em">${d[1]}</strong><br>
-                                <span style="font-size:0.75em; color:#8b949e; font-weight:700">${d[2]}</span><br>
-                                <span style="font-size:0.8em; font-weight:bold">${d[3]}</span>
+                                <strong style="font-size:1.4em; letter-spacing:-1px">${d[1]}</strong><br>
+                                <span style="font-size:0.75em; color:var(--text-dim); font-weight:700">${d[2]}</span><br>
+                                <span style="font-size:0.85em; font-weight:800; color:#fff">${d[3]}</span>
                             </div>`;
                     }
                 });
+
+                document.getElementById('ticker-content').innerHTML = `+++ È OBBLIGATORIO FARE RIFORNIMENTO AI MEZZI PRIMA CHE ARRIVINO A METÀ SERBATOIO, PRESTANDO ATTENZIONE AL TIPO DI CARBURANTE DEL VEICOLO IN USO +++ Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 ••• Situazione flotta aggiornata alle ore ${ora} •••`;
+
             } catch (e) { console.error(e); }
         }
-        update(); setInterval(update, 60000);
+
+        update();
+        setInterval(update, 60000);
     </script>
 </body>
 </html>
