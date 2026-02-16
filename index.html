@@ -8,6 +8,7 @@
         :root {
             --bg: #0d1117;
             --panel: #161b22;
+            --panel-hover: #1c2128;
             --green: #238636;
             --green-glow: #2ea043;
             --orange: #d29922;
@@ -24,12 +25,13 @@
             overflow: hidden; height: 100vh; display: flex; flex-direction: column;
         }
         
+        /* HEADER PROFESSIONALE */
         .header { 
             display: flex; justify-content: space-between; align-items: center; 
             margin-bottom: 25px; padding: 0 10px;
         }
         .header-center h1 { 
-            margin: 0; text-transform: uppercase; letter-spacing: 4px; 
+            margin: 0; text-transform: uppercase; letter-spacing: 6px; 
             font-size: 2em; font-weight: 900; background: linear-gradient(to bottom, #fff, #8b949e);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
@@ -45,6 +47,7 @@
         }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
 
+        /* LAYOUT DASHBOARD */
         .dashboard { 
             display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 20px; 
             flex-grow: 1; overflow: hidden; padding-bottom: 60px;
@@ -58,7 +61,7 @@
 
         .gruppo-mezzi { 
             background: var(--panel); border-radius: 12px; overflow: hidden; 
-            border: 1px solid #30363d; margin-bottom: 10px;
+            border: 1px solid #30363d; transition: all 0.3s; margin-bottom: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
@@ -78,6 +81,7 @@
         .card-small { background: var(--panel); padding: 15px; border-radius: 10px; border-top: 4px solid; position: relative; }
         .card-small .cat-tag { font-size: 0.55em; color: var(--gold); border: 1px solid var(--gold); padding: 2px 5px; border-radius: 4px; position: absolute; top: 12px; right: 12px; font-weight: 800; }
 
+        /* TICKER NEWS STYLE */
         .ticker-container {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 45px;
             background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; z-index: 100;
@@ -91,13 +95,16 @@
             content: ""; position: absolute; right: -15px; border-left: 15px solid var(--blue);
             border-top: 22.5px solid transparent; border-bottom: 22.5px solid transparent;
         }
-        .ticker-scroll { flex-grow: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
+        .ticker-scroll {
+            flex-grow: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center;
+        }
         .ticker-text {
-            display: inline-block; padding-left: 100%; animation: ticker-move 45s linear infinite;
-            font-weight: 700; font-size: 1.1em; color: #fff;
+            display: inline-block; padding-left: 100%; animation: ticker-move 40s linear infinite;
+            font-weight: 600; font-size: 1.1em; color: var(--text-main);
         }
         @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
+        /* COLORI STATO */
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
@@ -108,7 +115,7 @@
     <div class="header">
         <div style="flex:1"></div>
         <div class="header-center">
-            <h1>Status Real Time Autoparco</h1>
+            <h1>SITUATION ROOM AUTOPARCO</h1>
             <div class="sync-info" id="update-time">
                 <div class="pulse-dot"></div>
                 Sincronizzazione dati in corso...
@@ -144,7 +151,7 @@
         <div class="ticker-label">AVVISI</div>
         <div class="ticker-scroll">
             <div class="ticker-text" id="ticker-content">
-                +++ È OBBLIGATORIO FARE RIFORNIMENTO AI MEZZI PRIMA CHE ARRIVINO A METÀ SERBATOIO, PRESTANDO ATTENZIONE AL TIPO DI CARBURANTE DEL VEICOLO IN USO +++ Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 +++
+                Caricamento informazioni di servizio... +++ Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 +++ Controllare i livelli AdBlue prima di ogni inizio turno +++
             </div>
         </div>
     </div>
@@ -174,6 +181,7 @@
                 const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
                 document.getElementById('update-time').innerHTML = `<div class="pulse-dot"></div> SISTEMA OPERATIVO • ULTIMO AGGIORNAMENTO ${ora}`;
 
+                // Svuoto le colonne
                 document.getElementById('sub-gallarate').innerHTML = '';
                 document.getElementById('sub-malpensa').innerHTML = '';
                 document.getElementById('sub-somma').innerHTML = '';
@@ -189,35 +197,36 @@
 
                 mainSections.forEach(g => {
                     if (!g.main) return;
-                    let targa = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
+                    let mainTarga = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
                             <div class="sigla">${g.main[1]}</div>
-                            <div class="mezzo">${g.main[2]}${targa}</div>
+                            <div class="mezzo">${g.main[2]}${mainTarga}</div>
                             <div class="status-badge">${g.main[3]}</div>
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
                         html += `<div class="backup-unit"><span class="backup-label">PROSSIMO ARRIVO</span><span style="font-size:0.8em; font-weight:700; color:var(--blue)">MARZO 2026</span></div>`;
                     } else if (g.backup) {
-                        let bTarga = g.backup[4] ? `<span style="color:var(--gold); font-family:monospace; margin-left:8px">${g.backup[4]}</span>` : "";
+                        let backupTarga = g.backup[4] ? `<span class="targa-small" style="color:var(--gold); font-family:monospace; margin-left:8px; font-size:0.9em">${g.backup[4]}</span>` : "";
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
-                            <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:10px">BACKUP</span><strong style="font-size:1.1em">${g.backup[1]}</strong>${bTarga}</div>
-                            <span style="font-size:0.75em; font-weight:bold; opacity:0.8">${g.backup[3]}</span>
+                            <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:10px">BACKUP</span><strong style="font-size:1.1em">${g.backup[1]}</strong>${backupTarga}</div>
+                            <span style="font-size:0.7em; font-weight:bold; opacity:0.8">${g.backup[3]}</span>
                         </div>`;
                     }
                     html += `</div>`;
                     document.getElementById(g.target).innerHTML += html;
                 });
 
+                // Altri mezzi
                 const altriCont = document.getElementById('col-altri');
                 altriCont.innerHTML = "";
                 data.forEach(d => {
-                    const s = d[3].toUpperCase();
-                    const sig = d[1].toUpperCase();
-                    const isM = s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP CONV") || s.includes("AGG. MXP") || sig === "VA11-81";
+                    const status = d[3].toUpperCase();
+                    const sigla = d[1].toUpperCase();
+                    const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     
-                    if (!isM) {
+                    if (!isMapped) {
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
@@ -228,7 +237,8 @@
                     }
                 });
 
-                document.getElementById('ticker-content').innerHTML = `+++ È OBBLIGATORIO FARE RIFORNIMENTO AI MEZZI PRIMA CHE ARRIVINO A METÀ SERBATOIO, PRESTANDO ATTENZIONE AL TIPO DI CARBURANTE DEL VEICOLO IN USO +++ Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 ••• Situazione flotta aggiornata alle ore ${ora} •••`;
+                // Ticker Content update
+                document.getElementById('ticker-content').innerHTML = `Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 ••• Situazione flotta aggiornata alle ore ${ora} ••• Controllare sempre le dotazioni di bordo prima della partenza •••`;
 
             } catch (e) { console.error(e); }
         }
