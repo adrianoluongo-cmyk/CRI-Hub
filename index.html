@@ -50,8 +50,11 @@
         .gruppo-mezzi { background: var(--panel); border-radius: 8px; border: 1px solid #30363d; overflow: hidden; }
         .main-unit { padding: 12px 15px; border-left: 10px solid; position: relative; }
         
+        /* ICONE */
         .amb-icon { display: inline-block; vertical-align: middle; margin-right: 12px; width: 32px; height: 32px; fill: currentColor; opacity: 0.9; }
-        .sigla-container { display: flex; align-items: center; }
+        .radio-icon { width: 18px; height: 18px; fill: var(--blue); margin-left: 10px; vertical-align: middle; }
+        
+        .sigla-container { display: flex; align-items: center; flex-wrap: wrap; }
         .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
         
         .mezzo { font-size: 0.85em; color: var(--text-dim); font-weight: 700; margin: 4px 0; text-transform: uppercase; }
@@ -90,7 +93,7 @@
 
     <div class="header">
         <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em; color:var(--text-dim)">SINCRONIZZAZIONE...</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em; color:var(--text-dim)">AGGIORNAMENTO...</div>
         <img src="logo.png" style="max-height:40px" onerror="this.style.display='none'">
     </div>
 
@@ -126,6 +129,8 @@
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
         const ambulanceSvg = `<svg class="amb-icon" viewBox="0 0 24 24"><path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" /></svg>`;
+        
+        const radioSvg = `<svg class="radio-icon" viewBox="0 0 24 24"><path d="M10,20A2,2 0 0,1 8,18V8A2,2 0 0,1 10,6H14A2,2 0 0,1 16,8V18A2,2 0 0,1 14,20H10M12,8A1,1 0 0,0 11,9A1,1 0 0,0 12,10A1,1 0 0,0 13,9A1,1 0 0,0 12,8M14,12H10V14H14V12M14,15H10V17H14V15M11,2H13V6H11V2Z" /></svg>`;
 
         function getStatusClass(status) {
             if (!status) return "status-off";
@@ -135,6 +140,12 @@
             return "status-ok";
         }
 
+        // Funzione per verificare se ha la radio CRI
+        function hasRadio(sigla) {
+            const radioUnits = ["VA11-32", "VA11-41", "VA21-31"];
+            return radioUnits.includes(sigla.trim().toUpperCase());
+        }
+
         async function update() {
             try {
                 const response = await fetch(sheetUrl + '&t=' + Date.now());
@@ -142,10 +153,7 @@
                 const sep = csv.includes(';') ? ';' : ',';
                 const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
                 
-                // MappaturaColonne:
-                // 0: Cat, 1: Sigla, 2: Mezzo, 3: Stato, 4: DIFETTO (Col E), 5: TARGA (Col F)
                 const data = rows.map(r => r.split(sep).map(c => c.replace(/"/g, '').trim()));
-                
                 const findByStatus = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
                 const findBySigla = (siglaPart) => data.find(d => d[1].toUpperCase().includes(siglaPart)) || null;
 
@@ -170,12 +178,14 @@
                     
                     let mainTarga = g.main[5] ? `<span class="targa">${g.main[5]}</span>` : "";
                     let noteHtml = (g.main[4] && g.main[4].length > 1) ? `<div class="note-box">⚠️ ${g.main[4]}</div>` : "";
+                    let radioIcon = hasRadio(g.main[1]) ? radioSvg : "";
                     
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
                             <div class="sigla-container">
                                 ${ambulanceSvg}
                                 <div class="sigla">${g.main[1]}</div>
+                                ${radioIcon}
                                 ${mainTarga}
                             </div>
                             <div class="mezzo">${g.main[2]}</div>
@@ -186,11 +196,12 @@
                     if (g.backup === "MARZO2026") {
                         html += `<div class="backup-unit"><span class="backup-label">PROSSIMO ARRIVO</span><span style="font-size:0.8em; font-weight:700; color:var(--blue)">MARZO 2026</span></div>`;
                     } else if (g.backup && g.backup !== "NONE") {
+                        let bRadio = hasRadio(g.backup[1]) ? radioSvg : "";
                         let bTarga = g.backup[5] ? `<span class="targa" style="font-size:0.7em; margin-left:5px">${g.backup[5]}</span>` : "";
                         let bNoteHtml = (g.backup[4] && g.backup[4].length > 1) ? `<div class="note-box" style="margin-top:4px; font-size:0.75em">⚠️ ${g.backup[4]}</div>` : "";
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
                             <div style="display:flex; flex-direction:column">
-                                <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:8px">BACKUP</span><strong>${g.backup[1]}</strong>${bTarga}</div>
+                                <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:8px">BACKUP</span><strong>${g.backup[1]}</strong>${bRadio}${bTarga}</div>
                                 ${bNoteHtml}
                             </div>
                             <span style="font-size:0.7em; opacity:0.8">${g.backup[3]}</span>
@@ -207,13 +218,14 @@
                     const sigla = d[1].toUpperCase();
                     const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     if (!isMapped) {
+                        let aRadio = hasRadio(d[1]) ? radioSvg : "";
                         let aTarga = d[5] ? `<span class="targa" style="font-size:0.7em; float:right">${d[5]}</span>` : "";
                         let altNote = (d[4] && d[4].length > 1) ? `<div class="note-box" style="font-size:0.7em; margin-top:5px">⚠️ ${d[4]}</div>` : "";
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
                                 ${aTarga}
-                                <strong style="font-size:1.3em">${d[1]}</strong><br>
+                                <strong style="font-size:1.3em">${d[1]}</strong>${aRadio}<br>
                                 <span style="font-size:0.75em; color:var(--text-dim)">${d[2]}</span><br>
                                 <span style="font-size:0.8em; font-weight:800">${d[3]}</span>
                                 ${altNote}
