@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>STATUS REAL TIME AUTOPARCO</title>
+    <title>SITUATION ROOM AUTOPARCO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -50,8 +50,22 @@
 
         /* MEZZI */
         .gruppo-mezzi { background: var(--panel); border-radius: 8px; border: 1px solid #30363d; overflow: hidden; }
-        .main-unit { padding: 12px 15px; border-left: 8px solid; }
+        .main-unit { padding: 12px 15px; border-left: 10px solid; position: relative; }
+        
+        /* ICONA AMBULANZA STILIZZATA */
+        .amb-icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 12px;
+            width: 32px;
+            height: 32px;
+            fill: currentColor;
+            opacity: 0.9;
+        }
+
+        .sigla-container { display: flex; align-items: center; }
         .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
+        
         .mezzo { font-size: 0.8em; color: var(--text-dim); font-weight: 700; margin: 4px 0; text-transform: uppercase; }
         .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 1px 5px; border-radius: 4px; margin-left: 8px; font-size: 0.9em; }
         .status-badge { font-size: 0.75em; font-weight: 800; display: inline-block; margin-top: 5px; color: #fff; }
@@ -130,6 +144,12 @@
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
+        // SVG dell'ambulanza stilizzata
+        const ambulanceSvg = `
+            <svg class="amb-icon" viewBox="0 0 24 24">
+                <path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" />
+            </svg>`;
+
         function getStatusClass(status) {
             if (!status) return "status-off";
             const s = status.toUpperCase();
@@ -170,7 +190,10 @@
                     let mainTarga = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
-                            <div class="sigla">${g.main[1]}</div>
+                            <div class="sigla-container">
+                                ${ambulanceSvg}
+                                <div class="sigla">${g.main[1]}</div>
+                            </div>
                             <div class="mezzo">${g.main[2]}${mainTarga}</div>
                             <div class="status-badge">${g.main[3]}</div>
                         </div>`;
@@ -212,4 +235,4 @@
         setInterval(update, 60000);
     </script>
 </body>
-</html>l>
+</html>
