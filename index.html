@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUATION ROOM AUTOPARCO</title>
+    <title>STATUS REAL TIME AUTOPARCO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -79,7 +79,7 @@
         .ticker-scroll { flex: 1; overflow: hidden; white-space: nowrap; }
         .ticker-text { 
             display: inline-block; padding-left: 100%; animation: scroll 35s linear infinite; 
-            font-weight: 600; font-size: 1em; color: #fff;
+            font-weight: 600; font-size: 1.1em; color: #fff;
         }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
@@ -87,9 +87,6 @@
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
-
-        .pulse { animation: pulse-anim 2s infinite; }
-        @keyframes pulse-anim { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -124,7 +121,9 @@
     <div class="ticker-wrap">
         <div class="ticker-label">AVVISI</div>
         <div class="ticker-scroll">
-            <div class="ticker-text" id="ticker-content">In attesa di aggiornamenti...</div>
+            <div class="ticker-text" id="ticker-content">
+                Mandatorio effettuare rifornimento prima della metà serbatoio, verificando il tipo di carburante del mezzo in uso ••• Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 338.7360099
+            </div>
         </div>
     </div>
 
@@ -206,8 +205,6 @@
                     }
                 });
 
-                document.getElementById('ticker-content').innerHTML = `+++ Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 3387360099 +++ Situazione flotta aggiornata alle ore ${ora} +++ Ricordarsi di segnalare eventuali anomalie sul diario di bordo +++`;
-
             } catch (e) { console.error(e); }
         }
 
@@ -215,4 +212,4 @@
         setInterval(update, 60000);
     </script>
 </body>
-</html>
+</html>l>
