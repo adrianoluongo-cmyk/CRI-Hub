@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUATION ROOM AUTOPARCO</title>
+    <title>SITUAZIONE REAL TIME AUTOPARCO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +14,7 @@
             --blue: #2f81f7;
             --gold: #f1e05a;
             --text-dim: #8b949e;
+            --note-bg: rgba(241, 224, 90, 0.1);
         }
         
         body { 
@@ -24,18 +25,16 @@
             display: flex; flex-direction: column;
         }
 
-        /* HEADER */
         .header { 
             height: 70px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 30px; border-bottom: 1px solid #30363d; background: #0d1117;
         }
         .header h1 { 
-            margin: 0; font-size: 1.5em; letter-spacing: 4px; font-weight: 900;
+            margin: 0; font-size: 1.5em; letter-spacing: 2px; font-weight: 900;
             background: linear-gradient(to right, #fff, var(--text-dim));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* DASHBOARD AREA */
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.2fr; 
             gap: 20px; padding: 20px; overflow: hidden;
@@ -48,27 +47,23 @@
             border-left: 3px solid var(--blue); padding-left: 10px; margin-bottom: 5px;
         }
 
-        /* MEZZI */
         .gruppo-mezzi { background: var(--panel); border-radius: 8px; border: 1px solid #30363d; overflow: hidden; }
         .main-unit { padding: 12px 15px; border-left: 10px solid; position: relative; }
         
-        /* ICONA AMBULANZA STILIZZATA */
-        .amb-icon {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 12px;
-            width: 32px;
-            height: 32px;
-            fill: currentColor;
-            opacity: 0.9;
-        }
-
+        .amb-icon { display: inline-block; vertical-align: middle; margin-right: 12px; width: 32px; height: 32px; fill: currentColor; opacity: 0.9; }
         .sigla-container { display: flex; align-items: center; }
         .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
         
-        .mezzo { font-size: 0.8em; color: var(--text-dim); font-weight: 700; margin: 4px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 1px 5px; border-radius: 4px; margin-left: 8px; font-size: 0.9em; }
-        .status-badge { font-size: 0.75em; font-weight: 800; display: inline-block; margin-top: 5px; color: #fff; }
+        .mezzo { font-size: 0.85em; color: var(--text-dim); font-weight: 700; margin: 4px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-size: 0.95em; border: 1px solid rgba(241, 224, 90, 0.3); }
+        .status-badge { font-size: 0.75em; font-weight: 800; display: inline-block; margin-top: 5px; color: #fff; text-transform: uppercase; }
+
+        .note-box {
+            margin-top: 8px; padding: 6px 10px; background: var(--note-bg);
+            border-radius: 4px; border: 1px solid rgba(241, 224, 90, 0.2);
+            color: var(--gold); font-size: 0.8em; font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+        }
 
         .backup-unit {
             padding: 8px 15px; background: rgba(0,0,0,0.2);
@@ -76,28 +71,16 @@
         }
         .backup-label { font-size: 0.6em; font-weight: 900; color: var(--blue); text-transform: uppercase; }
 
-        /* ALTRI MEZZI */
         .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow-y: auto; padding-right: 5px; }
         .card-small { background: var(--panel); padding: 10px; border-radius: 6px; border-left: 4px solid; position: relative; }
         .card-small .cat-tag { font-size: 0.5em; color: var(--gold); position: absolute; top: 8px; right: 8px; border: 1px solid var(--gold); padding: 1px 4px; border-radius: 3px; }
 
-        /* TICKER */
-        .ticker-wrap {
-            height: 40px; background: #000; border-top: 2px solid var(--blue);
-            display: flex; align-items: center; overflow: hidden;
-        }
-        .ticker-label { 
-            background: var(--blue); color: #fff; padding: 0 15px; height: 100%; 
-            display: flex; align-items: center; font-weight: 900; font-size: 0.8em; z-index: 10;
-        }
+        .ticker-wrap { height: 40px; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
+        .ticker-label { background: var(--blue); color: #fff; padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.8em; z-index: 10; }
         .ticker-scroll { flex: 1; overflow: hidden; white-space: nowrap; }
-        .ticker-text { 
-            display: inline-block; padding-left: 100%; animation: scroll 35s linear infinite; 
-            font-weight: 600; font-size: 1.1em; color: #fff;
-        }
+        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 35s linear infinite; font-weight: 600; font-size: 1.1em; color: #fff; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* STATI */
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
@@ -106,10 +89,8 @@
 <body>
 
     <div class="header">
-        <h1>SITUATION ROOM AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em; color:var(--text-dim)">
-            COLLEGAMENTO...
-        </div>
+        <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
+        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em; color:var(--text-dim)">SINCRONIZZAZIONE...</div>
         <img src="logo.png" style="max-height:40px" onerror="this.style.display='none'">
     </div>
 
@@ -144,11 +125,7 @@
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
-        // SVG dell'ambulanza stilizzata
-        const ambulanceSvg = `
-            <svg class="amb-icon" viewBox="0 0 24 24">
-                <path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" />
-            </svg>`;
+        const ambulanceSvg = `<svg class="amb-icon" viewBox="0 0 24 24"><path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" /></svg>`;
 
         function getStatusClass(status) {
             if (!status) return "status-off";
@@ -164,6 +141,9 @@
                 const csv = await response.text();
                 const sep = csv.includes(';') ? ';' : ',';
                 const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
+                
+                // MappaturaColonne:
+                // 0: Cat, 1: Sigla, 2: Mezzo, 3: Stato, 4: DIFETTO (Col E), 5: TARGA (Col F)
                 const data = rows.map(r => r.split(sep).map(c => c.replace(/"/g, '').trim()));
                 
                 const findByStatus = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
@@ -187,23 +167,32 @@
 
                 sections.forEach(g => {
                     if (!g.main) return;
-                    let mainTarga = g.main[4] ? `<span class="targa">${g.main[4]}</span>` : "";
+                    
+                    let mainTarga = g.main[5] ? `<span class="targa">${g.main[5]}</span>` : "";
+                    let noteHtml = (g.main[4] && g.main[4].length > 1) ? `<div class="note-box">⚠️ ${g.main[4]}</div>` : "";
+                    
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
                             <div class="sigla-container">
                                 ${ambulanceSvg}
                                 <div class="sigla">${g.main[1]}</div>
+                                ${mainTarga}
                             </div>
-                            <div class="mezzo">${g.main[2]}${mainTarga}</div>
+                            <div class="mezzo">${g.main[2]}</div>
                             <div class="status-badge">${g.main[3]}</div>
+                            ${noteHtml}
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
                         html += `<div class="backup-unit"><span class="backup-label">PROSSIMO ARRIVO</span><span style="font-size:0.8em; font-weight:700; color:var(--blue)">MARZO 2026</span></div>`;
-                    } else if (g.backup) {
-                        let bTarga = g.backup[4] ? `<span style="color:var(--gold); font-family:monospace; margin-left:5px">${g.backup[4]}</span>` : "";
+                    } else if (g.backup && g.backup !== "NONE") {
+                        let bTarga = g.backup[5] ? `<span class="targa" style="font-size:0.7em; margin-left:5px">${g.backup[5]}</span>` : "";
+                        let bNoteHtml = (g.backup[4] && g.backup[4].length > 1) ? `<div class="note-box" style="margin-top:4px; font-size:0.75em">⚠️ ${g.backup[4]}</div>` : "";
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
-                            <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:8px">BACKUP</span><strong>${g.backup[1]}</strong>${bTarga}</div>
+                            <div style="display:flex; flex-direction:column">
+                                <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:8px">BACKUP</span><strong>${g.backup[1]}</strong>${bTarga}</div>
+                                ${bNoteHtml}
+                            </div>
                             <span style="font-size:0.7em; opacity:0.8">${g.backup[3]}</span>
                         </div>`;
                     }
@@ -218,12 +207,16 @@
                     const sigla = d[1].toUpperCase();
                     const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     if (!isMapped) {
+                        let aTarga = d[5] ? `<span class="targa" style="font-size:0.7em; float:right">${d[5]}</span>` : "";
+                        let altNote = (d[4] && d[4].length > 1) ? `<div class="note-box" style="font-size:0.7em; margin-top:5px">⚠️ ${d[4]}</div>` : "";
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
+                                ${aTarga}
                                 <strong style="font-size:1.3em">${d[1]}</strong><br>
                                 <span style="font-size:0.75em; color:var(--text-dim)">${d[2]}</span><br>
                                 <span style="font-size:0.8em; font-weight:800">${d[3]}</span>
+                                ${altNote}
                             </div>`;
                     }
                 });
