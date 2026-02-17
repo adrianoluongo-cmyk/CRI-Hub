@@ -50,6 +50,7 @@
 
         .distacco-titolo { margin-top: 25px !important; }
 
+        /* BOX MEZZO IN CONVENZIONE */
         .gruppo-mezzi { 
             background: var(--panel); 
             border-radius: 16px; 
@@ -144,6 +145,7 @@
     </div>
 
     <script>
+        // URL FOGLIO GOOGLE
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
         const ambulanceSvg = `<svg class="amb-icon" viewBox="0 0 24 24"><path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" /></svg>`;
@@ -164,21 +166,11 @@
             return "text-ok";
         }
 
-        function updateGallarate1Info() {
-            const hour = new Date().getHours();
-            const infoGal1 = document.getElementById('info-gal1');
-            infoGal1.innerHTML = (hour >= 6 && hour < 22) ? `06:00-22:00 | <span style="color:var(--gold)">H24_2+</span>` : `22:00-06:00 | <span style="color:var(--gold)">H24_3</span>`;
-        }
-
-        // Funzione di parsing CSV migliorata
         function parseCSV(text) {
             const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
             if (lines.length === 0) return [];
             const delimiter = lines[0].includes(';') ? ';' : ',';
-            return lines.map(line => {
-                const parts = line.split(delimiter);
-                return parts.map(p => p.replace(/^"|"$/g, '').trim());
-            });
+            return lines.map(line => line.split(delimiter).map(p => p.replace(/^"|"$/g, '').trim()));
         }
 
         async function update() {
@@ -186,18 +178,17 @@
                 const response = await fetch(sheetUrl + '&t=' + Date.now());
                 const csvText = await response.text();
                 const allData = parseCSV(csvText);
-                const data = allData.slice(1); // Rimuove header
+                const data = allData.slice(1);
 
                 document.getElementById('update-time').innerHTML = `● LIVE • ${new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'})}`;
-                updateGallarate1Info();
 
-                // Reset contenitori
                 document.querySelectorAll('[id^="sub-"]').forEach(el => el.innerHTML = '');
                 document.getElementById('col-altri').innerHTML = '';
                 document.getElementById('wrapper-malpensa').style.display = 'none';
 
-                const findByStatus = (statusPart) => data.find(d => d[3] && d[3].toUpperCase().includes(statusPart)) || null;
-                const findBySigla = (siglaPart) => data.find(d => d[1] && d[1].toUpperCase().includes(siglaPart)) || null;
+                // MAPPATURA NUOVA: A:0, B:1 (SIGLA), C:2 (MODELLO), D:3 (TARGA), E:4 (STATUS), F:5 (NOTE)
+                const findByStatus = (statusText) => data.find(d => d[4] && d[4].toUpperCase().includes(statusText)) || null;
+                const findBySigla = (siglaText) => data.find(d => d[1] && d[1].toUpperCase().includes(siglaText)) || null;
 
                 const sections = [
                     { target: "sub-gallarate-1", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1") },
@@ -211,19 +202,19 @@
                     if (!g.main) return;
                     if (g.target === "sub-malpensa") document.getElementById('wrapper-malpensa').style.display = 'block';
 
-                    let mainTarga = g.main[5] ? `<span class="targa">${g.main[5]}</span>` : "";
-                    let noteHtml = (g.main[4] && g.main[4].length > 1) ? `<div class="note-box">⚠️ ${g.main[4]}</div>` : "";
+                    let targa = g.main[3] ? `<span class="targa">${g.main[3]}</span>` : "";
+                    let note = (g.main[5] && g.main[5].length > 1) ? `<div class="note-box">⚠️ ${g.main[5]}</div>` : "";
                     
                     let html = `<div class="gruppo-mezzi">
-                        <div class="main-unit ${getStatusClass(g.main[3])}">
+                        <div class="main-unit ${getStatusClass(g.main[4])}">
                             <div style="display:flex; align-items:center;">
                                 ${ambulanceSvg}
                                 <div class="sigla">${g.main[1]}</div>
-                                ${mainTarga}
+                                ${targa}
                             </div>
                             <div class="mezzo">${g.main[2]}</div>
-                            <div class="status-badge ${getStatusTextColor(g.main[3])}" style="font-weight:900; font-size:0.8em; text-transform:uppercase;">${g.main[3]}</div>
-                            ${noteHtml}
+                            <div class="status-badge ${getStatusTextColor(g.main[4])}" style="font-weight:900; font-size:0.8em; text-transform:uppercase;">${g.main[4]}</div>
+                            ${note}
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
@@ -234,7 +225,7 @@
                                 <span style="font-size:0.6em; font-weight:900; color:var(--blue);">BK</span>
                                 <span style="font-size:1.1em; font-weight:800;">${g.backup[1]}</span>
                             </div>
-                            <span class="${getStatusTextColor(g.backup[3])}" style="font-size:0.75em; font-weight:800;">${g.backup[3]}</span>
+                            <span class="${getStatusTextColor(g.backup[4])}" style="font-size:0.75em; font-weight:800;">${g.backup[4]}</span>
                         </div>`;
                     }
                     html += `</div>`;
@@ -245,24 +236,22 @@
                 const altriCont = document.getElementById('col-altri');
                 data.forEach(d => {
                     if (!d[1]) return;
-                    const status = d[3].toUpperCase();
+                    const status = d[4] ? d[4].toUpperCase() : "";
                     const sigla = d[1].toUpperCase();
                     const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     
                     if (!isMapped) {
                         altriCont.innerHTML += `
-                            <div class="card-small ${getStatusClass(d[3])}">
+                            <div class="card-small ${getStatusClass(d[4])}">
                                 <div style="display:flex; justify-content:space-between; align-items:center;">
                                     <strong style="font-size:1.4em;">${d[1]}</strong>
-                                    <span class="${getStatusTextColor(d[3])}" style="font-size:0.75em; font-weight:800;">${d[3]}</span>
+                                    <span class="${getStatusTextColor(d[4])}" style="font-size:0.75em; font-weight:800;">${d[4]}</span>
                                 </div>
                                 <div style="font-size:0.8em; color:var(--text-dim); margin-top:2px; font-weight:600;">${d[2]}</div>
                             </div>`;
                     }
                 });
-            } catch (e) { 
-                console.error("Errore caricamento dati:", e); 
-            }
+            } catch (e) { console.error("Errore:", e); }
         }
 
         update();
