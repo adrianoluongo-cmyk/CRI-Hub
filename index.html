@@ -57,32 +57,45 @@
 
         .distacco-titolo { margin-top: 40px !important; }
 
-        .gruppo-mezzi { background: var(--panel); border-radius: 10px; border: 1px solid #30363d; overflow: hidden; margin-bottom: 12px; }
-        .main-unit { padding: 15px 18px; border-left: 12px solid; position: relative; }
+        .gruppo-mezzi { 
+            background: var(--panel); border-radius: 12px; 
+            border: 1px solid #30363d; overflow: hidden; 
+            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* UNITÀ TITOLARE */
+        .main-unit { padding: 18px; border-left: 12px solid; position: relative; }
         
-        .amb-icon { display: inline-block; vertical-align: middle; margin-right: 12px; width: 38px; height: 38px; fill: currentColor; opacity: 0.9; }
-        .radio-icon { width: 22px; height: 22px; fill: var(--blue); margin-left: 12px; vertical-align: middle; }
+        .amb-icon { display: inline-block; vertical-align: middle; margin-right: 15px; width: 40px; height: 40px; fill: currentColor; opacity: 0.9; }
+        .radio-icon { width: 24px; height: 24px; fill: var(--blue); margin-left: 12px; vertical-align: middle; }
         
         .sigla-container { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
-        .prefix-areu { font-size: 0.8em; font-weight: 800; color: var(--text-dim); margin-right: 8px; text-transform: uppercase; }
-        .sigla { font-size: 2.5em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
+        .sigla { font-size: 2.8em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
         
-        .mezzo { font-size: 0.95em; color: var(--text-dim); font-weight: 700; margin: 6px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 3px 8px; border-radius: 4px; margin-left: 12px; font-size: 1em; border: 1px solid rgba(241, 224, 90, 0.3); }
-        .status-badge { font-size: 0.85em; font-weight: 800; display: inline-block; margin-top: 6px; color: #fff; text-transform: uppercase; padding: 2px 0; }
+        .mezzo { font-size: 1em; color: var(--text-dim); font-weight: 700; margin: 6px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 4px 10px; border-radius: 6px; margin-left: 12px; font-size: 1em; border: 1px solid rgba(241, 224, 90, 0.3); }
+        .status-badge { font-size: 0.9em; font-weight: 800; display: inline-block; margin-top: 8px; color: #fff; text-transform: uppercase; }
+
+        /* NUOVO DESIGN BACKUP */
+        .backup-unit {
+            padding: 12px 18px; 
+            background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, rgba(22,27,34,1) 100%);
+            border-top: 1px solid #30363d; 
+            display: flex; justify-content: space-between; align-items: center;
+            border-left: 12px solid transparent; /* Sarà colorato via JS */
+        }
+        .backup-content { display: flex; flex-direction: column; gap: 2px; }
+        .backup-header { display: flex; align-items: center; gap: 10px; }
+        .backup-label { font-size: 0.65em; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
+        .backup-sigla { font-size: 1.4em; font-weight: 800; color: #f0f6fc; }
+        .backup-status { font-size: 0.8em; font-weight: 700; opacity: 0.8; }
 
         .note-box {
-            margin-top: 10px; padding: 8px 12px; background: var(--note-bg);
-            border-radius: 5px; border: 1px solid rgba(241, 224, 90, 0.2);
-            color: var(--gold); font-size: 0.9em; font-weight: 600;
+            margin-top: 10px; padding: 10px 15px; background: var(--note-bg);
+            border-radius: 6px; border: 1px solid rgba(241, 224, 90, 0.2);
+            color: var(--gold); font-size: 0.95em; font-weight: 600;
             display: flex; align-items: center; gap: 10px;
         }
-
-        .backup-unit {
-            padding: 10px 18px; background: rgba(0,0,0,0.2);
-            border-top: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center;
-        }
-        .backup-label { font-size: 0.7em; font-weight: 900; color: var(--blue); text-transform: uppercase; }
 
         .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; padding-right: 5px; }
         .card-small { background: var(--panel); padding: 12px; border-radius: 8px; border-left: 5px solid; position: relative; }
@@ -97,6 +110,9 @@
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
+        .text-ok { color: var(--green); }
+        .text-man { color: var(--orange); }
+        .text-off { color: var(--red); }
     </style>
 </head>
 <body>
@@ -162,6 +178,14 @@
             return "status-ok";
         }
 
+        function getStatusTextColor(status) {
+            if (!status) return "text-off";
+            const s = status.toUpperCase();
+            if (s.includes("FUORI SERVIZIO") || s === "OFF") return "text-off";
+            if (s.includes("MANUTENZIONE")) return "text-man";
+            return "text-ok";
+        }
+
         function hasRadio(sigla) {
             const radioUnits = ["VA11-32", "VA11-41", "VA21-31"];
             return radioUnits.includes(sigla.trim().toUpperCase());
@@ -216,7 +240,6 @@
                         <div class="main-unit ${getStatusClass(g.main[3])}">
                             <div class="sigla-container">
                                 ${ambulanceSvg}
-                                <span class="prefix-areu">Convenzione AREU:</span>
                                 <div class="sigla">${g.main[1]}</div>
                                 ${radioIcon}
                                 ${mainTarga}
@@ -227,17 +250,28 @@
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
-                        html += `<div class="backup-unit"><span class="backup-label">PROSSIMO ARRIVO</span><span style="font-size:0.9em; font-weight:700; color:var(--blue)">MARZO 2026</span></div>`;
+                        html += `<div class="backup-unit" style="border-left-color: var(--blue)">
+                            <div class="backup-content">
+                                <span class="backup-label">PROSSIMO ARRIVO</span>
+                                <span class="backup-sigla" style="color:var(--blue)">MARZO 2026</span>
+                            </div>
+                        </div>`;
                     } else if (g.backup && g.backup !== "NONE") {
                         let bRadio = hasRadio(g.backup[1]) ? radioSvg : "";
-                        let bTarga = g.backup[5] ? `<span class="targa" style="font-size:0.8em; margin-left:8px">${g.backup[5]}</span>` : "";
-                        let bNoteHtml = (g.backup[4] && g.backup[4].length > 1) ? `<div class="note-box" style="margin-top:5px; font-size:0.85em">⚠️ ${g.backup[4]}</div>` : "";
+                        let bTarga = g.backup[5] ? `<span class="targa" style="font-size:0.85em">${g.backup[5]}</span>` : "";
+                        let bNoteHtml = (g.backup[4] && g.backup[4].length > 1) ? `<div class="note-box" style="margin: 5px 0 0 0; font-size:0.85em">⚠️ ${g.backup[4]}</div>` : "";
+                        
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
-                            <div style="display:flex; flex-direction:column">
-                                <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:8px">BACKUP</span><strong>${g.backup[1]}</strong>${bRadio}${bTarga}</div>
+                            <div class="backup-content" style="width:100%">
+                                <div class="backup-header">
+                                    <span class="backup-label">BACKUP UNIT</span>
+                                    <span class="backup-sigla">${g.backup[1]}</span>
+                                    ${bRadio}
+                                    ${bTarga}
+                                    <span class="backup-status ${getStatusTextColor(g.backup[3])}" style="margin-left:auto">${g.backup[3]}</span>
+                                </div>
                                 ${bNoteHtml}
                             </div>
-                            <span style="font-size:0.8em; opacity:0.8">${g.backup[3]}</span>
                         </div>`;
                     }
                     html += `</div>`;
@@ -252,15 +286,15 @@
                     const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     if (!isMapped) {
                         let aRadio = hasRadio(d[1]) ? radioSvg : "";
-                        let aTarga = d[5] ? `<span class="targa" style="font-size:0.8em; float:right">${d[5]}</span>` : "";
-                        let altNote = (d[4] && d[4].length > 1) ? `<div class="note-box" style="font-size:0.8em; margin-top:5px">⚠️ ${d[4]}</div>` : "";
+                        let aTarga = d[5] ? `<span class="targa" style="font-size:0.85em; float:right">${d[5]}</span>` : "";
+                        let altNote = (d[4] && d[4].length > 1) ? `<div class="note-box" style="font-size:0.85em; margin-top:5px">⚠️ ${d[4]}</div>` : "";
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
                                 ${aTarga}
-                                <strong style="font-size:1.4em">${d[1]}</strong>${aRadio}<br>
-                                <span style="font-size:0.85em; color:var(--text-dim)">${d[2]}</span><br>
-                                <span style="font-size:0.9em; font-weight:800">${d[3]}</span>
+                                <strong style="font-size:1.5em">${d[1]}</strong>${aRadio}<br>
+                                <span style="font-size:0.9em; color:var(--text-dim)">${d[2]}</span><br>
+                                <span style="font-size:0.95em; font-weight:800">${d[3]}</span>
                                 ${altNote}
                             </div>`;
                     }
