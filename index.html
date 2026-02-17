@@ -6,15 +6,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0c10;
-            --panel: #161b22;
-            --green: #238636;
+            --bg: #0d1117;
+            --panel: #1c2128; /* Sfondo a contrasto per i box */
+            --green: #2ea043;
             --orange: #d29922;
-            --red: #da3633;
-            --blue: #2f81f7;
+            --red: #f85149;
+            --blue: #388bfd;
             --gold: #f1e05a;
             --text-dim: #8b949e;
-            --note-bg: rgba(241, 224, 90, 0.1);
         }
         
         body { 
@@ -26,13 +25,8 @@
         }
 
         .header { 
-            height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 30px; border-bottom: 1px solid #30363d; background: #0d1117;
-        }
-        .header h1 { 
-            margin: 0; font-size: 1.6em; letter-spacing: 2px; font-weight: 900;
-            background: linear-gradient(to right, #fff, var(--text-dim));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            height: 60px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 30px; border-bottom: 1px solid #30363d; background: #010409;
         }
 
         .dashboard { 
@@ -40,86 +34,75 @@
             gap: 20px; padding: 20px; overflow: hidden;
         }
         
-        .colonna { display: flex; flex-direction: column; gap: 12px; height: 100%; }
+        .colonna { display: flex; flex-direction: column; gap: 10px; height: 100%; }
         
         .colonna-titolo { 
-            font-weight: 900; font-size: 1.5em; color: #fff; 
-            text-transform: uppercase; letter-spacing: 2px;
-            border-left: 6px solid var(--blue); padding-left: 15px; 
-            margin-bottom: 4px; margin-top: 5px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-weight: 900; font-size: 1.3em; color: #fff; 
+            text-transform: uppercase; letter-spacing: 1px;
+            padding-left: 12px; margin-bottom: 2px;
         }
 
         .equipaggio-info {
-            font-size: 0.95em; font-weight: 700; color: var(--blue);
-            margin-bottom: 12px; padding-left: 21px; text-transform: uppercase;
+            font-size: 0.8em; font-weight: 700; color: var(--blue);
+            margin-bottom: 8px; padding-left: 12px; opacity: 0.9;
         }
 
-        .distacco-titolo { margin-top: 40px !important; }
+        .distacco-titolo { margin-top: 30px !important; }
 
+        /* BOX CONVENZIONE CON CONTRASTO E BORDI SMUSSATI */
         .gruppo-mezzi { 
-            background: var(--panel); border-radius: 12px; 
-            border: 1px solid #30363d; overflow: hidden; 
-            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: var(--panel); 
+            border-radius: 16px; 
+            border: 1px solid #444c56; 
+            overflow: hidden; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            transition: transform 0.2s;
         }
 
-        /* UNITÀ TITOLARE */
-        .main-unit { padding: 18px; border-left: 12px solid; position: relative; }
+        .main-unit { padding: 15px 20px; border-left: 8px solid; position: relative; }
         
-        .amb-icon { display: inline-block; vertical-align: middle; margin-right: 15px; width: 40px; height: 40px; fill: currentColor; opacity: 0.9; }
-        .radio-icon { width: 24px; height: 24px; fill: var(--blue); margin-left: 12px; vertical-align: middle; }
+        .sigla { font-size: 2.6em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
+        .amb-icon { width: 35px; height: 35px; fill: currentColor; margin-right: 12px; }
         
-        .sigla-container { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
-        .sigla { font-size: 2.8em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
-        
-        .mezzo { font-size: 1em; color: var(--text-dim); font-weight: 700; margin: 6px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 4px 10px; border-radius: 6px; margin-left: 12px; font-size: 1em; border: 1px solid rgba(241, 224, 90, 0.3); }
-        .status-badge { font-size: 0.9em; font-weight: 800; display: inline-block; margin-top: 8px; color: #fff; text-transform: uppercase; }
-
-        /* NUOVO DESIGN BACKUP */
-        .backup-unit {
-            padding: 12px 18px; 
-            background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, rgba(22,27,34,1) 100%);
-            border-top: 1px solid #30363d; 
-            display: flex; justify-content: space-between; align-items: center;
-            border-left: 12px solid transparent; /* Sarà colorato via JS */
-        }
-        .backup-content { display: flex; flex-direction: column; gap: 2px; }
-        .backup-header { display: flex; align-items: center; gap: 10px; }
-        .backup-label { font-size: 0.65em; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
-        .backup-sigla { font-size: 1.4em; font-weight: 800; color: #f0f6fc; }
-        .backup-status { font-size: 0.8em; font-weight: 700; opacity: 0.8; }
+        .mezzo { font-size: 0.9em; color: var(--text-dim); font-weight: 700; margin: 4px 0; }
+        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 2px 8px; border-radius: 6px; font-size: 0.9em; border: 1px solid rgba(241, 224, 90, 0.2); }
 
         .note-box {
-            margin-top: 10px; padding: 10px 15px; background: var(--note-bg);
-            border-radius: 6px; border: 1px solid rgba(241, 224, 90, 0.2);
-            color: var(--gold); font-size: 0.95em; font-weight: 600;
-            display: flex; align-items: center; gap: 10px;
+            margin-top: 10px; padding: 8px 12px; background: rgba(241, 224, 90, 0.05);
+            border-radius: 8px; border: 1px solid rgba(241, 224, 90, 0.2);
+            color: var(--gold); font-size: 0.85em; font-weight: 600;
         }
 
-        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; padding-right: 5px; }
-        .card-small { background: var(--panel); padding: 12px; border-radius: 8px; border-left: 5px solid; position: relative; }
-        .card-small .cat-tag { font-size: 0.6em; color: var(--gold); position: absolute; top: 10px; right: 10px; border: 1px solid var(--gold); padding: 1px 5px; border-radius: 4px; }
+        /* BACKUP SMUSSATO */
+        .backup-unit {
+            padding: 10px 20px; 
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid #444c56; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
 
-        .ticker-wrap { height: 45px; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
-        .ticker-label { background: var(--blue); color: #fff; padding: 0 20px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.9em; z-index: 10; }
-        .ticker-scroll { flex: 1; overflow: hidden; white-space: nowrap; }
-        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 35s linear infinite; font-weight: 600; font-size: 1.2em; color: #fff; }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        /* STATI CON GLOW */
+        .status-ok { border-color: var(--green) !important; box-shadow: inset 10px 0 15px -10px rgba(46, 160, 67, 0.3); }
+        .status-man { border-color: var(--orange) !important; box-shadow: inset 10px 0 15px -10px rgba(210, 153, 34, 0.3); }
+        .status-off { border-color: var(--red) !important; box-shadow: inset 10px 0 15px -10px rgba(248, 81, 73, 0.3); }
 
-        .status-ok { border-color: var(--green) !important; }
-        .status-man { border-color: var(--orange) !important; }
-        .status-off { border-color: var(--red) !important; }
         .text-ok { color: var(--green); }
         .text-man { color: var(--orange); }
         .text-off { color: var(--red); }
+
+        .card-small { background: var(--panel); padding: 12px; border-radius: 12px; border-left: 4px solid; border: 1px solid #444c56; }
+
+        .ticker-wrap { height: 40px; background: #010409; border-top: 1px solid #30363d; display: flex; align-items: center; overflow: hidden; }
+        .ticker-label { background: var(--blue); color: #fff; padding: 0 15px; font-weight: 900; font-size: 0.8em; height: 100%; display: flex; align-items: center; }
+        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 40s linear infinite; color: #fff; font-weight: 500; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.9em; color:var(--text-dim)">AGGIORNAMENTO...</div>
+        <h1 style="font-size:1.3em; letter-spacing:1px; font-weight:900;">SITUAZIONE REAL TIME AUTOPARCO</h1>
+        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em; color:var(--text-dim)">AGGIORNAMENTO...</div>
     </div>
 
     <div class="dashboard">
@@ -150,17 +133,16 @@
         </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">Flotta Variabile</div>
-            <div id="col-altri" class="grid-altri"></div>
+            <div class="colonna-titolo" style="border-left-color:var(--gold)">Flotta Variabile</div>
+            <div class="equipaggio-info">MEZZI DI SUPPORTO</div>
+            <div id="col-altri" class="colonna" style="overflow-y: auto; padding-right:5px;"></div>
         </div>
     </div>
 
     <div class="ticker-wrap">
         <div class="ticker-label">AVVISI</div>
-        <div class="ticker-scroll">
-            <div class="ticker-text" id="ticker-content">
-                Mandatorio effettuare rifornimento prima della metà serbatoio, verificando il tipo di carburante del mezzo in uso ••• Per ogni necessità relativa ai mezzi, contattare il Responsabile Autoparco al 338.7360099
-            </div>
+        <div class="ticker-scroll" style="flex:1; overflow:hidden; white-space:nowrap;">
+            <div class="ticker-text" id="ticker-content">Rifornimento consigliato a metà serbatoio • Verificare carburante • Contatto Responsabile: 338.7360099</div>
         </div>
     </div>
 
@@ -168,7 +150,6 @@
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
 
         const ambulanceSvg = `<svg class="amb-icon" viewBox="0 0 24 24"><path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" /></svg>`;
-        const radioSvg = `<svg class="radio-icon" viewBox="0 0 24 24"><path d="M10,20A2,2 0 0,1 8,18V8A2,2 0 0,1 10,6H14A2,2 0 0,1 16,8V18A2,2 0 0,1 14,20H10M12,8A1,1 0 0,0 11,9A1,1 0 0,0 12,10A1,1 0 0,0 13,9A1,1 0 0,0 12,8M14,12H10V14H14V12M14,15H10V17H14V15M11,2H13V6H11V2Z" /></svg>`;
 
         function getStatusClass(status) {
             if (!status) return "status-off";
@@ -186,35 +167,23 @@
             return "text-ok";
         }
 
-        function hasRadio(sigla) {
-            const radioUnits = ["VA11-32", "VA11-41", "VA21-31"];
-            return radioUnits.includes(sigla.trim().toUpperCase());
-        }
-
         function updateGallarate1Info() {
-            const now = new Date();
-            const hour = now.getHours();
+            const hour = new Date().getHours();
             const infoGal1 = document.getElementById('info-gal1');
-            if (hour >= 6 && hour < 22) {
-                infoGal1.innerHTML = `<span style="color:#fff">06:00-22:00</span> EQUIPAGGIO: <span style="color:var(--gold)">H24_2+</span>`;
-            } else {
-                infoGal1.innerHTML = `<span style="color:#fff">22:00-06:00</span> EQUIPAGGIO: <span style="color:var(--gold)">H24_3</span>`;
-            }
+            infoGal1.innerHTML = (hour >= 6 && hour < 22) ? `06:00-22:00 | <span style="color:var(--gold)">H24_2+</span>` : `22:00-06:00 | <span style="color:var(--gold)">H24_3</span>`;
         }
 
         async function update() {
             try {
                 const response = await fetch(sheetUrl + '&t=' + Date.now());
                 const csv = await response.text();
-                const sep = csv.includes(';') ? ';' : ',';
                 const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "").slice(1);
-                const data = rows.map(r => r.split(sep).map(c => c.replace(/"/g, '').trim()));
+                const data = rows.map(r => r.split(csv.includes(';') ? ';' : ',').map(c => c.replace(/"/g, '').trim()));
                 
                 const findByStatus = (statusPart) => data.find(d => d[3].toUpperCase().includes(statusPart)) || null;
                 const findBySigla = (siglaPart) => data.find(d => d[1].toUpperCase().includes(siglaPart)) || null;
 
-                const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('update-time').innerHTML = `● LIVE • AGGIORNATO ALLE ${ora}`;
+                document.getElementById('update-time').innerHTML = `● LIVE • ${new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'})}`;
                 updateGallarate1Info();
 
                 document.querySelectorAll('[id^="sub-"]').forEach(el => el.innerHTML = '');
@@ -234,44 +203,28 @@
 
                     let mainTarga = g.main[5] ? `<span class="targa">${g.main[5]}</span>` : "";
                     let noteHtml = (g.main[4] && g.main[4].length > 1) ? `<div class="note-box">⚠️ ${g.main[4]}</div>` : "";
-                    let radioIcon = hasRadio(g.main[1]) ? radioSvg : "";
                     
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[3])}">
-                            <div class="sigla-container">
+                            <div style="display:flex; align-items:center;">
                                 ${ambulanceSvg}
                                 <div class="sigla">${g.main[1]}</div>
-                                ${radioIcon}
                                 ${mainTarga}
                             </div>
                             <div class="mezzo">${g.main[2]}</div>
-                            <div class="status-badge">${g.main[3]}</div>
+                            <div class="status-badge ${getStatusTextColor(g.main[3])}" style="font-weight:900; font-size:0.8em; text-transform:uppercase;">${g.main[3]}</div>
                             ${noteHtml}
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
-                        html += `<div class="backup-unit" style="border-left-color: var(--blue)">
-                            <div class="backup-content">
-                                <span class="backup-label">PROSSIMO ARRIVO</span>
-                                <span class="backup-sigla" style="color:var(--blue)">MARZO 2026</span>
+                        html += `<div class="backup-unit"><span style="font-size:0.6em; font-weight:900; color:var(--blue);">PROSSIMO ARRIVO</span><span style="color:var(--blue); font-weight:800; font-size:0.9em;">MARZO 2026</span></div>`;
+                    } else if (g.backup) {
+                        html += `<div class="backup-unit">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span style="font-size:0.6em; font-weight:900; color:var(--blue);">BK</span>
+                                <span style="font-size:1.1em; font-weight:800;">${g.backup[1]}</span>
                             </div>
-                        </div>`;
-                    } else if (g.backup && g.backup !== "NONE") {
-                        let bRadio = hasRadio(g.backup[1]) ? radioSvg : "";
-                        let bTarga = g.backup[5] ? `<span class="targa" style="font-size:0.85em">${g.backup[5]}</span>` : "";
-                        let bNoteHtml = (g.backup[4] && g.backup[4].length > 1) ? `<div class="note-box" style="margin: 5px 0 0 0; font-size:0.85em">⚠️ ${g.backup[4]}</div>` : "";
-                        
-                        html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
-                            <div class="backup-content" style="width:100%">
-                                <div class="backup-header">
-                                    <span class="backup-label">BACKUP UNIT</span>
-                                    <span class="backup-sigla">${g.backup[1]}</span>
-                                    ${bRadio}
-                                    ${bTarga}
-                                    <span class="backup-status ${getStatusTextColor(g.backup[3])}" style="margin-left:auto">${g.backup[3]}</span>
-                                </div>
-                                ${bNoteHtml}
-                            </div>
+                            <span class="${getStatusTextColor(g.backup[3])}" style="font-size:0.7em; font-weight:800;">${g.backup[3]}</span>
                         </div>`;
                     }
                     html += `</div>`;
@@ -285,21 +238,16 @@
                     const sigla = d[1].toUpperCase();
                     const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     if (!isMapped) {
-                        let aRadio = hasRadio(d[1]) ? radioSvg : "";
-                        let aTarga = d[5] ? `<span class="targa" style="font-size:0.85em; float:right">${d[5]}</span>` : "";
-                        let altNote = (d[4] && d[4].length > 1) ? `<div class="note-box" style="font-size:0.85em; margin-top:5px">⚠️ ${d[4]}</div>` : "";
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
-                                <div class="cat-tag">${d[0]}</div>
-                                ${aTarga}
-                                <strong style="font-size:1.5em">${d[1]}</strong>${aRadio}<br>
-                                <span style="font-size:0.9em; color:var(--text-dim)">${d[2]}</span><br>
-                                <span style="font-size:0.95em; font-weight:800">${d[3]}</span>
-                                ${altNote}
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <strong style="font-size:1.3em;">${d[1]}</strong>
+                                    <span class="${getStatusTextColor(d[3])}" style="font-size:0.7em; font-weight:800;">${d[3]}</span>
+                                </div>
+                                <div style="font-size:0.75em; color:var(--text-dim); margin-top:2px;">${d[2]}</div>
                             </div>`;
                     }
                 });
-
             } catch (e) { console.error(e); }
         }
 
