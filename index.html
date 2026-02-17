@@ -30,7 +30,7 @@
             padding: 0 30px; border-bottom: 1px solid #30363d; background: #0d1117;
         }
         .header h1 { 
-            margin: 0; font-size: 1.5em; letter-spacing: 2px; font-weight: 900;
+            margin: 0; font-size: 1.6em; letter-spacing: 2px; font-weight: 900;
             background: linear-gradient(to right, #fff, var(--text-dim));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
@@ -43,50 +43,55 @@
         .colonna { display: flex; flex-direction: column; gap: 12px; height: 100%; }
         
         .colonna-titolo { 
-            font-weight: 900; font-size: 1.4em; color: #fff; 
-            text-transform: uppercase; letter-spacing: 3px;
-            border-left: 5px solid var(--blue); padding-left: 15px; 
-            margin-bottom: 8px; margin-top: 10px;
+            font-weight: 900; font-size: 1.5em; color: #fff; 
+            text-transform: uppercase; letter-spacing: 2px;
+            border-left: 6px solid var(--blue); padding-left: 15px; 
+            margin-bottom: 4px; margin-top: 5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* Distanziatore specifico per Somma e Malpensa */
-        .distacco-titolo { margin-top: 45px !important; }
+        .equipaggio-info {
+            font-size: 0.95em; font-weight: 700; color: var(--blue);
+            margin-bottom: 12px; padding-left: 21px; text-transform: uppercase;
+        }
 
-        .gruppo-mezzi { background: var(--panel); border-radius: 8px; border: 1px solid #30363d; overflow: hidden; margin-bottom: 5px; }
-        .main-unit { padding: 12px 15px; border-left: 10px solid; position: relative; }
+        .distacco-titolo { margin-top: 40px !important; }
+
+        .gruppo-mezzi { background: var(--panel); border-radius: 10px; border: 1px solid #30363d; overflow: hidden; margin-bottom: 12px; }
+        .main-unit { padding: 15px 18px; border-left: 12px solid; position: relative; }
         
-        .amb-icon { display: inline-block; vertical-align: middle; margin-right: 12px; width: 32px; height: 32px; fill: currentColor; opacity: 0.9; }
-        .radio-icon { width: 18px; height: 18px; fill: var(--blue); margin-left: 10px; vertical-align: middle; }
+        .amb-icon { display: inline-block; vertical-align: middle; margin-right: 12px; width: 38px; height: 38px; fill: currentColor; opacity: 0.9; }
+        .radio-icon { width: 22px; height: 22px; fill: var(--blue); margin-left: 12px; vertical-align: middle; }
         
-        .sigla-container { display: flex; align-items: center; flex-wrap: wrap; }
-        .sigla { font-size: 2.2em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
+        .sigla-container { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
+        .prefix-areu { font-size: 0.8em; font-weight: 800; color: var(--text-dim); margin-right: 8px; text-transform: uppercase; }
+        .sigla { font-size: 2.5em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
         
-        .mezzo { font-size: 0.85em; color: var(--text-dim); font-weight: 700; margin: 4px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-size: 0.95em; border: 1px solid rgba(241, 224, 90, 0.3); }
-        .status-badge { font-size: 0.75em; font-weight: 800; display: inline-block; margin-top: 5px; color: #fff; text-transform: uppercase; }
+        .mezzo { font-size: 0.95em; color: var(--text-dim); font-weight: 700; margin: 6px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 3px 8px; border-radius: 4px; margin-left: 12px; font-size: 1em; border: 1px solid rgba(241, 224, 90, 0.3); }
+        .status-badge { font-size: 0.85em; font-weight: 800; display: inline-block; margin-top: 6px; color: #fff; text-transform: uppercase; padding: 2px 0; }
 
         .note-box {
-            margin-top: 8px; padding: 6px 10px; background: var(--note-bg);
-            border-radius: 4px; border: 1px solid rgba(241, 224, 90, 0.2);
-            color: var(--gold); font-size: 0.8em; font-weight: 600;
-            display: flex; align-items: center; gap: 8px;
+            margin-top: 10px; padding: 8px 12px; background: var(--note-bg);
+            border-radius: 5px; border: 1px solid rgba(241, 224, 90, 0.2);
+            color: var(--gold); font-size: 0.9em; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
         }
 
         .backup-unit {
-            padding: 8px 15px; background: rgba(0,0,0,0.2);
+            padding: 10px 18px; background: rgba(0,0,0,0.2);
             border-top: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center;
         }
-        .backup-label { font-size: 0.6em; font-weight: 900; color: var(--blue); text-transform: uppercase; }
+        .backup-label { font-size: 0.7em; font-weight: 900; color: var(--blue); text-transform: uppercase; }
 
-        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow-y: auto; padding-right: 5px; }
-        .card-small { background: var(--panel); padding: 10px; border-radius: 6px; border-left: 4px solid; position: relative; }
-        .card-small .cat-tag { font-size: 0.5em; color: var(--gold); position: absolute; top: 8px; right: 8px; border: 1px solid var(--gold); padding: 1px 4px; border-radius: 3px; }
+        .grid-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; padding-right: 5px; }
+        .card-small { background: var(--panel); padding: 12px; border-radius: 8px; border-left: 5px solid; position: relative; }
+        .card-small .cat-tag { font-size: 0.6em; color: var(--gold); position: absolute; top: 10px; right: 10px; border: 1px solid var(--gold); padding: 1px 5px; border-radius: 4px; }
 
-        .ticker-wrap { height: 40px; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
-        .ticker-label { background: var(--blue); color: #fff; padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.8em; z-index: 10; }
+        .ticker-wrap { height: 45px; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
+        .ticker-label { background: var(--blue); color: #fff; padding: 0 20px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.9em; z-index: 10; }
         .ticker-scroll { flex: 1; overflow: hidden; white-space: nowrap; }
-        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 35s linear infinite; font-weight: 600; font-size: 1.1em; color: #fff; }
+        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 35s linear infinite; font-weight: 600; font-size: 1.2em; color: #fff; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .status-ok { border-color: var(--green) !important; }
@@ -98,24 +103,32 @@
 
     <div class="header">
         <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em; color:var(--text-dim)">AGGIORNAMENTO...</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.9em; color:var(--text-dim)">AGGIORNAMENTO...</div>
     </div>
 
     <div class="dashboard">
         <div class="colonna">
-            <div class="colonna-titolo">Gallarate</div>
-            <div id="sub-gallarate"></div>
+            <div class="colonna-titolo">Gallarate CONV 1</div>
+            <div class="equipaggio-info" id="info-gal1">H24_3</div>
+            <div id="sub-gallarate-1"></div>
             
-            <div class="colonna-titolo distacco-titolo">Somma Lombardo</div>
-            <div id="sub-somma"></div>
+            <div class="colonna-titolo distacco-titolo">Gallarate CONV 2</div>
+            <div class="equipaggio-info">H24_3</div>
+            <div id="sub-gallarate-2"></div>
         </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">Sumirago</div>
+            <div class="colonna-titolo">Somma Lombardo</div>
+            <div class="equipaggio-info">H24_3</div>
+            <div id="sub-somma"></div>
+
+            <div class="colonna-titolo distacco-titolo">Sumirago</div>
+            <div class="equipaggio-info">GET_3</div>
             <div id="sub-sumirago"></div>
 
             <div id="wrapper-malpensa" style="display:none">
                 <div class="colonna-titolo distacco-titolo">Malpensa</div>
+                <div class="equipaggio-info">AGG. MXP</div>
                 <div id="sub-malpensa"></div>
             </div>
         </div>
@@ -154,6 +167,17 @@
             return radioUnits.includes(sigla.trim().toUpperCase());
         }
 
+        function updateGallarate1Info() {
+            const now = new Date();
+            const hour = now.getHours();
+            const infoGal1 = document.getElementById('info-gal1');
+            if (hour >= 6 && hour < 22) {
+                infoGal1.innerHTML = `<span style="color:#fff">06:00-22:00</span> EQUIPAGGIO: <span style="color:var(--gold)">H24_2+</span>`;
+            } else {
+                infoGal1.innerHTML = `<span style="color:#fff">22:00-06:00</span> EQUIPAGGIO: <span style="color:var(--gold)">H24_3</span>`;
+            }
+        }
+
         async function update() {
             try {
                 const response = await fetch(sheetUrl + '&t=' + Date.now());
@@ -167,26 +191,22 @@
 
                 const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
                 document.getElementById('update-time').innerHTML = `● LIVE • AGGIORNATO ALLE ${ora}`;
+                updateGallarate1Info();
 
-                // Reset
                 document.querySelectorAll('[id^="sub-"]').forEach(el => el.innerHTML = '');
                 document.getElementById('wrapper-malpensa').style.display = 'none';
 
                 const sections = [
-                    { target: "sub-gallarate", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1") },
-                    { target: "sub-gallarate", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2") },
-                    { target: "sub-somma",     main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026" },
-                    { target: "sub-sumirago",  main: findBySigla("VA11-81"), backup: null },
-                    { target: "sub-malpensa",  main: findByStatus("AGG. MXP"), backup: null }
+                    { target: "sub-gallarate-1", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1") },
+                    { target: "sub-gallarate-2", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2") },
+                    { target: "sub-somma",       main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026" },
+                    { target: "sub-sumirago",    main: findBySigla("VA11-81"), backup: null },
+                    { target: "sub-malpensa",    main: findByStatus("AGG. MXP"), backup: null }
                 ];
 
                 sections.forEach(g => {
                     if (!g.main) return;
-                    
-                    // Se troviamo il mezzo Malpensa, mostriamo il contenitore
-                    if (g.target === "sub-malpensa") {
-                        document.getElementById('wrapper-malpensa').style.display = 'block';
-                    }
+                    if (g.target === "sub-malpensa") document.getElementById('wrapper-malpensa').style.display = 'block';
 
                     let mainTarga = g.main[5] ? `<span class="targa">${g.main[5]}</span>` : "";
                     let noteHtml = (g.main[4] && g.main[4].length > 1) ? `<div class="note-box">⚠️ ${g.main[4]}</div>` : "";
@@ -196,6 +216,7 @@
                         <div class="main-unit ${getStatusClass(g.main[3])}">
                             <div class="sigla-container">
                                 ${ambulanceSvg}
+                                <span class="prefix-areu">Convenzione AREU:</span>
                                 <div class="sigla">${g.main[1]}</div>
                                 ${radioIcon}
                                 ${mainTarga}
@@ -206,17 +227,17 @@
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
-                        html += `<div class="backup-unit"><span class="backup-label">PROSSIMO ARRIVO</span><span style="font-size:0.8em; font-weight:700; color:var(--blue)">MARZO 2026</span></div>`;
+                        html += `<div class="backup-unit"><span class="backup-label">PROSSIMO ARRIVO</span><span style="font-size:0.9em; font-weight:700; color:var(--blue)">MARZO 2026</span></div>`;
                     } else if (g.backup && g.backup !== "NONE") {
                         let bRadio = hasRadio(g.backup[1]) ? radioSvg : "";
-                        let bTarga = g.backup[5] ? `<span class="targa" style="font-size:0.7em; margin-left:5px">${g.backup[5]}</span>` : "";
-                        let bNoteHtml = (g.backup[4] && g.backup[4].length > 1) ? `<div class="note-box" style="margin-top:4px; font-size:0.75em">⚠️ ${g.backup[4]}</div>` : "";
+                        let bTarga = g.backup[5] ? `<span class="targa" style="font-size:0.8em; margin-left:8px">${g.backup[5]}</span>` : "";
+                        let bNoteHtml = (g.backup[4] && g.backup[4].length > 1) ? `<div class="note-box" style="margin-top:5px; font-size:0.85em">⚠️ ${g.backup[4]}</div>` : "";
                         html += `<div class="backup-unit ${getStatusClass(g.backup[3])}">
                             <div style="display:flex; flex-direction:column">
                                 <div style="display:flex; align-items:center"><span class="backup-label" style="margin-right:8px">BACKUP</span><strong>${g.backup[1]}</strong>${bRadio}${bTarga}</div>
                                 ${bNoteHtml}
                             </div>
-                            <span style="font-size:0.7em; opacity:0.8">${g.backup[3]}</span>
+                            <span style="font-size:0.8em; opacity:0.8">${g.backup[3]}</span>
                         </div>`;
                     }
                     html += `</div>`;
@@ -231,15 +252,15 @@
                     const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
                     if (!isMapped) {
                         let aRadio = hasRadio(d[1]) ? radioSvg : "";
-                        let aTarga = d[5] ? `<span class="targa" style="font-size:0.7em; float:right">${d[5]}</span>` : "";
-                        let altNote = (d[4] && d[4].length > 1) ? `<div class="note-box" style="font-size:0.75em; margin-top:5px">⚠️ ${d[4]}</div>` : "";
+                        let aTarga = d[5] ? `<span class="targa" style="font-size:0.8em; float:right">${d[5]}</span>` : "";
+                        let altNote = (d[4] && d[4].length > 1) ? `<div class="note-box" style="font-size:0.8em; margin-top:5px">⚠️ ${d[4]}</div>` : "";
                         altriCont.innerHTML += `
                             <div class="card-small ${getStatusClass(d[3])}">
                                 <div class="cat-tag">${d[0]}</div>
                                 ${aTarga}
-                                <strong style="font-size:1.3em">${d[1]}</strong>${aRadio}<br>
-                                <span style="font-size:0.75em; color:var(--text-dim)">${d[2]}</span><br>
-                                <span style="font-size:0.8em; font-weight:800">${d[3]}</span>
+                                <strong style="font-size:1.4em">${d[1]}</strong>${aRadio}<br>
+                                <span style="font-size:0.85em; color:var(--text-dim)">${d[2]}</span><br>
+                                <span style="font-size:0.9em; font-weight:800">${d[3]}</span>
                                 ${altNote}
                             </div>`;
                     }
