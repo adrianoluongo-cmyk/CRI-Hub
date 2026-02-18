@@ -4,29 +4,50 @@
     <meta charset="UTF-8">
     <title>SITUAZIONE REAL TIME AUTOPARCO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-    <style>
+    <style id="theme-style">
+        /* Variabili dinamiche gestite via JS */
         :root {
-            --bg: #0d1117;
-            --panel: #1c2128;
             --green: #2ea043;
             --orange: #d29922;
             --red: #f85149;
             --blue: #388bfd;
             --gold: #f1e05a;
-            --text-dim: #8b949e;
         }
-        
+
+        /* Tema DARK (Default) */
+        .dark-theme {
+            --bg: #0d1117;
+            --panel: #1c2128;
+            --text-main: #c9d1d9;
+            --text-title: #ffffff;
+            --text-dim: #8b949e;
+            --border: #444c56;
+            --header-bg: #010409;
+        }
+
+        /* Tema LIGHT (08:00 - 18:00) */
+        .light-theme {
+            --bg: #f6f8fa;
+            --panel: #ffffff;
+            --text-main: #24292f;
+            --text-title: #1b1f24;
+            --text-dim: #57606a;
+            --border: #d0d7de;
+            --header-bg: #ffffff;
+        }
+
         body { 
             font-family: 'Inter', sans-serif; 
-            background: var(--bg); color: #c9d1d9; 
+            background: var(--bg); color: var(--text-main); 
             margin: 0; padding: 0; 
             overflow: hidden; height: 100vh;
             display: flex; flex-direction: column;
+            transition: all 0.5s ease;
         }
 
         .header { 
             height: 60px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 30px; border-bottom: 1px solid #30363d; background: #010409;
+            padding: 0 30px; border-bottom: 1px solid var(--border); background: var(--header-bg);
         }
 
         .dashboard { 
@@ -37,7 +58,7 @@
         .colonna { display: flex; flex-direction: column; gap: 10px; height: 100%; overflow: hidden; }
         
         .colonna-titolo { 
-            font-weight: 900; font-size: 1.3em; color: #fff; 
+            font-weight: 900; font-size: 1.3em; color: var(--text-title); 
             text-transform: uppercase; letter-spacing: 1px;
             padding-left: 12px; margin-bottom: 2px;
             border-left: 5px solid var(--blue);
@@ -45,7 +66,7 @@
 
         .equipaggio-info {
             font-size: 0.8em; font-weight: 700; color: var(--blue);
-            margin-bottom: 5px; padding-left: 17px; opacity: 0.9;
+            margin-bottom: 5px; padding-left: 17px; opacity: 0.9; min-height: 1em;
         }
 
         .distacco-titolo { margin-top: 25px !important; }
@@ -53,27 +74,27 @@
         .gruppo-mezzi { 
             background: var(--panel); 
             border-radius: 16px; 
-            border: 1px solid #444c56; 
+            border: 1px solid var(--border); 
             overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .main-unit { padding: 12px 18px; border-left: 10px solid; position: relative; }
-        .sigla { font-size: 2.5em; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
+        .sigla { font-size: 2.5em; font-weight: 900; line-height: 1; color: var(--text-title); letter-spacing: -1px; }
         .amb-icon { width: 32px; height: 32px; fill: currentColor; margin-right: 10px; vertical-align: middle; }
         .mezzo { font-size: 0.85em; color: var(--text-dim); font-weight: 700; margin: 3px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; border: 1px solid rgba(241, 224, 90, 0.2); margin-left: 8px; }
+        .targa { font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(241, 224, 90, 0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; border: 1px solid var(--gold); margin-left: 8px; }
 
         .note-box {
-            margin-top: 8px; padding: 6px 10px; background: rgba(241, 224, 90, 0.05);
-            border-radius: 6px; border: 1px solid rgba(241, 224, 90, 0.15);
-            color: var(--gold); font-size: 0.8em; font-weight: 600; line-height: 1.2;
+            margin-top: 8px; padding: 6px 10px; background: rgba(241, 224, 90, 0.1);
+            border-radius: 6px; border: 1px solid var(--gold);
+            color: var(--text-main); font-size: 0.8em; font-weight: 600; line-height: 1.2;
         }
 
         .backup-unit {
             padding: 8px 18px; 
-            background: rgba(0,0,0,0.2);
-            border-top: 1px solid #444c56; 
+            background: rgba(0,0,0,0.05);
+            border-top: 1px solid var(--border); 
             display: flex; justify-content: space-between; align-items: center;
         }
 
@@ -81,9 +102,9 @@
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
 
-        .text-ok { color: var(--green); }
-        .text-man { color: var(--orange); }
-        .text-off { color: var(--red); }
+        .text-ok { color: var(--green); font-weight: 800; }
+        .text-man { color: var(--orange); font-weight: 800; }
+        .text-off { color: var(--red); font-weight: 800; }
 
         #col-altri {
             display: grid;
@@ -97,11 +118,8 @@
             background: var(--panel); 
             padding: 10px; 
             border-radius: 12px; 
-            border: 1px solid #444c56; 
+            border: 1px solid var(--border); 
             border-left: 5px solid;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
         .ticker-wrap { 
@@ -131,22 +149,21 @@
             color: #fff; 
             font-weight: 700; 
             font-size: 1.3em;
-            letter-spacing: 0.5px;
         }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
-<body>
+<body class="dark-theme">
 
     <div class="header">
         <h1 style="font-size:1.3em; letter-spacing:1px; font-weight:900;">SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em; color:var(--text-dim)">AGGIORNAMENTO...</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em;">AGGIORNAMENTO...</div>
     </div>
 
     <div class="dashboard">
         <div class="colonna">
             <div class="colonna-titolo">Gallarate CONV 1</div>
-            <div class="equipaggio-info" id="info-gal1">CARICAMENTO...</div>
+            <div class="equipaggio-info" id="info-gal1"></div>
             <div id="sub-gallarate-1"></div>
             
             <div class="colonna-titolo distacco-titolo">Gallarate CONV 2</div>
@@ -172,15 +189,14 @@
 
         <div class="colonna">
             <div class="colonna-titolo" style="border-left-color:var(--gold)">Flotta Variabile</div>
-            <div class="equipaggio-info">MEZZI DI SUPPORTO</div>
-            <div id="col-altri"></div>
+            <div class="equipaggio-info"></div> <div id="col-altri"></div>
         </div>
     </div>
 
     <div class="ticker-wrap">
         <div class="ticker-label">AVVISI</div>
         <div class="ticker-scroll">
-            <div class="ticker-text" id="ticker-content">
+            <div class="ticker-text">
                 MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RELATIVA AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO AL 338.7360099
             </div>
         </div>
@@ -188,8 +204,26 @@
 
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
-
         const ambulanceSvg = `<svg class="amb-icon" viewBox="0 0 24 24"><path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" /></svg>`;
+
+        function updateThemeAndClock() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // Gestione Tema
+            const isDay = (hour >= 8 && hour < 18);
+            document.body.className = isDay ? 'light-theme' : 'dark-theme';
+
+            // Orario Gallarate 1
+            const infoGal1 = document.getElementById('info-gal1');
+            if (hour >= 6 && hour < 22) {
+                infoGal1.innerHTML = `CONV: <span style="color:var(--gold)">H24_2+</span> (06:00-22:00)`;
+            } else {
+                infoGal1.innerHTML = `CONV: <span style="color:var(--gold)">H24_3</span> (22:00-06:00)`;
+            }
+
+            document.getElementById('update-time').innerHTML = `● LIVE • ${now.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'})}`;
+        }
 
         function getStatusClass(status) {
             if (!status) return "status-off";
@@ -209,30 +243,17 @@
 
         function parseCSV(text) {
             const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
-            if (lines.length === 0) return [];
             const delimiter = lines[0].includes(';') ? ';' : ',';
             return lines.map(line => line.split(delimiter).map(p => p.replace(/^"|"$/g, '').trim()));
-        }
-
-        function updateGallarate1Info() {
-            const hour = new Date().getHours();
-            const infoGal1 = document.getElementById('info-gal1');
-            if (hour >= 6 && hour < 22) {
-                infoGal1.innerHTML = `CONV: <span style="color:var(--gold)">H24_2+</span> (06:00-22:00)`;
-            } else {
-                infoGal1.innerHTML = `CONV: <span style="color:var(--gold)">H24_3</span> (22:00-06:00)`;
-            }
         }
 
         async function update() {
             try {
                 const response = await fetch(sheetUrl + '&t=' + Date.now());
                 const csvText = await response.text();
-                const allData = parseCSV(csvText);
-                const data = allData.slice(1);
+                const data = parseCSV(csvText).slice(1);
 
-                document.getElementById('update-time').innerHTML = `● LIVE • ${new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'})}`;
-                updateGallarate1Info();
+                updateThemeAndClock();
 
                 document.querySelectorAll('[id^="sub-"]').forEach(el => el.innerHTML = '');
                 document.getElementById('col-altri').innerHTML = '';
@@ -242,11 +263,11 @@
                 const findBySigla = (siglaText) => data.find(d => d[1] && d[1].toUpperCase().includes(siglaText)) || null;
 
                 const sections = [
-                    { target: "sub-gallarate-1", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1"), cleanLabel: false },
-                    { target: "sub-gallarate-2", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2"), cleanLabel: false },
-                    { target: "sub-somma",       main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026", cleanLabel: true },
-                    { target: "sub-sumirago",    main: findBySigla("VA11-81"), backup: null, cleanLabel: true },
-                    { target: "sub-malpensa",    main: findByStatus("AGG. MXP"), backup: null, cleanLabel: false }
+                    { target: "sub-gallarate-1", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1"), clean: false },
+                    { target: "sub-gallarate-2", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2"), clean: false },
+                    { target: "sub-somma",       main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026", clean: true },
+                    { target: "sub-sumirago",    main: findBySigla("VA11-81"), backup: null, clean: true },
+                    { target: "sub-malpensa",    main: findByStatus("AGG. MXP"), backup: null, clean: false }
                 ];
 
                 sections.forEach(g => {
@@ -255,9 +276,7 @@
 
                     let targa = g.main[3] ? `<span class="targa">${g.main[3]}</span>` : "";
                     let note = (g.main[5] && g.main[5].length > 1) ? `<div class="note-box">⚠️ ${g.main[5]}</div>` : "";
-                    
-                    // Se cleanLabel è true, non mostriamo il testo del modello/mezzo (colonna C)
-                    let labelMezzo = g.cleanLabel ? "" : `<div class="mezzo">${g.main[2]}</div>`;
+                    let labelMezzo = g.clean ? "" : `<div class="mezzo">${g.main[2]}</div>`;
 
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[4])}">
@@ -267,44 +286,39 @@
                                 ${targa}
                             </div>
                             ${labelMezzo}
-                            <div class="status-badge ${getStatusTextColor(g.main[4])}" style="font-weight:900; font-size:0.8em; text-transform:uppercase;">${g.main[4]}</div>
+                            <div class="${getStatusTextColor(g.main[4])}" style="font-size:0.8em; text-transform:uppercase;">${g.main[4]}</div>
                             ${note}
                         </div>`;
                     
                     if (g.backup === "MARZO2026") {
-                        html += `<div class="backup-unit"><span style="font-size:0.65em; font-weight:900; color:var(--blue);">BK</span><span style="color:var(--blue); font-weight:800; font-size:1em;">MARZO 2026</span></div>`;
+                        html += `<div class="backup-unit"><span style="font-size:0.65em; font-weight:900; color:var(--blue);">BK</span><span style="color:var(--blue); font-weight:800;">MARZO 2026</span></div>`;
                     } else if (g.backup) {
                         html += `<div class="backup-unit">
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <span style="font-size:0.65em; font-weight:900; color:var(--blue);">BK</span>
-                                <span style="font-size:1.15em; font-weight:800;">${g.backup[1]}</span>
-                            </div>
-                            <span class="${getStatusTextColor(g.backup[4])}" style="font-size:0.75em; font-weight:800;">${g.backup[4]}</span>
+                            <div style="display:flex; align-items:center; gap:8px;"><span style="font-size:0.65em; font-weight:900; color:var(--blue);">BK</span><span style="font-size:1.15em; font-weight:800;">${g.backup[1]}</span></div>
+                            <span class="${getStatusTextColor(g.backup[4])}" style="font-size:0.75em;">${g.backup[4]}</span>
                         </div>`;
                     }
                     html += `</div>`;
                     document.getElementById(g.target).innerHTML += html;
                 });
 
-                const altriCont = document.getElementById('col-altri');
                 data.forEach(d => {
                     if (!d[1]) return;
                     const status = d[4] ? d[4].toUpperCase() : "";
                     const sigla = d[1].toUpperCase();
                     const isMapped = status.includes("GALLARATE") || status.includes("SOMMA") || status.includes("BACKUP CONV") || status.includes("AGG. MXP") || sigla === "VA11-81";
-                    
                     if (!isMapped) {
-                        altriCont.innerHTML += `
+                        document.getElementById('col-altri').innerHTML += `
                             <div class="card-small ${getStatusClass(d[4])}">
                                 <div style="display:flex; justify-content:space-between; align-items:center;">
                                     <strong style="font-size:1.3em;">${d[1]}</strong>
-                                    <span class="${getStatusTextColor(d[4])}" style="font-size:0.75em; font-weight:800;">${d[4]}</span>
+                                    <span class="${getStatusTextColor(d[4])}" style="font-size:0.75em;">${d[4]}</span>
                                 </div>
                                 <div style="font-size:0.75em; color:var(--text-dim); font-weight:600;">${d[2]}</div>
                             </div>`;
                     }
                 });
-            } catch (e) { console.error("Errore:", e); }
+            } catch (e) { console.error(e); }
         }
 
         update();
