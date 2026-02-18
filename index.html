@@ -85,7 +85,6 @@
         .text-man { color: var(--orange); }
         .text-off { color: var(--red); }
 
-        /* GRIGLIA FLOTTA VARIABILE SU DUE COLONNE */
         #col-altri {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -93,8 +92,6 @@
             overflow-y: auto;
             padding-right: 5px;
         }
-        #col-altri::-webkit-scrollbar { width: 4px; }
-        #col-altri::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
 
         .card-small { 
             background: var(--panel); 
@@ -107,7 +104,6 @@
             justify-content: space-between;
         }
 
-        /* TICKER AVVISI ORIGINALE */
         .ticker-wrap { 
             height: 50px; 
             background: #000; 
@@ -150,7 +146,7 @@
     <div class="dashboard">
         <div class="colonna">
             <div class="colonna-titolo">Gallarate CONV 1</div>
-            <div class="equipaggio-info" id="info-gal1">H24_3</div>
+            <div class="equipaggio-info" id="info-gal1">CARICAMENTO...</div>
             <div id="sub-gallarate-1"></div>
             
             <div class="colonna-titolo distacco-titolo">Gallarate CONV 2</div>
@@ -218,6 +214,16 @@
             return lines.map(line => line.split(delimiter).map(p => p.replace(/^"|"$/g, '').trim()));
         }
 
+        function updateGallarate1Info() {
+            const hour = new Date().getHours();
+            const infoGal1 = document.getElementById('info-gal1');
+            if (hour >= 6 && hour < 22) {
+                infoGal1.innerHTML = `CONV: <span style="color:var(--gold)">H24_2+</span> (06:00-22:00)`;
+            } else {
+                infoGal1.innerHTML = `CONV: <span style="color:var(--gold)">H24_3</span> (22:00-06:00)`;
+            }
+        }
+
         async function update() {
             try {
                 const response = await fetch(sheetUrl + '&t=' + Date.now());
@@ -226,6 +232,7 @@
                 const data = allData.slice(1);
 
                 document.getElementById('update-time').innerHTML = `● LIVE • ${new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'})}`;
+                updateGallarate1Info();
 
                 document.querySelectorAll('[id^="sub-"]').forEach(el => el.innerHTML = '');
                 document.getElementById('col-altri').innerHTML = '';
@@ -235,11 +242,11 @@
                 const findBySigla = (siglaText) => data.find(d => d[1] && d[1].toUpperCase().includes(siglaText)) || null;
 
                 const sections = [
-                    { target: "sub-gallarate-1", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1") },
-                    { target: "sub-gallarate-2", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2") },
-                    { target: "sub-somma",       main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026" },
-                    { target: "sub-sumirago",    main: findBySigla("VA11-81"), backup: null },
-                    { target: "sub-malpensa",    main: findByStatus("AGG. MXP"), backup: null }
+                    { target: "sub-gallarate-1", main: findByStatus("GALLARATE CONV 1"), backup: findByStatus("BACKUP CONV 1"), cleanLabel: false },
+                    { target: "sub-gallarate-2", main: findByStatus("GALLARATE CONV 2"), backup: findByStatus("BACKUP CONV 2"), cleanLabel: false },
+                    { target: "sub-somma",       main: findByStatus("SOMMA LOMBARDO"), backup: "MARZO2026", cleanLabel: true },
+                    { target: "sub-sumirago",    main: findBySigla("VA11-81"), backup: null, cleanLabel: true },
+                    { target: "sub-malpensa",    main: findByStatus("AGG. MXP"), backup: null, cleanLabel: false }
                 ];
 
                 sections.forEach(g => {
@@ -249,6 +256,9 @@
                     let targa = g.main[3] ? `<span class="targa">${g.main[3]}</span>` : "";
                     let note = (g.main[5] && g.main[5].length > 1) ? `<div class="note-box">⚠️ ${g.main[5]}</div>` : "";
                     
+                    // Se cleanLabel è true, non mostriamo il testo del modello/mezzo (colonna C)
+                    let labelMezzo = g.cleanLabel ? "" : `<div class="mezzo">${g.main[2]}</div>`;
+
                     let html = `<div class="gruppo-mezzi">
                         <div class="main-unit ${getStatusClass(g.main[4])}">
                             <div style="display:flex; align-items:center;">
@@ -256,7 +266,7 @@
                                 <div class="sigla">${g.main[1]}</div>
                                 ${targa}
                             </div>
-                            <div class="mezzo">${g.main[2]}</div>
+                            ${labelMezzo}
                             <div class="status-badge ${getStatusTextColor(g.main[4])}" style="font-weight:900; font-size:0.8em; text-transform:uppercase;">${g.main[4]}</div>
                             ${note}
                         </div>`;
