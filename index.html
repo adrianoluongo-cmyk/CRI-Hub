@@ -7,6 +7,7 @@
     <style>
         :root {
             --green: #2ea043; --orange: #d29922; --red: #f85149; --blue: #388bfd;
+            --highway-yellow: #ffcc00;
         }
 
         .dark-theme {
@@ -37,7 +38,7 @@
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.5fr; 
             gap: 15px; padding: 15px; overflow: hidden;
-            height: calc(100vh - 110px); 
+            height: calc(100vh - 180px); /* Regolato per il box segnalazione più alto */
         }
         
         .colonna { display: flex; flex-direction: column; gap: 10px; height: 100%; }
@@ -86,7 +87,6 @@
         .text-man { color: var(--orange); font-weight: 800; }
         .text-off { color: var(--red); font-weight: 800; }
 
-        /* FLOTTA VARIABILE: GRIGLIA A 2 COLONNE PER 48" */
         #col-altri { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
             overflow-y: hidden; align-content: start;
@@ -99,8 +99,35 @@
         }
 
         .card-small strong { font-size: 1.5em; color: var(--text-title); line-height: 1; }
-        .card-small .status-label { font-size: 0.8em; text-transform: uppercase; font-weight: 800; }
+        
+        /* BOX AUTOSTRADA */
+        .highway-alert {
+            background: var(--highway-yellow);
+            color: #000;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 5px solid #000;
+            gap: 20px;
+            z-index: 101;
+        }
 
+        .highway-content { text-align: center; }
+        .highway-title { font-weight: 900; font-size: 1.1em; display: block; text-transform: uppercase; margin-bottom: 2px; }
+        .highway-detail { font-weight: 700; font-size: 0.95em; line-height: 1.2; display: block; }
+
+        .alert-icon {
+            font-size: 2.5em;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* TICKER */
         .ticker-wrap { height: 50px; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; z-index: 100; }
         .ticker-label { background: var(--blue); color: #fff; padding: 0 25px; font-weight: 900; display: flex; align-items: center; height: 100%; }
         .ticker-scroll { flex: 1; overflow: hidden; white-space: nowrap; }
@@ -120,7 +147,6 @@
             <div class="colonna-titolo">Gallarate CONV 1</div>
             <div class="equipaggio-info" id="info-gal1"></div>
             <div id="sub-gallarate-1"></div>
-
             <div class="colonna-titolo distacco-titolo">Gallarate CONV 2</div>
             <div class="equipaggio-info">H24_3</div>
             <div id="sub-gallarate-2"></div>
@@ -130,11 +156,9 @@
             <div class="colonna-titolo">Somma Lombardo</div>
             <div class="equipaggio-info">H24_3</div>
             <div id="sub-somma"></div>
-
             <div class="colonna-titolo distacco-titolo">Sumirago</div>
             <div class="equipaggio-info">GET_3</div>
             <div id="sub-sumirago"></div>
-
             <div id="wrapper-malpensa" style="display:none">
                 <div class="colonna-titolo distacco-titolo">Malpensa</div>
                 <div class="equipaggio-info">AGG. MXP</div>
@@ -149,10 +173,19 @@
         </div>
     </div>
 
+    <div class="highway-alert">
+        <span class="alert-icon">⚠️</span>
+        <div class="highway-content">
+            <span class="highway-title">GALLARATE - Entrata Chiusa (km 29.9 - Dir: Milano)</span>
+            <span class="highway-detail">Chiuso dalle 21:00 del 23/02/2026 alle 05:00 del 24/06/2026 per lavori.<br>Entrata consigliata verso Milano: Busto Arsizio.</span>
+        </div>
+        <span class="alert-icon">⚠️</span>
+    </div>
+
     <div class="ticker-wrap">
         <div class="ticker-label">AVVISI</div>
         <div class="ticker-scroll">
-            <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RELATIVA AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO: 338.7360099</div>
+            <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO ••• RESPONSABILE AUTOPARCO: 338.7360099</div>
         </div>
     </div>
 
@@ -194,7 +227,6 @@
                 config.forEach(g => {
                     if (!g.m) return;
                     if (g.t === "sub-malpensa") document.getElementById('wrapper-malpensa').style.display = 'block';
-                    
                     const statusClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'status-man' : (g.m[4]||'').includes('OFF') ? 'status-off' : 'status-ok';
                     const textClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'text-man' : (g.m[4]||'').includes('OFF') ? 'text-off' : 'text-ok';
 
@@ -217,7 +249,6 @@
                 data.forEach(d => {
                     const s = d[4]?.toUpperCase() || "";
                     if (!d[1] || s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP") || d[1].includes("VA11-81") || s.includes("AGG. MXP")) return;
-                    
                     const statusClass = (s.includes('MANUTENZIONE'))?'status-man':(s.includes('OFF'))?'status-off':'status-ok';
                     const textClass = (s.includes('MANUTENZIONE'))?'text-man':(s.includes('OFF'))?'text-off':'text-ok';
 
