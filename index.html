@@ -37,7 +37,7 @@
 
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.5fr; 
-            gap: 15px; padding: 25px 15px 15px 15px; overflow: hidden;
+            gap: 15px; padding: 35px 15px 15px 15px; overflow: hidden;
             height: calc(100vh - 180px); 
         }
         
@@ -53,9 +53,8 @@
             font-size: 0.8em; font-weight: 700; color: var(--blue); margin-bottom: 2px; padding-left: 17px;
         }
 
-        .distacco-titolo { margin-top: 55px !important; } /* Spazio per la foto del box sopra */
+        .distacco-titolo { margin-top: 65px !important; }
 
-        /* CONTENITORE BOX E FOTO */
         .box-container { position: relative; z-index: 1; margin-top: 15px; }
 
         .gruppo-mezzi { 
@@ -64,13 +63,14 @@
         }
 
         .mezzo-foto-container {
-            position: absolute; top: -65px; right: -10px; z-index: 10; pointer-events: none;
+            position: absolute; top: -75px; right: -5px; z-index: 10; pointer-events: none;
         }
 
         .mezzo-foto {
-            max-width: 150px; height: auto;
+            height: 75px;
+            width: auto;
             filter: drop-shadow(0 8px 10px rgba(0,0,0,0.3));
-            transform: scaleX(-1) rotate(2deg); /* Specchiata a sinistra */
+            transform: scaleX(-1) rotate(2deg);
         }
 
         .main-unit { padding: 12px 15px; border-left: 8px solid; position: relative; }
@@ -96,9 +96,6 @@
         .status-ok { border-color: var(--green) !important; }
         .status-man { border-color: var(--orange) !important; }
         .status-off { border-color: var(--red) !important; }
-        .text-ok { color: var(--green); font-weight: 800; }
-        .text-man { color: var(--orange); font-weight: 800; }
-        .text-off { color: var(--red); font-weight: 800; }
 
         #col-altri { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
@@ -113,7 +110,6 @@
 
         .card-small strong { font-size: 1.5em; color: var(--text-title); line-height: 1; }
         
-        /* BOX AUTOSTRADA */
         .highway-alert {
             background: var(--highway-yellow); color: #000; padding: 10px 20px;
             display: grid; grid-template-columns: auto 1fr 1fr auto;
@@ -128,11 +124,10 @@
         .alert-icon { font-size: 2em; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* TICKER */
         .ticker-wrap { height: 50px; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; z-index: 100; }
         .ticker-label { background: var(--blue); color: #fff; padding: 0 25px; font-weight: 900; display: flex; align-items: center; height: 100%; }
         .ticker-scroll { flex: 1; overflow: hidden; white-space: nowrap; }
-        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 35s linear infinite; color: #fff; font-weight: 700; font-size: 1.4em; }
+        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 45s linear infinite; color: #fff; font-weight: 700; font-size: 1.3em; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
@@ -190,7 +185,7 @@
     <div class="ticker-wrap">
         <div class="ticker-label">AVVISI</div>
         <div class="ticker-scroll">
-            <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO ••• RESPONSABILE AUTOPARCO: 338.7360099</div>
+            <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ INERENTE AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO: 338.7360099</div>
         </div>
     </div>
 
@@ -198,8 +193,8 @@
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
         const ambulanceSvg = `<svg class="amb-icon" viewBox="0 0 24 24"><path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,6H1V17H3.31C3.66,15.28 5.18,14 7,14C8.82,14 10.34,15.28 10.69,17H13.31C13.66,15.28 15.18,14 17,14C18.82,14 20.34,15.28 20.69,17H23V12L17,6M13,11H10V14H8V11H5V9H8V6H10V9H13V11Z" /></svg>`;
 
-        // Lista mezzi con foto disponibili
-        const mezziConFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49"];
+        // LISTA AGGIORNATA CON 11-81
+        const mezziConFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49", "VA11-81"];
 
         function updateClock() {
             const now = new Date();
@@ -240,7 +235,6 @@
                     const statusClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'status-man' : (g.m[4]||'').includes('OFF') ? 'status-off' : 'status-ok';
                     const textClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'text-man' : (g.m[4]||'').includes('OFF') ? 'text-off' : 'text-ok';
 
-                    // Logica inserimento foto
                     let photoHtml = mezziConFoto.includes(siglaMezzo) ? `<div class="mezzo-foto-container"><img src="${siglaMezzo}.png" class="mezzo-foto"></div>` : '';
 
                     let boxHtml = `<div class="gruppo-mezzi"><div class="main-unit ${statusClass}">
