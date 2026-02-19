@@ -48,32 +48,31 @@
             padding-left: 12px; border-left: 5px solid var(--blue); position: relative; z-index: 5;
         }
 
-        .distacco-titolo { margin-top: 40px !important; }
+        .distacco-titolo { margin-top: 20px !important; }
 
-        .box-container { position: relative; margin-top: 35px; }
+        /* IL BOX NON SI SPOSTA */
+        .box-container { position: relative; margin-top: 10px; }
 
-        /* POSIZIONAMENTO IMMAGINI FLOTTANTI */
+        /* L'AMBULANZA FLUTTUA SOPRA */
         .mezzo-foto-container {
             position: absolute; 
-            bottom: calc(100% - 15px); /* Poggia sul bordo superiore */
-            right: 20px; 
-            z-index: 100; 
+            top: -65px; /* Sovrapposizione al box */
+            right: -10px; 
+            z-index: 100; /* Sempre sopra tutto */
             pointer-events: none;
-            display: flex;
-            align-items: flex-end; /* Allinea in basso così quelle più alte crescono in su */
         }
 
         .mezzo-foto {
-            height: 95px; /* Altezza standard per i Ducato */
+            height: 90px; /* Altezza standard Ducato */
             width: auto;
-            filter: drop-shadow(0 10px 12px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 12px 15px rgba(0,0,0,0.5));
             transform: scaleX(-1);
-            transition: height 0.3s ease;
         }
 
-        /* INGRANDIMENTO SPECIFICO SOLO PER 11-81 */
+        /* INGRANDIMENTO EXTRA 11-81 */
         .img-va11-81 {
-            height: 135px !important; 
+            height: 115px !important; 
+            top: -85px !important; /* Correzione posizione per altezza maggiore */
         }
 
         .gruppo-mezzi { 
@@ -82,7 +81,7 @@
         }
 
         .main-unit { padding: 15px 20px; border-left: 10px solid; }
-        .sigla { font-size: 2.5em; font-weight: 900; line-height: 1; color: var(--text-title); letter-spacing: -1px; }
+        .sigla { font-size: 2.4em; font-weight: 900; line-height: 1; color: var(--text-title); letter-spacing: -1px; }
         
         .targa { 
             font-family: 'JetBrains Mono', monospace; color: var(--gold); background: var(--gold-bg); 
@@ -95,7 +94,6 @@
             color: var(--text-main); font-size: 0.85em; font-weight: 600;
         }
 
-        /* BACKUP UNIT RIPRISTINATE */
         .backup-unit {
             padding: 8px 20px; background: rgba(0,0,0,0.03);
             border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
@@ -118,7 +116,6 @@
             border: 1px solid var(--border); border-left: 5px solid; box-shadow: 0 2px 6px var(--shadow);
         }
 
-        /* VIABILITÀ */
         .highway-alert {
             background: var(--highway-yellow); color: #000; padding: 10px 20px;
             display: grid; grid-template-columns: auto 1fr 1fr auto;
@@ -133,7 +130,6 @@
         .alert-icon { font-size: 2em; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* TICKER */
         .ticker-wrap { height: 50px; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; z-index: 100; }
         .ticker-label { background: var(--blue); color: #fff; padding: 0 25px; font-weight: 900; display: flex; align-items: center; height: 100%; }
         .ticker-scroll { flex: 1; overflow: hidden; white-space: nowrap; }
@@ -144,7 +140,7 @@
 <body class="dark-theme">
 
     <div class="header">
-        <h1 style="font-size:1.2em; letter-spacing:1px; font-weight:900;">SITUAZIONE REAL TIME AUTOPARCO</h1>
+        <h1 style="font-size:1.5em; letter-spacing:1px; font-weight:900;">SITUAZIONE REAL TIME AUTOPARCO</h1>
         <div id="update-time" style="font-family:'JetBrains Mono'; font-size:0.8em;">AGGIORNAMENTO...</div>
     </div>
 
@@ -206,65 +202,74 @@
             try {
                 const res = await fetch(sheetUrl + '&t=' + Date.now());
                 const csv = await res.text();
-                const separator = csv.includes(';') ? ';' : ',';
                 const lines = csv.split(/\r?\n/).filter(l => l.trim() !== "");
-                const data = lines.slice(1).map(l => l.split(separator).map(p => p.replace(/^"|"$/g, '').trim()));
+                const data = lines.slice(1).map(l => l.split(lines[0].includes(';') ? ';' : ',').map(p => p.replace(/^"|"$/g, '').trim()));
                 
                 updateClock();
                 document.querySelectorAll('[id^="sub-"], #col-altri').forEach(el => el.innerHTML = '');
+                document.getElementById('wrapper-malpensa').style.display = 'none';
 
-                const findMezzo = (txt) => data.find(d => d[4] && d[4].toUpperCase().replace(/\s+/g, '') === txt.toUpperCase().replace(/\s+/g, '')) || null;
+                const findS = (txt) => data.find(d => d[4]?.toUpperCase().includes(txt)) || null;
+                const findG = (txt) => data.find(d => d[1]?.toUpperCase().includes(txt)) || null;
 
                 const config = [
-                    { t: "sub-gallarate-1", m: findMezzo("GALLARATE CONV 1"), b: findMezzo("BACKUP CONV 1") },
-                    { t: "sub-gallarate-2", m: findMezzo("GALLARATE CONV 2"), b: findMezzo("BACKUP CONV 2") },
-                    { t: "sub-somma",       m: findMezzo("SOMMA LOMBARDO"),   b: findMezzo("BACKUP CONV SOMMA L.DO") },
-                    { t: "sub-sumirago",    m: data.find(d => d[1] === "VA11-81"), b: null },
-                    { t: "sub-malpensa",    m: findMezzo("AGG. MXP") }
+                    { t: "sub-gallarate-1", m: findS("GALLARATE CONV 1"), b: findS("BACKUP CONV 1") },
+                    { t: "sub-gallarate-2", m: findS("GALLARATE CONV 2"), b: findS("BACKUP CONV 2") },
+                    { t: "sub-somma",       m: findS("SOMMA LOMBARDO"),   b: "MARZO2026" },
+                    { t: "sub-sumirago",    m: findG("VA11-81"),          b: null },
+                    { t: "sub-malpensa",    m: findS("AGG. MXP"),         b: null }
                 ];
 
                 config.forEach(g => {
                     if (!g.m) return;
                     if (g.t === "sub-malpensa") document.getElementById('wrapper-malpensa').style.display = 'block';
-                    
-                    const sigla = g.m[1].toUpperCase();
-                    const statusRaw = (g.m[4] || "").toUpperCase();
-                    const statusClass = statusRaw.includes('MANUTENZIONE') ? 'status-man' : statusRaw.includes('OFF') ? 'status-off' : 'status-ok';
-                    const textClass = statusRaw.includes('MANUTENZIONE') ? 'text-man' : statusRaw.includes('OFF') ? 'text-off' : 'text-ok';
+                    const siglaMezzo = g.m[1].toUpperCase();
+                    const statusClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'status-man' : (g.m[4]||'').includes('OFF') ? 'status-off' : 'status-ok';
+                    const textClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'text-man' : (g.m[4]||'').includes('OFF') ? 'text-off' : 'text-ok';
 
-                    // Logica foto: solo la 11-81 riceve la classe per ingrandirla
-                    const is81 = sigla === "VA11-81";
-                    let photoHtml = mezziConFoto.includes(sigla) ? 
-                        `<div class="mezzo-foto-container">
-                            <img src="${sigla}.png" class="mezzo-foto ${is81 ? 'img-va11-81' : ''}">
+                    // Se è la 11-81 applico stile dedicato per ingrandirla
+                    const is81 = siglaMezzo === "VA11-81";
+                    let photoHtml = mezziConFoto.includes(siglaMezzo) ? 
+                        `<div class="mezzo-foto-container" style="${is81 ? 'top:-85px;' : ''}">
+                            <img src="${siglaMezzo}.png" class="mezzo-foto ${is81 ? 'img-va11-81' : ''}">
                         </div>` : '';
 
-                    let boxHtml = `<div class="box-container">${photoHtml}<div class="gruppo-mezzi"><div class="main-unit ${statusClass}">
-                        <div class="sigla">${g.m[1]}${g.m[3]?`<span class="targa">${g.m[3]}</span>`:''}</div>
+                    let boxHtml = `<div class="gruppo-mezzi"><div class="main-unit ${statusClass}">
+                        <div style="display:flex; align-items:center;"><div class="sigla">${g.m[1]}</div>${g.m[3]?`<span class="targa">${g.m[3]}</span>`:''}</div>
                         <div style="font-size:0.9em; font-weight:700; opacity:0.8; margin: 4px 0;">${g.m[2]}</div>
-                        <div class="${textClass}" style="font-size:0.85em;">${g.m[4]}</div>
+                        <div class="${textClass}" style="font-size:0.85em; text-transform:uppercase;">${g.m[4]}</div>
                         ${g.m[5]?`<div class="note-box">⚠️ ${g.m[5]}</div>`:''}</div>`;
 
-                    // LOGICA BACKUP RIPRISTINATA
-                    if (g.b) {
-                        const bStatus = (g.b[4] || "").toUpperCase();
-                        const bTextClass = bStatus.includes('MANUTENZIONE') ? 'text-man' : bStatus.includes('OFF') ? 'text-off' : 'text-ok';
-                        boxHtml += `<div class="backup-unit"><div><span style="font-weight:900; color:var(--blue); font-size:0.7em;">BK </span><span style="font-weight:800;">${g.b[1]}</span></div><span class="${bTextClass}" style="font-size:0.75em;">${g.b[4]}</span></div>`;
+                    if (g.b === "MARZO2026") {
+                        boxHtml += `<div class="backup-unit"><span style="font-weight:900; color:var(--blue); font-size:0.7em;">BK</span><span style="color:var(--blue); font-weight:800; font-size:1em;">MARZO 2026</span></div>`;
+                    } else if (g.b) {
+                        const bTextClass = (g.b[4]||'').includes('MANUTENZIONE') ? 'text-man' : 'text-ok';
+                        boxHtml += `<div class="backup-unit"><div><span style="font-weight:900; color:var(--blue); font-size:0.7em;">BK </span><span style="font-weight:800; font-size:1.1em;">${g.b[1]}</span></div><span class="${bTextClass}" style="font-size:0.75em;">${g.b[4]}</span></div>`;
                     }
-                    boxHtml += `</div></div>`;
-                    document.getElementById(g.t).innerHTML = boxHtml;
+                    boxHtml += `</div>`;
+                    document.getElementById(g.t).innerHTML = `<div class="box-container">${photoHtml}${boxHtml}</div>`;
                 });
 
                 data.forEach(d => {
-                    const s = (d[4] || "").toUpperCase();
-                    if (!d[1] || s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP") || d[1] === "VA11-81" || s.includes("AGG. MXP")) return;
-                    const statusClass = s.includes('MANUTENZIONE') ? 'status-man' : s.includes('OFF') ? 'status-off' : 'status-ok';
-                    document.getElementById('col-altri').innerHTML += `<div class="card-small ${statusClass}"><strong>${d[1]}</strong><br><small>${d[2]}</small></div>`;
+                    const s = d[4]?.toUpperCase() || "";
+                    if (!d[1] || s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP") || d[1].includes("VA11-81") || s.includes("AGG. MXP")) return;
+                    const statusClass = (s.includes('MANUTENZIONE'))?'status-man':(s.includes('OFF'))?'status-off':'status-ok';
+                    const textClass = (s.includes('MANUTENZIONE'))?'text-man':(s.includes('OFF'))?'text-off':'text-ok';
+
+                    document.getElementById('col-altri').innerHTML += `
+                        <div class="card-small ${statusClass}">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong>${d[1]}</strong>
+                                <span class="status-label ${textClass}">${d[4]}</span>
+                            </div>
+                            <div style="font-size:0.85em; opacity:0.8; margin-top:4px; font-weight:600;">${d[2]}</div>
+                            ${d[5]?`<div class="note-box" style="font-size:0.75em; margin-top:6px; padding:4px 8px;">${d[5]}</div>`:''}
+                        </div>`;
                 });
             } catch (e) { console.error(e); }
         }
 
-        setInterval(update, 15000); update();
+        setInterval(update, 30000); update();
     </script>
 </body>
 </html>
