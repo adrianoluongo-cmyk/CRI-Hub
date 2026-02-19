@@ -16,21 +16,10 @@
             --gold: #f1e05a; --gold-bg: rgba(241, 224, 90, 0.1); --shadow: rgba(0,0,0,0.8);
         }
 
-        /* AGGIUNTA SPECIFICA PER IL GLOW TECNOLOGICO IN DARK MODE */
-        .dark-theme .mezzo-foto {
-            /* Doppio filtro: ombra profonda + bagliore blu tecnologico */
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7)) drop-shadow(0 0 20px rgba(56, 139, 253, 0.5));
-        }
-
         .light-theme {
             --bg: #f6f8fa; --panel: #ffffff; --text-main: #24292f; --text-title: #1b1f24;
             --border: #d0d7de; --header-bg: #ffffff;
             --gold: #9a7b00; --gold-bg: #fff9e6; --shadow: rgba(0,0,0,0.2);
-        }
-
-        /* Ombra più pulita per il tema chiaro */
-        .light-theme .mezzo-foto {
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3));
         }
 
         * { box-sizing: border-box; }
@@ -45,9 +34,10 @@
             padding: 0 30px; border-bottom: 1px solid var(--border); background: var(--header-bg); z-index: 100;
         }
 
+        /* DASHBOARD: Aumentato il padding-top per evitare che le foto tocchino l'header */
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.5fr; 
-            gap: 15px; padding: 20px; overflow: hidden;
+            gap: 15px; padding: 85px 20px 20px 20px; overflow: hidden;
             height: calc(100vh - 180px); 
         }
         
@@ -59,43 +49,41 @@
             padding-left: 12px; border-left: 5px solid var(--blue); position: relative; z-index: 5;
         }
 
-        .distacco-titolo { margin-top: 45px !important; }
+        /* Margine per le foto della seconda riga */
+        .distacco-titolo { margin-top: 100px !important; }
 
-        /* IL BOX NON SI SPOSTA */
         .box-container { position: relative; margin-top: 10px; }
 
-        /* --- MODIFICHE FOTO INIZIO --- */
-
-        /* Contenitore con prospettiva 3D */
+        /* FOTO: Ripristinate a destra con effetto tecnologico */
         .mezzo-foto-container {
             position: absolute; 
-            top: -90px; /* Alzato ulteriormente per compensare la nuova dimensione */
-            right: 30px; 
+            bottom: calc(100% - 20px); /* Poggia sul bordo superiore */
+            right: 0px; /* Angolo destro come richiesto */
             z-index: 100; 
             pointer-events: none;
-            perspective: 1000px; /* Attiva l'effetto 3D */
+            perspective: 1000px;
         }
 
-        /* Immagine moderna e tecnologica */
         .mezzo-foto {
-            height: 130px; /* MOLTO PIÙ GRANDE (era 90px) */
+            height: 130px; /* Grande e moderna */
             width: auto;
-            /* Trasformazione 3D: specchiata, ruotata sull'asse Y per profondità, inclinata su Z per dinamismo */
-            transform: scaleX(-1) rotateY(-12deg) rotateZ(3deg);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transizione fluida e "elastica" */
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.6));
+            transform: scaleX(-1) rotateY(-10deg) rotateZ(2deg); /* Effetto 3D tecnologico */
+            transition: all 0.3s ease;
         }
 
-        /* INGRANDIMENTO EXTRA 11-81 */
+        .dark-theme .mezzo-foto {
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.8)) drop-shadow(0 0 10px rgba(56, 139, 253, 0.3));
+        }
+
+        /* 11-81: Più grande ma proporzionata */
         .img-va11-81 {
-            height: 175px !important; /* ENORME (era 135px) */
-            top: -140px !important; /* Riposizionamento per la nuova altezza */
+            height: 175px !important; 
         }
-        /* --- MODIFICHE FOTO FINE --- */
-
 
         .gruppo-mezzi { 
             background: var(--panel); border-radius: 16px; border: 1px solid var(--border); 
-            box-shadow: 0 4px 12px var(--shadow); position: relative;
+            box-shadow: 0 4px 12px var(--shadow); position: relative; z-index: 10;
         }
 
         .main-unit { padding: 15px 20px; border-left: 10px solid; }
@@ -136,12 +124,9 @@
 
         /* BOX AUTOSTRADA INGRANDITO */
         .highway-alert {
-            background: var(--highway-yellow); color: #000; 
-            padding: 20px 30px; 
+            background: var(--highway-yellow); color: #000; padding: 20px 30px;
             display: grid; grid-template-columns: auto 1fr 1fr auto;
-            align-items: center; 
-            border-top: 8px solid #000; 
-            gap: 25px; z-index: 101;
+            align-items: center; border-top: 8px solid #000; gap: 25px; z-index: 101;
         }
 
         .highway-col { padding: 0 15px; border-right: 3px solid rgba(0,0,0,0.1); }
@@ -251,11 +236,11 @@
 
                     const is81 = siglaMezzo === "VA11-81";
                     let photoHtml = mezziConFoto.includes(siglaMezzo) ? 
-                        `<div class="mezzo-foto-container" style="${is81 ? 'top:-140px;' : ''}">
+                        `<div class="mezzo-foto-container">
                             <img src="${siglaMezzo}.png" class="mezzo-foto ${is81 ? 'img-va11-81' : ''}">
                         </div>` : '';
 
-                    let boxHtml = `<div class="gruppo-mezzi"><div class="main-unit ${statusClass}">
+                    let boxHtml = `<div class="box-container">${photoHtml}<div class="gruppo-mezzi"><div class="main-unit ${statusClass}">
                         <div style="display:flex; align-items:center;"><div class="sigla">${g.m[1]}</div>${g.m[3]?`<span class="targa">${g.m[3]}</span>`:''}</div>
                         <div style="font-size:0.9em; font-weight:700; opacity:0.8; margin: 4px 0;">${g.m[2]}</div>
                         <div class="${textClass}" style="font-size:0.85em; text-transform:uppercase;">${g.m[4]}</div>
@@ -267,8 +252,8 @@
                         const bTextClass = (g.b[4]||'').includes('MANUTENZIONE') ? 'text-man' : 'text-ok';
                         boxHtml += `<div class="backup-unit"><div><span style="font-weight:900; color:var(--blue); font-size:0.7em;">BK </span><span style="font-weight:800; font-size:1.1em;">${g.b[1]}</span></div><span class="${bTextClass}" style="font-size:0.75em;">${g.b[4]}</span></div>`;
                     }
-                    boxHtml += `</div>`;
-                    document.getElementById(g.t).innerHTML = `<div class="box-container">${photoHtml}${boxHtml}</div>`;
+                    boxHtml += `</div></div>`;
+                    document.getElementById(g.t).innerHTML = boxHtml;
                 });
 
                 data.forEach(d => {
