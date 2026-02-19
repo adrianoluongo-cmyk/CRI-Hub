@@ -38,7 +38,7 @@
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.5fr; 
             gap: 15px; padding: 15px; overflow: hidden;
-            height: calc(100vh - 180px); /* Regolato per il box segnalazione più alto */
+            height: calc(100vh - 180px); 
         }
         
         .colonna { display: flex; flex-direction: column; gap: 10px; height: 100%; }
@@ -100,25 +100,30 @@
 
         .card-small strong { font-size: 1.5em; color: var(--text-title); line-height: 1; }
         
-        /* BOX AUTOSTRADA */
+        /* BOX AUTOSTRADA A DUE COLONNE */
         .highway-alert {
             background: var(--highway-yellow);
             color: #000;
-            padding: 10px 25px;
-            display: flex;
+            padding: 10px 20px;
+            display: grid;
+            grid-template-columns: auto 1fr 1fr auto;
             align-items: center;
-            justify-content: center;
             border-top: 5px solid #000;
-            gap: 20px;
+            gap: 15px;
             z-index: 101;
         }
 
-        .highway-content { text-align: center; }
-        .highway-title { font-weight: 900; font-size: 1.1em; display: block; text-transform: uppercase; margin-bottom: 2px; }
-        .highway-detail { font-weight: 700; font-size: 0.95em; line-height: 1.2; display: block; }
+        .highway-col {
+            padding: 0 10px;
+            border-right: 2px solid rgba(0,0,0,0.1);
+        }
+        .highway-col:last-of-type { border-right: none; }
+
+        .highway-title { font-weight: 900; font-size: 0.9em; display: block; text-transform: uppercase; margin-bottom: 2px; text-decoration: underline; }
+        .highway-detail { font-weight: 700; font-size: 0.8em; line-height: 1.2; display: block; }
 
         .alert-icon {
-            font-size: 2.5em;
+            font-size: 2em;
             animation: blink 1s infinite;
         }
 
@@ -175,9 +180,13 @@
 
     <div class="highway-alert">
         <span class="alert-icon">⚠️</span>
-        <div class="highway-content">
-            <span class="highway-title">GALLARATE - Entrata Chiusa (km 29.9 - Dir: Milano)</span>
-            <span class="highway-detail">Chiuso dalle 21:00 del 23/02/2026 alle 05:00 del 24/06/2026 per lavori.<br>Entrata consigliata verso Milano: Busto Arsizio.</span>
+        <div class="highway-col">
+            <span class="highway-title">A8 GALLARATE - Entrata Chiusa</span>
+            <span class="highway-detail">Chiuso dalle 21:00 del 23/02 alle 05:00 del 24/06 verso Milano per lavori. Consigliata: Busto Arsizio.</span>
+        </div>
+        <div class="highway-col">
+            <span class="highway-title">A8 SOLBIATE ARNO / BUSTO - Tratto Chiuso</span>
+            <span class="highway-detail">Chiuso tra Solbiate e Bivio A8-A36 dalle 22:00 alle 05:00 (23-24/02) per lavori. Consigliata: Busto A.</span>
         </div>
         <span class="alert-icon">⚠️</span>
     </div>
@@ -185,7 +194,7 @@
     <div class="ticker-wrap">
         <div class="ticker-label">AVVISI</div>
         <div class="ticker-scroll">
-            <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO ••• RESPONSABILE AUTOPARCO: 338.7360099</div>
+            <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ INERENTE AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO: 338.7360099</div>
         </div>
     </div>
 
