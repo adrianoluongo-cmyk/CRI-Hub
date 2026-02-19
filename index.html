@@ -14,14 +14,12 @@
             --bg: #0d1117; --panel: #1c2128; --text-main: #c9d1d9; --text-title: #ffffff;
             --border: #444c56; --header-bg: #010409;
             --gold: #f1e05a; --gold-bg: rgba(241, 224, 90, 0.1); --shadow: rgba(0,0,0,0.6);
-            --img-glow: rgba(56, 139, 253, 0.4);
         }
 
         .light-theme {
             --bg: #f6f8fa; --panel: #ffffff; --text-main: #24292f; --text-title: #1b1f24;
             --border: #d0d7de; --header-bg: #ffffff;
             --gold: #9a7b00; --gold-bg: #fff9e6; --shadow: rgba(0,0,0,0.15);
-            --img-glow: rgba(0, 0, 0, 0.1);
         }
 
         * { box-sizing: border-box; }
@@ -39,7 +37,7 @@
 
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.5fr; 
-            gap: 15px; padding: 45px 15px 15px 15px; overflow: hidden;
+            gap: 15px; padding: 50px 15px 15px 15px; overflow: hidden;
             height: calc(100vh - 180px); 
         }
         
@@ -51,25 +49,32 @@
             padding-left: 12px; border-left: 5px solid var(--blue); position: relative; z-index: 5;
         }
 
-        .distacco-titolo { margin-top: 60px !important; }
+        .distacco-titolo { margin-top: 85px !important; }
 
-        /* EFFETTO TECNOLOGICO IMMAGINE */
-        .box-container { position: relative; z-index: 1; margin-top: 20px; }
+        /* POSIZIONAMENTO IMMAGINI SOPRA IL BOX */
+        .box-container { position: relative; z-index: 1; margin-top: 50px; }
 
         .mezzo-foto-container {
-            position: absolute; top: -75px; right: -5px; z-index: 10; pointer-events: none;
-            perspective: 1000px;
+            position: absolute; 
+            bottom: calc(100% - 10px); /* Poggia esattamente sopra il bordo del box */
+            right: 10px; 
+            z-index: 10; 
+            pointer-events: none;
         }
 
         .mezzo-foto {
-            height: 80px; /* Altezza coordinata */
+            height: 85px; /* Dimensione standard per Ducato */
             width: auto;
-            filter: drop-shadow(0 10px 15px var(--shadow));
-            transform: scaleX(-1) rotateY(-10deg) rotateZ(2deg); /* Effetto 3D tecnologico */
-            transition: transform 0.3s ease;
+            filter: drop-shadow(0 5px 8px rgba(0,0,0,0.4));
+            transform: scaleX(-1); /* Orientamento a sinistra */
+            transition: all 0.3s ease;
         }
 
-        /* BOX PRINCIPALE */
+        /* INGRANDIMENTO SPECIFICO 11-81 */
+        .img-va11-81 {
+            height: 95px !important; /* Più grande per compensare la forma del Transporter */
+        }
+
         .gruppo-mezzi { 
             background: var(--panel); border-radius: 16px; border: 1px solid var(--border); 
             box-shadow: 0 4px 12px var(--shadow); position: relative; z-index: 2;
@@ -111,6 +116,8 @@
             border: 1px solid var(--border); border-left: 5px solid; box-shadow: 0 2px 6px var(--shadow);
         }
 
+        .card-small strong { font-size: 1.5em; color: var(--text-title); line-height: 1; }
+        
         /* VIABILITÀ */
         .highway-alert {
             background: var(--highway-yellow); color: #000; padding: 10px 20px;
@@ -160,7 +167,7 @@
         </div>
         <div class="colonna">
             <div class="colonna-titolo" style="border-left-color:var(--gold)">Flotta Variabile</div>
-            <div id="col-altri" style="margin-top:20px;"></div>
+            <div id="col-altri"></div>
         </div>
     </div>
 
@@ -224,7 +231,9 @@
                     const statusClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'status-man' : (g.m[4]||'').includes('OFF') ? 'status-off' : 'status-ok';
                     const textClass = (g.m[4]||'').includes('MANUTENZIONE') ? 'text-man' : (g.m[4]||'').includes('OFF') ? 'text-off' : 'text-ok';
 
-                    let photoHtml = mezziConFoto.includes(siglaMezzo) ? `<div class="mezzo-foto-container"><img src="${siglaMezzo}.png" class="mezzo-foto"></div>` : '';
+                    // Se è la 11-81 aggiungo una classe CSS specifica per ingrandirla
+                    const extraClass = (siglaMezzo === "VA11-81") ? "img-va11-81" : "";
+                    let photoHtml = mezziConFoto.includes(siglaMezzo) ? `<div class="mezzo-foto-container"><img src="${siglaMezzo}.png" class="mezzo-foto ${extraClass}"></div>` : '';
 
                     let boxHtml = `<div class="gruppo-mezzi"><div class="main-unit ${statusClass}">
                         <div style="display:flex; align-items:center;"><div class="sigla">${g.m[1]}</div>${g.m[3]?`<span class="targa">${g.m[3]}</span>`:''}</div>
