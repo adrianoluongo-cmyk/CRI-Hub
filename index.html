@@ -13,111 +13,75 @@
         }
 
         * { box-sizing: border-box; }
-
         body { 
             font-family: 'Inter', sans-serif; 
-            /* Sfondo tecnologico profondo */
             background: radial-gradient(circle at center, #1c2128 0%, #0d1117 100%);
-            color: #c9d1d9; 
-            margin: 0; padding: 0; overflow: hidden; height: 100vh; display: flex; flex-direction: column;
+            color: #c9d1d9; margin: 0; padding: 0; overflow: hidden; height: 100vh; display: flex; flex-direction: column;
         }
 
         /* HEADER */
         .header { 
             height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; background: rgba(1, 4, 9, 0.8);
-            border-bottom: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px); z-index: 1000;
+            padding: 0 40px; background: rgba(1, 4, 9, 0.85);
+            border-bottom: 1px solid var(--glass-border); backdrop-filter: blur(15px); z-index: 1000;
         }
-
         .header h1 { font-size: 1.8em; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0; }
 
-        /* DASHBOARD GRID */
-        .dashboard { 
-            flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.2fr; 
-            gap: 25px; padding: 30px; overflow: hidden;
-        }
-        
+        /* DASHBOARD */
+        .dashboard { flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 25px; padding: 30px; overflow: hidden; }
         .colonna { display: flex; flex-direction: column; gap: 20px; height: 100%; overflow: visible; }
-        
         .colonna-titolo { 
-            font-weight: 900; font-size: 1.3em; color: var(--blue); 
-            text-transform: uppercase; letter-spacing: 2px;
-            padding-left: 15px; border-left: 6px solid var(--blue);
-            text-shadow: 0 0 15px rgba(56, 139, 253, 0.4);
+            font-weight: 900; font-size: 1.3em; color: var(--blue); text-transform: uppercase; letter-spacing: 2px;
+            padding-left: 15px; border-left: 6px solid var(--blue); text-shadow: 0 0 15px rgba(56, 139, 253, 0.4);
         }
 
-        /* BOX STILE VETRO */
-        .box-container { position: relative; margin-top: 40px; }
-
+        /* BOX MEZZI TITOLARI */
+        .box-container { position: relative; margin-top: 45px; }
         .glass-card { 
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            position: relative; overflow: hidden;
-            transition: transform 0.3s ease;
+            background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;
         }
-
         .main-unit { padding: 25px; border-left: 12px solid; }
-
-        /* FOTO MEZZI */
-        .mezzo-foto-container {
-            position: absolute; 
-            top: -110px; /* Alti per non spostare il box */
-            right: 10px; 
-            z-index: 110; 
-            pointer-events: none;
-        }
-
-        .mezzo-foto {
-            height: 140px; width: auto;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
-            transform: scaleX(-1);
-        }
-
-        .img-va11-81 { height: 185px !important; top: -140px !important; }
-
-        /* TESTI */
+        
         .sigla { font-size: 3.2em; font-weight: 900; color: #fff; line-height: 1; letter-spacing: -2px; }
-        .targa { 
-            font-family: 'JetBrains Mono', monospace; font-size: 1em; color: var(--orange); 
-            display: block; margin-top: 8px; font-weight: 700;
-        }
+        .modello-titolare { font-size: 1.1em; font-weight: 700; color: #fff; opacity: 0.7; margin-top: 5px; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; font-size: 1em; color: var(--orange); display: block; margin-top: 5px; font-weight: 700; }
+
         .status-badge {
-            display: inline-block; padding: 6px 15px; border-radius: 50px;
-            font-size: 0.9em; font-weight: 900; text-transform: uppercase;
-            margin-top: 15px; letter-spacing: 1px;
+            display: inline-block; padding: 6px 18px; border-radius: 50px;
+            font-size: 0.9em; font-weight: 900; text-transform: uppercase; margin-top: 15px;
         }
 
-        /* COLORI STATO CON GLOW */
+        /* FOTO */
+        .mezzo-foto-container { position: absolute; top: -115px; right: 10px; z-index: 110; pointer-events: none; }
+        .mezzo-foto { height: 145px; width: auto; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)); transform: scaleX(-1); }
+        .img-va11-81 { height: 190px !important; top: -145px !important; }
+
+        /* COLORI STATO */
         .status-ok { border-color: var(--green); }
         .badge-ok { background: rgba(46, 160, 67, 0.15); color: var(--green); border: 1px solid var(--green); box-shadow: 0 0 15px rgba(46, 160, 67, 0.3); }
-        
         .status-man { border-color: var(--orange); }
         .badge-man { background: rgba(210, 153, 34, 0.15); color: var(--orange); border: 1px solid var(--orange); box-shadow: 0 0 15px rgba(210, 153, 34, 0.3); }
-
         .status-off { border-color: var(--red); }
         .badge-off { background: rgba(248, 81, 73, 0.15); color: var(--red); border: 1px solid var(--red); box-shadow: 0 0 15px rgba(248, 81, 73, 0.3); }
 
         /* BACKUP E NOTE */
-        .note-box { margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 12px; font-size: 0.9em; color: #fff; font-weight: 600; }
-        .backup-unit { padding: 10px 25px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; font-size: 0.9em; }
+        .note-box { margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 12px; font-size: 0.9em; color: #fff; font-weight: 600; border: 1px dashed rgba(255,255,255,0.2); }
+        .backup-unit { padding: 12px 25px; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; font-size: 0.95em; color: var(--blue); font-weight: 800; }
 
-        /* FLOTTA VARIABILE */
-        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        /* FLOTTA VARIABILE - DESIGN AGGIORNATO */
+        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; overflow-y: auto; padding-right: 10px; }
         .card-variabile { 
-            background: var(--glass-bg); backdrop-filter: blur(5px); border: 1px solid var(--glass-border);
-            padding: 15px; border-radius: 18px; border-left: 6px solid;
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); 
+            border: 1px solid var(--glass-border); padding: 18px; border-radius: 20px;
+            border-left: 8px solid; transition: all 0.3s ease;
         }
+        .v-sigla { font-size: 1.6em; font-weight: 900; color: #fff; display: block; line-height: 1; }
+        .v-modello { font-size: 0.85em; font-weight: 700; color: #c9d1d9; opacity: 0.6; display: block; margin-top: 4px; text-transform: uppercase; }
+        .v-status { font-size: 0.75em; font-weight: 900; text-transform: uppercase; margin-top: 10px; display: block; }
 
-        /* VIABILITÀ - ULTRA VISIBILE */
-        .highway-alert {
-            background: var(--highway-yellow); color: #000; padding: 25px 50px;
-            display: grid; grid-template-columns: auto 1fr 1fr auto;
-            align-items: center; border-top: 12px solid #000; gap: 40px;
-        }
+        /* VIABILITÀ */
+        .highway-alert { background: var(--highway-yellow); color: #000; padding: 25px 50px; display: grid; grid-template-columns: auto 1fr 1fr auto; align-items: center; border-top: 12px solid #000; gap: 40px; }
         .highway-title { font-weight: 900; font-size: 1.4em; text-transform: uppercase; text-decoration: underline; margin-bottom: 8px; display: block; }
         .highway-detail { font-weight: 700; font-size: 1.2em; line-height: 1.4; }
 
@@ -132,21 +96,21 @@
 
     <div class="header">
         <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: bold;">SINCRONIZZAZIONE...</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-size: 1.1em; font-weight: 900;">LIVE...</div>
     </div>
 
     <div class="dashboard">
         <div class="colonna">
             <div class="colonna-titolo">Gallarate CONV 1</div>
             <div id="sub-gallarate-1"></div>
-            <div class="colonna-titolo" style="margin-top:30px">Gallarate CONV 2</div>
+            <div class="colonna-titolo" style="margin-top:35px">Gallarate CONV 2</div>
             <div id="sub-gallarate-2"></div>
         </div>
 
         <div class="colonna">
             <div class="colonna-titolo">Somma Lombardo</div>
             <div id="sub-somma"></div>
-            <div class="colonna-titolo" style="margin-top:30px">Sumirago</div>
+            <div class="colonna-titolo" style="margin-top:35px">Sumirago</div>
             <div id="sub-sumirago"></div>
             <div id="sub-malpensa"></div>
         </div>
@@ -158,7 +122,7 @@
     </div>
 
     <div class="highway-alert">
-        <span style="font-size:4em; animation: blink 1s infinite;">⚠️</span>
+        <span style="font-size:4.5em; animation: blink 1s infinite;">⚠️</span>
         <div>
             <span class="highway-title">A8 GALLARATE - Entrata Chiusa</span>
             <span class="highway-detail">Dalle 21:00 (23/02) alle 05:00 (24/06) verso Milano. Consigliata: Busto A.</span>
@@ -167,11 +131,11 @@
             <span class="highway-title">A8 SOLBIATE / BUSTO - Tratto Chiuso</span>
             <span class="highway-detail">Tra Solbiate e Bivio A8-A36 (22:00-05:00). Consigliata: Busto A.</span>
         </div>
-        <span style="font-size:4em; animation: blink 1s infinite;">⚠️</span>
+        <span style="font-size:4.5em; animation: blink 1s infinite;">⚠️</span>
     </div>
 
     <div class="ticker-wrap">
-        <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ SUI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO: 338.7360099</div>
+        <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RELATIVA AI MEZZI, CONTATTARE IL RESPONSABILE: 338.7360099</div>
     </div>
 
     <script>
@@ -186,7 +150,7 @@
                 const lines = csv.split(/\r?\n/).filter(l => l.trim() !== "");
                 const data = lines.slice(1).map(l => l.split(sep).map(p => p.replace(/^"|"$/g, '').trim()));
                 
-                document.getElementById('update-time').innerText = `● SYSTEM ACTIVE • ${new Date().toLocaleTimeString('it-IT')}`;
+                document.getElementById('update-time').innerText = `● LIVE • ${new Date().toLocaleTimeString('it-IT')}`;
                 document.querySelectorAll('[id^="sub-"], #col-altri').forEach(el => el.innerHTML = '');
 
                 const findM = (txt) => data.find(d => d[4]?.toUpperCase().includes(txt.toUpperCase())) || null;
@@ -202,6 +166,7 @@
                 config.forEach(c => {
                     if (!c.m) return;
                     const sigla = c.m[1].toUpperCase();
+                    const modello = c.m[2] || "---";
                     const status = (c.m[4] || "").toUpperCase();
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
                     
@@ -216,8 +181,9 @@
                             ${photoHtml}
                             <div class="glass-card">
                                 <div class="main-unit status-${sType}">
-                                    <span class="sigla">${sigla}</span>
-                                    <span class="targa">${c.m[3] || '---'}</span>
+                                    <div class="sigla">${sigla}</div>
+                                    <div class="modello-titolare">${modello}</div>
+                                    <div class="targa">${c.m[3] || '---'}</div>
                                     <div class="status-badge badge-${sType}">${status}</div>
                                     ${c.m[5] ? `<div class="note-box">⚠️ ${c.m[5]}</div>` : ''}
                                 </div>
@@ -233,8 +199,9 @@
                     const sType = s.includes('MANUTENZIONE') ? 'status-man' : s.includes('OFF') ? 'status-off' : 'status-ok';
                     document.getElementById('col-altri').innerHTML += `
                         <div class="card-variabile ${sType}">
-                            <div style="font-weight:900; color:#fff; font-size:1.4em;">${d[1]}</div>
-                            <div style="font-size:0.8em; font-weight:700; opacity:0.8">${d[2]}</div>
+                            <span class="v-sigla">${d[1]}</span>
+                            <span class="v-modello">${d[2]}</span>
+                            <span class="v-status" style="color:var(--${sType === 'status-ok' ? 'green' : sType === 'status-man' ? 'orange' : 'red'})">${s}</span>
                         </div>`;
                 });
             } catch (e) { console.error(e); }
