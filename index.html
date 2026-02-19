@@ -16,10 +16,21 @@
             --gold: #f1e05a; --gold-bg: rgba(241, 224, 90, 0.1); --shadow: rgba(0,0,0,0.8);
         }
 
+        /* AGGIUNTA SPECIFICA PER IL GLOW TECNOLOGICO IN DARK MODE */
+        .dark-theme .mezzo-foto {
+            /* Doppio filtro: ombra profonda + bagliore blu tecnologico */
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7)) drop-shadow(0 0 20px rgba(56, 139, 253, 0.5));
+        }
+
         .light-theme {
             --bg: #f6f8fa; --panel: #ffffff; --text-main: #24292f; --text-title: #1b1f24;
             --border: #d0d7de; --header-bg: #ffffff;
             --gold: #9a7b00; --gold-bg: #fff9e6; --shadow: rgba(0,0,0,0.2);
+        }
+
+        /* Ombra più pulita per il tema chiaro */
+        .light-theme .mezzo-foto {
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3));
         }
 
         * { box-sizing: border-box; }
@@ -53,27 +64,34 @@
         /* IL BOX NON SI SPOSTA */
         .box-container { position: relative; margin-top: 10px; }
 
-        /* L'AMBULANZA FLUTTUA SOPRA */
+        /* --- MODIFICHE FOTO INIZIO --- */
+
+        /* Contenitore con prospettiva 3D */
         .mezzo-foto-container {
             position: absolute; 
-            top: -65px; 
-            right: 40px; /* Spostate a sinistra per allineamento armonico */
+            top: -90px; /* Alzato ulteriormente per compensare la nuova dimensione */
+            right: 30px; 
             z-index: 100; 
             pointer-events: none;
+            perspective: 1000px; /* Attiva l'effetto 3D */
         }
 
+        /* Immagine moderna e tecnologica */
         .mezzo-foto {
-            height: 90px; 
+            height: 130px; /* MOLTO PIÙ GRANDE (era 90px) */
             width: auto;
-            filter: drop-shadow(0 12px 15px rgba(0,0,0,0.5));
-            transform: scaleX(-1);
+            /* Trasformazione 3D: specchiata, ruotata sull'asse Y per profondità, inclinata su Z per dinamismo */
+            transform: scaleX(-1) rotateY(-12deg) rotateZ(3deg);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transizione fluida e "elastica" */
         }
 
         /* INGRANDIMENTO EXTRA 11-81 */
         .img-va11-81 {
-            height: 140px !important; /* Ancora più grande */
-            top: -110px !important; /* Aggiustamento posizione per altezza */
+            height: 175px !important; /* ENORME (era 135px) */
+            top: -140px !important; /* Riposizionamento per la nuova altezza */
         }
+        /* --- MODIFICHE FOTO FINE --- */
+
 
         .gruppo-mezzi { 
             background: var(--panel); border-radius: 16px; border: 1px solid var(--border); 
@@ -119,10 +137,10 @@
         /* BOX AUTOSTRADA INGRANDITO */
         .highway-alert {
             background: var(--highway-yellow); color: #000; 
-            padding: 20px 30px; /* Più spazio interno */
+            padding: 20px 30px; 
             display: grid; grid-template-columns: auto 1fr 1fr auto;
             align-items: center; 
-            border-top: 8px solid #000; /* Bordo più spesso */
+            border-top: 8px solid #000; 
             gap: 25px; z-index: 101;
         }
 
@@ -233,7 +251,7 @@
 
                     const is81 = siglaMezzo === "VA11-81";
                     let photoHtml = mezziConFoto.includes(siglaMezzo) ? 
-                        `<div class="mezzo-foto-container" style="${is81 ? 'top:-110px;' : ''}">
+                        `<div class="mezzo-foto-container" style="${is81 ? 'top:-140px;' : ''}">
                             <img src="${siglaMezzo}.png" class="mezzo-foto ${is81 ? 'img-va11-81' : ''}">
                         </div>` : '';
 
