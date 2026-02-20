@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUAZIONE REAL TIME AUTOPARCO - V7</title>
+    <title>SITUAZIONE REAL TIME AUTOPARCO - V8</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;500;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -53,14 +53,14 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1.3fr;
             gap: 15px;
-            padding: 20px;
+            padding: 15px; /* Ridotto leggermente per recuperare spazio */
             min-height: 0;
         }
 
         .column {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             min-height: 0;
         }
 
@@ -80,11 +80,11 @@
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 18px;
-            position: relative; /* Necessario per anchor delle foto */
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 130px;
+            min-height: 125px;
         }
 
         .unit-card.status-ok { border-left: 8px solid var(--green); }
@@ -110,7 +110,7 @@
         .badge-off { background: rgba(218, 54, 51, 0.3); color: #ff6b6b; }
 
         .backup {
-            margin-top: 10px;
+            margin-top: 8px;
             font-size: 0.8vw;
             font-weight: 700;
             padding-top: 6px;
@@ -119,32 +119,37 @@
             z-index: 5;
         }
 
-        /* --- FOTO MEZZI (ALTO A DESTRA E GIGANTI) --- */
+        /* --- FOTO MEZZI --- */
         .photo-anchor {
             position: absolute;
-            top: -25px;   /* Esce dal box in alto */
-            right: -35px;  /* Esce dal box a destra */
-            z-index: 50;  /* Sopra al testo ma non all'header */
+            top: -25px;   
+            right: -35px;  
+            z-index: 50;  
             pointer-events: none;
         }
 
         .img-pop {
-            height: 18vh; /* Dimensione massiccia */
+            height: 17vh; 
             filter: drop-shadow(0 15px 20px rgba(0,0,0,0.8)) contrast(1.1);
             transform: scaleX(-1);
         }
 
-        /* Speciale per 11-81 */
+        /* 11-81: MASSICCIA */
         .photo-anchor.large {
             top: -45px;
             right: -45px;
         }
         .photo-anchor.large .img-pop {
-            height: 24vh;
+            height: 23vh;
             filter: drop-shadow(0 20px 30px rgba(0,0,0,1)) contrast(1.2) brightness(1.1);
         }
 
-        /* --- FLOTTA VARIABILE (DENSITÀ OTTIMIZZATA) --- */
+        /* 11-32: SPOSTATA A SINISTRA */
+        .photo-anchor.pos-32 {
+            right: 15px !important; /* Spostata "un filo" più a sinistra verso l'interno */
+        }
+
+        /* --- FLOTTA VARIABILE --- */
         .variable-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -166,46 +171,47 @@
         .v-modello { font-size: 0.65vw; opacity: 0.5; text-transform: uppercase; }
         .v-status { font-size: 0.7vw; font-weight: 900; margin-top: 4px; text-transform: uppercase; }
 
-        /* --- FOOTER VIABILITÀ (AVVISI GIGANTI) --- */
+        /* --- FOOTER VIABILITÀ (ALTEZZA RIDOTTA) --- */
         .footer-info {
-            height: 150px; /* Aumentato per visibilità */
+            height: 110px; /* Ridotta da 150px */
             background: var(--orange);
             color: #000;
             display: grid;
-            grid-template-columns: 120px 1fr 1fr 120px;
+            grid-template-columns: 100px 1fr 1fr 100px;
             align-items: center;
-            padding: 0 40px;
-            gap: 50px;
-            border-top: 12px solid #000;
+            padding: 0 30px;
+            gap: 30px;
+            border-top: 10px solid #000;
         }
 
         .h-title { 
             font-weight: 900; 
-            font-size: 1.5vw; /* Testo più grande */
+            font-size: 1.3vw; 
             text-transform: uppercase; 
             text-decoration: underline;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
         .h-detail { 
             font-weight: 800; 
-            font-size: 1.2vw; /* Dettaglio molto più leggibile */
+            font-size: 1.1vw; 
             line-height: 1.1; 
         }
 
+        /* --- TICKER AVVISI (ALTEZZA AUMENTATA) --- */
         .ticker {
-            height: 45px;
+            height: 65px; /* Aumentata da 45px */
             background: #000;
             color: #fff;
             display: flex;
             align-items: center;
             overflow: hidden;
             font-family: 'JetBrains Mono';
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-top: 2px solid var(--blue);
+            font-size: 1.4rem; /* Testo più grande */
+            font-weight: 800;
+            border-top: 3px solid var(--blue);
         }
 
-        .ticker-move { white-space: nowrap; animation: move 45s linear infinite; }
+        .ticker-move { white-space: nowrap; animation: move 40s linear infinite; }
 
         @keyframes move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         @keyframes flash { 50% { opacity: 0.1; } }
@@ -217,7 +223,7 @@
 
     <div class="top-bar">
         <h1>COMMAND CENTER :: AUTOPARCO</h1>
-        <div id="clock" style="color: var(--blue); font-family: 'JetBrains Mono'; font-weight: 900; font-size: 2rem;">00:00</div>
+        <div id="clock" style="color: var(--blue); font-family: 'JetBrains Mono'; font-weight: 900; font-size: 2.2rem;">00:00</div>
     </div>
 
     <div class="dashboard">
@@ -241,7 +247,7 @@
     </div>
 
     <div class="footer-info">
-        <span class="blink" style="font-size: 5rem; text-align: center;">⚠️</span>
+        <span class="blink" style="font-size: 4rem; text-align: center;">⚠️</span>
         <div>
             <div class="h-title">A8 GALLARATE - ENTRATA CHIUSA</div>
             <div class="h-detail">Dalle ore 21:00 (23/02) alle ore 05:00 (24/06) verso Milano. Deviazione stazione di Busto Arsizio.</div>
@@ -250,12 +256,12 @@
             <div class="h-title">A8 SOLBIATE / BUSTO - TRATTO CHIUSO</div>
             <div class="h-detail">Tra Solbiate e Bivio A8-A36 Pedemontana (22:00-05:00). Seguire deviazioni segnalate in loco.</div>
         </div>
-        <span class="blink" style="font-size: 5rem; text-align: center;">⚠️</span>
+        <span class="blink" style="font-size: 4rem; text-align: center;">⚠️</span>
     </div>
 
     <div class="ticker">
         <div class="ticker-move">
-            MANDATORIO RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO • VERIFICARE TIPO CARBURANTE DEL MEZZO • RESPONSABILE AUTOPARCO: 338.7360099 • 
+            MANDATORIO RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO • VERIFICARE SEMPRE IL TIPO DI CARBURANTE • RESPONSABILE AUTOPARCO: 338.7360099 • 
         </div>
     </div>
 
@@ -272,7 +278,7 @@
                 const data = lines.slice(1).map(l => l.split(sep).map(p => p.replace(/^"|"$/g, '').trim()));
                 
                 const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('clock').innerText = `● ${ora}`;
+                document.getElementById('clock').innerText = ora;
 
                 document.querySelectorAll('[id^="slot-"]').forEach(el => el.innerHTML = '');
 
@@ -294,8 +300,11 @@
                     
                     let photoHtml = "";
                     if (mezziConFoto.includes(sigla)) {
-                        const isLarge = (sigla === "VA11-81");
-                        photoHtml = `<div class="photo-anchor ${isLarge ? 'large' : ''}"><img src="${sigla}.png" class="img-pop"></div>`;
+                        let specialClass = "";
+                        if (sigla === "VA11-81") specialClass = "large";
+                        if (sigla === "VA11-32") specialClass = "pos-32";
+                        
+                        photoHtml = `<div class="photo-anchor ${specialClass}"><img src="${sigla}.png" class="img-pop"></div>`;
                     }
 
                     document.getElementById(c.id).innerHTML = `
