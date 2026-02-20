@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUAZIONE REAL TIME AUTOPARCO - V3.3</title>
+    <title>SITUAZIONE REAL TIME AUTOPARCO - V5 COMPACT</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,140 +15,138 @@
         * { box-sizing: border-box; }
         body { 
             font-family: 'Inter', sans-serif; 
-            background: radial-gradient(circle at 50% 50%, #1c2128 0%, #0d1117 100%);
+            background: #0d1117;
             color: #c9d1d9; margin: 0; padding: 0; overflow: hidden; 
             height: 100vh; width: 100vw; display: flex; flex-direction: column;
         }
 
-        /* HEADER */
+        /* HEADER PIÙ SOTTILE */
         .header { 
-            height: 7vh; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 30px; background: rgba(1, 4, 9, 0.85);
+            height: 5vh; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 25px; background: rgba(1, 4, 9, 0.9);
             border-bottom: 1px solid var(--glass-border); z-index: 1000;
         }
-        .header h1 { font-size: 1.6vw; font-weight: 900; letter-spacing: 1px; color: #fff; margin: 0; }
+        .header h1 { font-size: 1.2vw; font-weight: 900; letter-spacing: 1px; color: #fff; margin: 0; }
 
-        /* DASHBOARD GRID */
+        /* DASHBOARD GRID - SPAZI RIDOTTI */
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.2fr; 
-            gap: 2vw; padding: 3vh 2vw; overflow: hidden;
+            gap: 1.5vw; padding: 2vh 1.5vw; overflow: hidden;
         }
-        .colonna { display: flex; flex-direction: column; gap: 3vh; height: 100%; }
+        .colonna { display: flex; flex-direction: column; gap: 2vh; height: 100%; }
         
         .colonna-titolo { 
-            font-weight: 900; font-size: 1vw; color: var(--blue); 
-            text-transform: uppercase; letter-spacing: 1.5px; padding-left: 12px; 
-            border-left: 5px solid var(--blue);
+            font-weight: 800; font-size: 0.85vw; color: var(--blue); 
+            text-transform: uppercase; border-left: 4px solid var(--blue); padding-left: 10px;
         }
 
-        /* BOX MEZZO PRINCIPALE */
-        .box-container { position: relative; margin-top: 2vh; }
+        /* BOX MEZZO PIÙ COMPATTO */
+        .box-container { position: relative; margin-top: 1.5vh; }
         .glass-card { 
             background: var(--glass);
-            backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 15px;
             position: relative; z-index: 10;
         }
 
         .main-unit { 
-            padding: 2vh 1.4vw; 
-            padding-right: 150px; 
-            border-left: 10px solid; 
-            border-radius: 20px 20px 0 0; 
+            padding: 1.5vh 1.2vw; 
+            padding-right: 130px; 
+            border-left: 8px solid; 
+            border-radius: 15px 15px 0 0; 
         }
 
         /* FOTO MEZZI */
         .mezzo-foto-container {
             position: absolute; 
-            top: -5vh; 
-            right: -1vw; 
+            top: -4vh; 
+            right: -0.5vw; 
             z-index: 100;
             pointer-events: none;
         }
-
         .mezzo-foto {
-            height: 14vh; 
+            height: 11vh; 
             width: auto;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
             transform: scaleX(-1);
         }
 
-        /* 11-81: PIÙ GROSSA E POSIZIONATA IN ALTO A DX */
+        /* 11-81: PIÙ ALTA E PIÙ A DESTRA (FILO BORDO) */
         .img-va11-81 { 
-            height: 20vh !important; 
-            top: -5vh !important; 
-            right: -0.5vw !important;
+            height: 16vh !important; 
+            top: -7.5vh !important; 
+            right: -1.2vw !important; /* Spinta più a destra */
         }
 
-        .sigla { font-size: 2.8vw; font-weight: 900; color: #fff; line-height: 0.95; }
-        .modello-text { font-size: 0.9vw; font-weight: 700; color: rgba(255,255,255,0.5); margin: 4px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; font-size: 0.85vw; color: var(--orange); }
+        /* TESTI RICALIBRATI */
+        .sigla { font-size: 2.2vw; font-weight: 900; color: #fff; line-height: 1; }
+        .modello-text { font-size: 0.75vw; font-weight: 700; color: rgba(255,255,255,0.4); margin: 2px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; font-size: 0.7vw; color: var(--orange); }
 
         .status-badge {
-            display: inline-block; padding: 5px 12px; border-radius: 6px;
-            font-size: 0.7vw; font-weight: 900; text-transform: uppercase; margin-top: 8px;
+            display: inline-block; padding: 3px 10px; border-radius: 4px;
+            font-size: 0.6vw; font-weight: 800; text-transform: uppercase; margin-top: 6px;
         }
 
         /* COLORI STATO */
         .status-ok { border-color: var(--green); }
-        .badge-ok { background: rgba(46, 160, 67, 0.2); color: #4ade80; border: 1px solid var(--green); }
         .status-man { border-color: var(--orange); }
-        .badge-man { background: rgba(210, 153, 34, 0.2); color: #fbbf24; border: 1px solid var(--orange); }
         .status-off { border-color: var(--red); }
+
+        .badge-ok { background: rgba(46, 160, 67, 0.2); color: #4ade80; border: 1px solid var(--green); }
+        .badge-man { background: rgba(210, 153, 34, 0.2); color: #fbbf24; border: 1px solid var(--orange); }
         .badge-off { background: rgba(248, 81, 73, 0.2); color: #f87171; border: 1px solid var(--red); }
 
         .backup-unit { 
-            padding: 10px 20px; background: rgba(0,0,0,0.4); 
-            border-top: 1px solid var(--glass-border); border-radius: 0 0 20px 20px;
-            font-size: 0.8vw; color: var(--blue); font-weight: 800; 
+            padding: 8px 15px; background: rgba(0,0,0,0.4); 
+            border-top: 1px solid var(--glass-border); border-radius: 0 0 15px 15px;
+            font-size: 0.7vw; color: var(--blue); font-weight: 700; 
         }
 
-        /* FLOTTA VARIABILE - RIPRISTINO STILE ORIGINALE (Bordo laterale) */
-        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; }
+        /* FLOTTA VARIABILE - BORDI INTEGRALI */
+        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8vw; }
         .card-variabile { 
             background: var(--glass);
-            border: 1px solid var(--glass-border); 
-            border-left: 6px solid; /* Ripristinato bordo laterale */
-            padding: 1.2vh 1vw; border-radius: 14px;
+            border: 2px solid; 
+            padding: 1vh 0.8vw; border-radius: 12px;
             display: flex; flex-direction: column; justify-content: space-between;
         }
-        .v-sigla { font-size: 1.4vw; font-weight: 900; color: #fff; display: block; }
-        .v-modello { font-size: 0.7vw; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
+        .card-variabile.status-ok { border-color: var(--green); }
+        .card-variabile.status-man { border-color: var(--orange); }
+        .card-variabile.status-off { border-color: var(--red); }
+
+        .v-sigla { font-size: 1.2vw; font-weight: 900; color: #fff; display: block; }
+        .v-modello { font-size: 0.6vw; opacity: 0.5; text-transform: uppercase; }
+        .v-status-text { font-size: 0.55vw; font-weight: 900; text-transform: uppercase; margin-top: 4px; }
         
-        .v-status-text {
-            font-size: 0.65vw; font-weight: 900; text-transform: uppercase;
-            padding: 2px 0; letter-spacing: 0.5px;
-        }
         .text-ok { color: #4ade80; }
         .text-man { color: #fbbf24; }
         .text-off { color: #f87171; }
 
-        /* VIABILITÀ */
+        /* VIABILITÀ - COMPATTA */
         .highway-alert { 
             background: var(--highway-yellow); color: #000; 
-            padding: 1.5vh 2.5vw; display: grid; grid-template-columns: auto 1fr 1fr auto; 
-            align-items: center; border-top: 8px solid #000; gap: 40px; 
+            padding: 1vh 2vw; display: grid; grid-template-columns: auto 1fr 1fr auto; 
+            align-items: center; border-top: 6px solid #000; gap: 30px; 
         }
-        .highway-title { font-weight: 900; font-size: 1.1vw; text-transform: uppercase; text-decoration: underline; margin-bottom: 3px; display: block; }
-        .highway-detail { font-weight: 700; font-size: 0.95vw; line-height: 1.2; }
+        .highway-title { font-weight: 900; font-size: 0.9vw; text-transform: uppercase; text-decoration: underline; }
+        .highway-detail { font-weight: 700; font-size: 0.8vw; line-height: 1.1; }
 
         /* TICKER */
-        .ticker-wrap { height: 5vh; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
+        .ticker-wrap { height: 4vh; background: #000; display: flex; align-items: center; overflow: hidden; }
         .ticker-text { 
-            white-space: nowrap; animation: scroll 55s linear infinite; 
-            color: #fff; font-weight: 700; font-size: 1.15vw; 
+            white-space: nowrap; animation: scroll 65s linear infinite; 
+            color: #fff; font-weight: 700; font-size: 1vw; 
         }
 
         @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: 900; font-size: 1.3vw;">00:00</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: 900; font-size: 1.1vw;">00:00</div>
     </div>
 
     <div class="dashboard">
@@ -159,7 +157,7 @@
         </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">Somma L.do / Sumirago / Malpensa T1</div>
+            <div class="colonna-titolo">Somma / Sumirago / MXP</div>
             <div id="sub-somma"></div>
             <div id="sub-sumirago"></div>
             <div id="sub-malpensa"></div>
@@ -172,21 +170,21 @@
     </div>
 
     <div class="highway-alert">
-        <span style="font-size:3vw; animation: blink 1s infinite;">⚠️</span>
+        <span style="font-size:2vw;">⚠️</span>
         <div>
             <span class="highway-title">A8 GALLARATE - Entrata Chiusa</span>
-            <span class="highway-detail">Dalle 21:00 (23/02) alle 05:00 (24/06) verso Milano. Entrata consigliata: Busto A.</span>
+            <span class="highway-detail">Dalle 21:00 (23/02) alle 05:00 (24/06) verso Milano. Consigliata: Busto A.</span>
         </div>
         <div>
             <span class="highway-title">A8 SOLBIATE / BUSTO - Tratto Chiuso</span>
-            <span class="highway-detail">Tra Solbiate e Bivio A8-A36 (22:00-05:00). Entrata consigliata: Busto A.</span>
+            <span class="highway-detail">Tra Solbiate e Bivio A8-A36 (22:00-05:00). Consigliata: Busto A.</span>
         </div>
-        <span style="font-size:3vw; animation: blink 1s infinite;">⚠️</span>
+        <span style="font-size:2vw;">⚠️</span>
     </div>
 
     <div class="ticker-wrap">
         <div class="ticker-text">
-            MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RIGUARDO AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO AL 338.7360099
+            MANDATORIO RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RIGUARDO AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO AL 338.7360099
         </div>
     </div>
 
