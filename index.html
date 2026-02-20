@@ -26,23 +26,23 @@
             padding: 0 40px; background: rgba(1, 4, 9, 0.8);
             border-bottom: 1px solid var(--glass-border); backdrop-filter: blur(20px); z-index: 1000;
         }
-        .header h1 { font-size: 2vw; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0; }
+        .header h1 { font-size: 1.8vw; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0; }
 
         /* DASHBOARD GRID */
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.3fr; 
-            gap: 2vw; padding: 4vh 2vw 2vh 2vw; overflow: hidden;
+            gap: 2.5vw; padding: 5vh 2vw 2vh 2vw; overflow: hidden;
         }
-        .colonna { display: flex; flex-direction: column; gap: 3vh; height: 100%; overflow: visible; }
+        .colonna { display: flex; flex-direction: column; gap: 4vh; height: 100%; }
         
         .colonna-titolo { 
-            font-weight: 900; font-size: 1.2vw; color: var(--blue); 
+            font-weight: 900; font-size: 1.1vw; color: var(--blue); 
             text-transform: uppercase; letter-spacing: 2px; padding-left: 15px; 
             border-left: 6px solid var(--blue); text-shadow: 0 0 20px rgba(56, 139, 253, 0.5);
         }
 
         /* IL BOX CONTENITORE */
-        .box-container { position: relative; margin-top: 4vh; }
+        .box-container { position: relative; margin-top: 2vh; }
 
         /* EFFETTO VETRO */
         .glass-card { 
@@ -50,83 +50,79 @@
             backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             position: relative; z-index: 10;
         }
 
-        .main-unit { padding: 2.5vh 1.5vw; border-left: 12px solid; border-radius: 24px 0 0 24px; }
+        /* PROTEZIONE CODICI: Aggiunto padding-right per non far sovrapporre la foto al testo */
+        .main-unit { 
+            padding: 2.5vh 1.5vw; 
+            padding-right: 180px; /* Spazio vitale per la foto a destra */
+            border-left: 12px solid; 
+            border-radius: 24px 24px 0 0; 
+        }
 
-        /* LE FOTO CHE BUCANO LO SCHERMO */
+        /* FOTO MEZZI: Posizionamento più esterno */
         .mezzo-foto-container {
             position: absolute; 
-            top: -7vh; 
-            right: -1vw; 
-            z-index: 100; /* Sopra la glass-card */
+            top: -6vh; 
+            right: -2vw; 
+            z-index: 100;
             pointer-events: none;
             perspective: 1000px;
         }
 
         .mezzo-foto {
-            height: 16vh; /* Dimensioni massive */
+            height: 18vh;
             width: auto;
-            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.9));
-            transform: scaleX(-1) rotateY(-15deg) rotateZ(3deg); /* Effetto 3D pop-out */
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
+            transform: scaleX(-1) rotateY(-10deg);
             transition: all 0.3s ease;
         }
 
-        /* 11-81: IL RE DELLO SCHERMO */
-        .img-va11-81 {
-            height: 22vh !important; 
-            top: -10vh !important;
-            right: -2vw !important;
-        }
+        .img-va11-81 { height: 24vh !important; top: -11vh !important; }
 
         /* TESTI */
-        .sigla { font-size: 4vw; font-weight: 900; color: #fff; line-height: 0.9; letter-spacing: -2px; }
-        .modello-text { font-size: 1.1vw; font-weight: 700; color: rgba(255,255,255,0.6); margin: 5px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; font-size: 1vw; color: var(--orange); font-weight: 700; }
+        .sigla { font-size: 3.5vw; font-weight: 900; color: #fff; line-height: 0.9; letter-spacing: -1px; }
+        .modello-text { font-size: 1vw; font-weight: 700; color: rgba(255,255,255,0.5); margin: 5px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; font-size: 0.9vw; color: var(--orange); font-weight: 700; }
 
         .status-badge {
-            display: inline-block; padding: 6px 18px; border-radius: 50px;
-            font-size: 0.8vw; font-weight: 900; text-transform: uppercase; margin-top: 15px;
+            display: inline-block; padding: 6px 15px; border-radius: 50px;
+            font-size: 0.75vw; font-weight: 900; text-transform: uppercase; margin-top: 10px;
         }
 
         /* COLORI STATO */
         .status-ok { border-color: var(--green); }
-        .badge-ok { background: rgba(46, 160, 67, 0.2); color: #4ade80; border: 1px solid var(--green); box-shadow: 0 0 20px rgba(46, 160, 67, 0.4); }
-        
+        .badge-ok { background: rgba(46, 160, 67, 0.2); color: #4ade80; border: 1px solid var(--green); }
         .status-man { border-color: var(--orange); }
-        .badge-man { background: rgba(210, 153, 34, 0.2); color: #fbbf24; border: 1px solid var(--orange); box-shadow: 0 0 20px rgba(210, 153, 34, 0.4); }
-
+        .badge-man { background: rgba(210, 153, 34, 0.2); color: #fbbf24; border: 1px solid var(--orange); }
         .status-off { border-color: var(--red); }
-        .badge-off { background: rgba(248, 81, 73, 0.2); color: #f87171; border: 1px solid var(--red); box-shadow: 0 0 20px rgba(248, 81, 73, 0.4); }
+        .badge-off { background: rgba(248, 81, 73, 0.2); color: #f87171; border: 1px solid var(--red); }
 
-        /* BACKUP */
         .backup-unit { 
-            padding: 10px 25px; background: rgba(0,0,0,0.4); 
+            padding: 12px 25px; background: rgba(0,0,0,0.4); 
             border-top: 1px solid var(--glass-border); border-radius: 0 0 24px 24px;
-            display: flex; justify-content: space-between; font-size: 0.9vw; color: var(--blue); font-weight: 800; 
+            font-size: 0.85vw; color: var(--blue); font-weight: 800; 
         }
 
-        /* FLOTTA VARIABILE - CARDS */
-        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2vw; overflow-y: auto; padding-right: 10px; }
+        /* FLOTTA VARIABILE */
+        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; overflow-y: auto; }
         .card-variabile { 
-            background: var(--glass); backdrop-filter: blur(10px); 
-            border: 1px solid var(--glass-border); padding: 1.5vh 1vw; border-radius: 20px;
-            border-left: 8px solid; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background: var(--glass); border: 1px solid var(--glass-border); 
+            padding: 1.5vh 1vw; border-radius: 15px; border-left: 6px solid;
         }
-        .v-sigla { font-size: 1.8vw; font-weight: 900; color: #fff; display: block; line-height: 1; }
-        .v-modello { font-size: 0.8vw; font-weight: 700; opacity: 0.5; text-transform: uppercase; }
+        .v-sigla { font-size: 1.6vw; font-weight: 900; color: #fff; display: block; }
+        .v-modello { font-size: 0.7vw; opacity: 0.5; text-transform: uppercase; }
 
-        /* VIABILITÀ */
-        .highway-alert { background: var(--highway-yellow); color: #000; padding: 2vh 4vw; display: grid; grid-template-columns: auto 1fr 1fr auto; align-items: center; border-top: 10px solid #000; gap: 40px; }
-        .highway-title { font-weight: 900; font-size: 1.3vw; text-transform: uppercase; text-decoration: underline; margin-bottom: 5px; display: block; }
-        .highway-detail { font-weight: 700; font-size: 1.1vw; line-height: 1.3; }
+        /* FOOTER & INFO */
+        .highway-alert { background: var(--highway-yellow); color: #000; padding: 1.5vh 3vw; display: grid; grid-template-columns: auto 1fr 1fr auto; align-items: center; border-top: 8px solid #000; gap: 30px; }
+        .highway-title { font-weight: 900; font-size: 1.1vw; text-transform: uppercase; display: block; }
+        .highway-detail { font-weight: 700; font-size: 0.95vw; }
 
-        .ticker-wrap { height: 6vh; background: #000; border-top: 3px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
-        .ticker-text { white-space: nowrap; animation: scroll 50s linear infinite; color: #fff; font-weight: 700; font-size: 1.4vw; padding-left: 100%; }
+        .ticker-wrap { height: 5vh; background: #000; display: flex; align-items: center; overflow: hidden; border-top: 2px solid var(--blue); }
+        .ticker-text { white-space: nowrap; animation: scroll 60s linear infinite; color: #fff; font-weight: 700; font-size: 1.2vw; }
 
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
@@ -134,21 +130,21 @@
 
     <div class="header">
         <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: 900; font-size: 1.2vw;">LIVE...</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: 900; font-size: 1.4vw;">00:00</div>
     </div>
 
     <div class="dashboard">
         <div class="colonna">
             <div class="colonna-titolo">Gallarate CONV 1</div>
             <div id="sub-gallarate-1"></div>
-            <div class="colonna-titolo" style="margin-top:2vh">Gallarate CONV 2</div>
+            <div class="colonna-titolo">Gallarate CONV 2</div>
             <div id="sub-gallarate-2"></div>
         </div>
 
         <div class="colonna">
             <div class="colonna-titolo">Somma Lombardo</div>
             <div id="sub-somma"></div>
-            <div class="colonna-titolo" style="margin-top:2vh">Sumirago</div>
+            <div class="colonna-titolo">Sumirago / Malpensa</div>
             <div id="sub-sumirago"></div>
             <div id="sub-malpensa"></div>
         </div>
@@ -160,20 +156,20 @@
     </div>
 
     <div class="highway-alert">
-        <span style="font-size:4vw; animation: blink 1s infinite;">⚠️</span>
+        <span style="font-size:3vw; animation: blink 1s infinite;">⚠️</span>
         <div>
             <span class="highway-title">A8 GALLARATE - Entrata Chiusa</span>
-            <span class="highway-detail">Dalle 21:00 (23/02) alle 05:00 (24/06) verso Milano. Consigliata: Busto A.</span>
+            <span class="highway-detail">Dalle 21:00 alle 05:00 verso Milano. Consigliata: Busto A.</span>
         </div>
         <div>
             <span class="highway-title">A8 SOLBIATE / BUSTO - Tratto Chiuso</span>
-            <span class="highway-detail">Tra Solbiate e Bivio A8-A36 (22:00-05:00). Consigliata: Busto A.</span>
+            <span class="highway-detail">Tra Solbiate e Bivio A8-A36 (22:00-05:00).</span>
         </div>
-        <span style="font-size:4vw; animation: blink 1s infinite;">⚠️</span>
+        <span style="font-size:3vw; animation: blink 1s infinite;">⚠️</span>
     </div>
 
     <div class="ticker-wrap">
-        <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ CONTATTARE IL RESPONSABILE: 338.7360099</div>
+        <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO ••• VERIFICARE SEMPRE IL TIPO DI CARBURANTE ••• EMERGENZE: 338.7360099</div>
     </div>
 
     <script>
@@ -188,7 +184,10 @@
                 const lines = csv.split(/\r?\n/).filter(l => l.trim() !== "");
                 const data = lines.slice(1).map(l => l.split(sep).map(p => p.replace(/^"|"$/g, '').trim()));
                 
-                document.getElementById('update-time').innerText = `● LIVE • ${new Date().toLocaleTimeString('it-IT')}`;
+                // OROLOGIO SENZA SECONDI
+                const oraLocale = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('update-time').innerText = `● LIVE • ${oraLocale}`;
+
                 document.querySelectorAll('[id^="sub-"], #col-altri').forEach(el => el.innerHTML = '');
 
                 const findM = (txt) => data.find(d => d[4]?.toUpperCase().includes(txt.toUpperCase())) || null;
@@ -198,20 +197,18 @@
                     { id: "sub-gallarate-2", m: findM("GALLARATE CONV 2"), b: findM("BACKUP CONV 2") },
                     { id: "sub-somma",       m: findM("SOMMA LOMBARDO"),   b: findM("BACKUP CONV SOMMA L.DO") },
                     { id: "sub-sumirago",    m: data.find(d => d[1]?.includes("11-81")), b: null },
-                    { id: "sub-malpensa",    m: findM("AGG. MXP"),         b: null }
+                    { id: "sub-malpensa",    m: findM("AGG. MXP"),          b: null }
                 ];
 
                 config.forEach(c => {
                     if (!c.m) return;
                     const sigla = c.m[1].toUpperCase();
-                    const modello = c.m[2] || "MODELLO NON SPEC.";
                     const status = (c.m[4] || "").toUpperCase();
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
                     
-                    const is81 = sigla.includes("11-81");
                     let photoHtml = mezziConFoto.includes(sigla) ? 
                         `<div class="mezzo-foto-container">
-                            <img src="${sigla}.png" class="mezzo-foto ${is81 ? 'img-va11-81' : ''}">
+                            <img src="${sigla}.png" class="mezzo-foto ${sigla.includes("11-81") ? 'img-va11-81' : ''}">
                         </div>` : '';
 
                     let html = `
@@ -220,12 +217,11 @@
                             <div class="glass-card">
                                 <div class="main-unit status-${sType}">
                                     <div class="sigla">${sigla}</div>
-                                    <div class="modello-text">${modello}</div>
+                                    <div class="modello-text">${c.m[2] || "---"}</div>
                                     <div class="targa">${c.m[3] || '---'}</div>
                                     <div class="status-badge badge-${sType}">${status}</div>
-                                    ${c.m[5] ? `<div style="margin-top:10px; font-size:0.9vw; color:#fff; font-weight:600; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">⚠️ ${c.m[5]}</div>` : ''}
                                 </div>
-                                ${c.b ? `<div class="backup-unit"><span>BACKUP: <strong>${c.b[1]}</strong></span></div>` : ''}
+                                ${c.b ? `<div class="backup-unit">BACKUP: <strong>${c.b[1]}</strong></div>` : ''}
                             </div>
                         </div>`;
                     document.getElementById(c.id).innerHTML = html;
