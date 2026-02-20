@@ -8,87 +8,123 @@
         :root {
             --green: #2ea043; --orange: #d29922; --red: #f85149; --blue: #388bfd;
             --highway-yellow: #ffcc00;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.12);
         }
 
         * { box-sizing: border-box; }
         body { 
             font-family: 'Inter', sans-serif; 
-            background: radial-gradient(circle at center, #1c2128 0%, #0d1117 100%);
+            background: radial-gradient(circle at 50% 50%, #1c2128 0%, #0d1117 100%);
             color: #c9d1d9; margin: 0; padding: 0; overflow: hidden; 
             height: 100vh; width: 100vw; display: flex; flex-direction: column;
         }
 
-        /* HEADER ADATTIVO */
+        /* HEADER */
         .header { 
-            height: 8vh; min-height: 60px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 3vw; background: rgba(1, 4, 9, 0.85);
-            border-bottom: 1px solid var(--glass-border); backdrop-filter: blur(15px); z-index: 1000;
+            height: 8vh; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; background: rgba(1, 4, 9, 0.8);
+            border-bottom: 1px solid var(--glass-border); backdrop-filter: blur(20px); z-index: 1000;
         }
-        .header h1 { font-size: clamp(1.2rem, 2.5vw, 2rem); font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0; }
+        .header h1 { font-size: 2vw; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0; }
 
-        /* DASHBOARD GRID ADATTIVA */
+        /* DASHBOARD GRID */
         .dashboard { 
-            flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.2fr; 
-            gap: 2vw; padding: 2vh 2vw; overflow: hidden;
+            flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.3fr; 
+            gap: 2vw; padding: 4vh 2vw 2vh 2vw; overflow: hidden;
         }
-        .colonna { display: flex; flex-direction: column; gap: 2vh; height: 100%; overflow: visible; }
+        .colonna { display: flex; flex-direction: column; gap: 3vh; height: 100%; overflow: visible; }
+        
         .colonna-titolo { 
-            font-weight: 900; font-size: clamp(0.9rem, 1.5vw, 1.4rem); color: var(--blue); 
-            text-transform: uppercase; letter-spacing: 2px; padding-left: 1vw; border-left: 0.5vw solid var(--blue);
-            text-shadow: 0 0 15px rgba(56, 139, 253, 0.4);
+            font-weight: 900; font-size: 1.2vw; color: var(--blue); 
+            text-transform: uppercase; letter-spacing: 2px; padding-left: 15px; 
+            border-left: 6px solid var(--blue); text-shadow: 0 0 20px rgba(56, 139, 253, 0.5);
         }
 
-        /* BOX MEZZI TITOLARI */
-        .box-container { position: relative; margin-top: 5vh; }
+        /* IL BOX CONTENITORE */
+        .box-container { position: relative; margin-top: 4vh; }
+
+        /* EFFETTO VETRO */
         .glass-card { 
-            background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative; z-index: 10;
         }
-        .main-unit { padding: 2vh 1.5vw; border-left: 0.8vw solid; }
-        
-        .sigla { font-size: clamp(2rem, 4vw, 4.5rem); font-weight: 900; color: #fff; line-height: 1; letter-spacing: -2px; }
-        .modello-titolare { font-size: clamp(0.8rem, 1.2vw, 1.3rem); font-weight: 700; color: #fff; opacity: 0.7; margin-top: 0.5vh; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; font-size: clamp(0.7rem, 1vw, 1.1rem); color: var(--orange); display: block; margin-top: 0.5vh; }
+
+        .main-unit { padding: 2.5vh 1.5vw; border-left: 12px solid; border-radius: 24px 0 0 24px; }
+
+        /* LE FOTO CHE BUCANO LO SCHERMO */
+        .mezzo-foto-container {
+            position: absolute; 
+            top: -7vh; 
+            right: -1vw; 
+            z-index: 100; /* Sopra la glass-card */
+            pointer-events: none;
+            perspective: 1000px;
+        }
+
+        .mezzo-foto {
+            height: 16vh; /* Dimensioni massive */
+            width: auto;
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.9));
+            transform: scaleX(-1) rotateY(-15deg) rotateZ(3deg); /* Effetto 3D pop-out */
+            transition: all 0.3s ease;
+        }
+
+        /* 11-81: IL RE DELLO SCHERMO */
+        .img-va11-81 {
+            height: 22vh !important; 
+            top: -10vh !important;
+            right: -2vw !important;
+        }
+
+        /* TESTI */
+        .sigla { font-size: 4vw; font-weight: 900; color: #fff; line-height: 0.9; letter-spacing: -2px; }
+        .modello-text { font-size: 1.1vw; font-weight: 700; color: rgba(255,255,255,0.6); margin: 5px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; font-size: 1vw; color: var(--orange); font-weight: 700; }
 
         .status-badge {
-            display: inline-block; padding: 0.5vh 1vw; border-radius: 50px;
-            font-size: clamp(0.6rem, 0.9vw, 1rem); font-weight: 900; text-transform: uppercase; margin-top: 1.5vh;
+            display: inline-block; padding: 6px 18px; border-radius: 50px;
+            font-size: 0.8vw; font-weight: 900; text-transform: uppercase; margin-top: 15px;
         }
-
-        /* FOTO MEZZI ADATTIVE */
-        .mezzo-foto-container { position: absolute; top: -7vh; right: 0.5vw; z-index: 110; pointer-events: none; }
-        .mezzo-foto { height: 14vh; width: auto; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8)); transform: scaleX(-1); }
-        .img-va11-81 { height: 19vh !important; top: -11vh !important; }
 
         /* COLORI STATO */
         .status-ok { border-color: var(--green); }
-        .badge-ok { background: rgba(46, 160, 67, 0.15); color: var(--green); border: 1px solid var(--green); box-shadow: 0 0 15px rgba(46, 160, 67, 0.3); }
+        .badge-ok { background: rgba(46, 160, 67, 0.2); color: #4ade80; border: 1px solid var(--green); box-shadow: 0 0 20px rgba(46, 160, 67, 0.4); }
+        
         .status-man { border-color: var(--orange); }
-        .badge-man { background: rgba(210, 153, 34, 0.15); color: var(--orange); border: 1px solid var(--orange); box-shadow: 0 0 15px rgba(210, 153, 34, 0.3); }
+        .badge-man { background: rgba(210, 153, 34, 0.2); color: #fbbf24; border: 1px solid var(--orange); box-shadow: 0 0 20px rgba(210, 153, 34, 0.4); }
+
         .status-off { border-color: var(--red); }
-        .badge-off { background: rgba(248, 81, 73, 0.15); color: var(--red); border: 1px solid var(--red); box-shadow: 0 0 15px rgba(248, 81, 73, 0.3); }
+        .badge-off { background: rgba(248, 81, 73, 0.2); color: #f87171; border: 1px solid var(--red); box-shadow: 0 0 20px rgba(248, 81, 73, 0.4); }
 
-        .backup-unit { padding: 1vh 1.5vw; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; font-size: clamp(0.7rem, 0.9vw, 1.1rem); color: var(--blue); font-weight: 800; }
-
-        /* FLOTTA VARIABILE CON BORDI COLORATI */
-        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; overflow-y: auto; padding-right: 10px; }
-        .card-variabile { 
-            background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); 
-            border: 1px solid var(--glass-border); padding: 1.5vh 1vw; border-radius: 15px;
-            border-left: 0.5vw solid; transition: all 0.3s ease;
+        /* BACKUP */
+        .backup-unit { 
+            padding: 10px 25px; background: rgba(0,0,0,0.4); 
+            border-top: 1px solid var(--glass-border); border-radius: 0 0 24px 24px;
+            display: flex; justify-content: space-between; font-size: 0.9vw; color: var(--blue); font-weight: 800; 
         }
-        .v-sigla { font-size: clamp(1rem, 1.8vw, 2rem); font-weight: 900; color: #fff; display: block; line-height: 1; }
-        .v-modello { font-size: clamp(0.6rem, 0.8vw, 1rem); font-weight: 700; color: #c9d1d9; opacity: 0.6; display: block; margin-top: 4px; text-transform: uppercase; }
 
-        /* VIABILITÀ - ULTRA SPAZIOSA */
-        .highway-alert { background: var(--highway-yellow); color: #000; padding: 2vh 4vw; display: grid; grid-template-columns: auto 1fr 1fr auto; align-items: center; border-top: 1vh solid #000; gap: 3vw; }
-        .highway-title { font-weight: 900; font-size: clamp(0.9rem, 1.3vw, 1.5rem); text-transform: uppercase; text-decoration: underline; margin-bottom: 0.5vh; display: block; }
-        .highway-detail { font-weight: 700; font-size: clamp(0.8rem, 1.1vw, 1.3rem); line-height: 1.3; }
+        /* FLOTTA VARIABILE - CARDS */
+        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2vw; overflow-y: auto; padding-right: 10px; }
+        .card-variabile { 
+            background: var(--glass); backdrop-filter: blur(10px); 
+            border: 1px solid var(--glass-border); padding: 1.5vh 1vw; border-radius: 20px;
+            border-left: 8px solid; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .v-sigla { font-size: 1.8vw; font-weight: 900; color: #fff; display: block; line-height: 1; }
+        .v-modello { font-size: 0.8vw; font-weight: 700; opacity: 0.5; text-transform: uppercase; }
 
-        .ticker-wrap { height: 6vh; background: #000; display: flex; align-items: center; overflow: hidden; border-top: 3px solid var(--blue); }
-        .ticker-text { white-space: nowrap; animation: scroll 55s linear infinite; color: #fff; font-weight: 700; font-size: clamp(1rem, 1.4vw, 1.8rem); padding-left: 100%; }
+        /* VIABILITÀ */
+        .highway-alert { background: var(--highway-yellow); color: #000; padding: 2vh 4vw; display: grid; grid-template-columns: auto 1fr 1fr auto; align-items: center; border-top: 10px solid #000; gap: 40px; }
+        .highway-title { font-weight: 900; font-size: 1.3vw; text-transform: uppercase; text-decoration: underline; margin-bottom: 5px; display: block; }
+        .highway-detail { font-weight: 700; font-size: 1.1vw; line-height: 1.3; }
+
+        .ticker-wrap { height: 6vh; background: #000; border-top: 3px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
+        .ticker-text { white-space: nowrap; animation: scroll 50s linear infinite; color: #fff; font-weight: 700; font-size: 1.4vw; padding-left: 100%; }
 
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         @keyframes blink { 50% { opacity: 0; } }
@@ -98,7 +134,7 @@
 
     <div class="header">
         <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-size: 1.2vw; font-weight: 900;">LIVE...</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: 900; font-size: 1.2vw;">LIVE...</div>
     </div>
 
     <div class="dashboard">
@@ -137,7 +173,7 @@
     </div>
 
     <div class="ticker-wrap">
-        <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RELATIVA AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO AL 338.7360099</div>
+        <div class="ticker-text">MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ CONTATTARE IL RESPONSABILE: 338.7360099</div>
     </div>
 
     <script>
@@ -184,11 +220,12 @@
                             <div class="glass-card">
                                 <div class="main-unit status-${sType}">
                                     <div class="sigla">${sigla}</div>
-                                    <div class="modello-titolare">${modello}</div>
+                                    <div class="modello-text">${modello}</div>
                                     <div class="targa">${c.m[3] || '---'}</div>
                                     <div class="status-badge badge-${sType}">${status}</div>
+                                    ${c.m[5] ? `<div style="margin-top:10px; font-size:0.9vw; color:#fff; font-weight:600; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">⚠️ ${c.m[5]}</div>` : ''}
                                 </div>
-                                ${c.b ? `<div class="backup-unit"><span>BACKUP: <strong>${c.b[1] || 'ATTIVO'}</strong></span></div>` : ''}
+                                ${c.b ? `<div class="backup-unit"><span>BACKUP: <strong>${c.b[1]}</strong></span></div>` : ''}
                             </div>
                         </div>`;
                     document.getElementById(c.id).innerHTML = html;
@@ -202,7 +239,7 @@
                         <div class="card-variabile ${sType}">
                             <span class="v-sigla">${d[1]}</span>
                             <span class="v-modello">${d[2] || '---'}</span>
-                            <span style="font-size:0.7vw; font-weight:900; text-transform:uppercase; margin-top:1vh; display:block; color:var(--${sType === 'status-ok' ? 'green' : sType === 'status-man' ? 'orange' : 'red'})">${s}</span>
+                            <span style="font-size:0.7vw; font-weight:900; margin-top:5px; display:block; color:var(--${sType === 'status-ok' ? 'green' : sType === 'status-man' ? 'orange' : 'red'})">${s}</span>
                         </div>`;
                 });
             } catch (e) { console.error(e); }
