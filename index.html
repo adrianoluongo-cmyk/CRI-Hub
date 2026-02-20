@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUAZIONE REAL TIME AUTOPARCO - V5 COMPACT</title>
+    <title>SITUAZIONE REAL TIME AUTOPARCO - V4</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,77 +15,79 @@
         * { box-sizing: border-box; }
         body { 
             font-family: 'Inter', sans-serif; 
-            background: #0d1117;
+            background: radial-gradient(circle at 50% 50%, #1c2128 0%, #0d1117 100%);
             color: #c9d1d9; margin: 0; padding: 0; overflow: hidden; 
             height: 100vh; width: 100vw; display: flex; flex-direction: column;
         }
 
-        /* HEADER PIÙ SOTTILE */
+        /* HEADER */
         .header { 
-            height: 5vh; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 25px; background: rgba(1, 4, 9, 0.9);
+            height: 7vh; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 30px; background: rgba(1, 4, 9, 0.85);
             border-bottom: 1px solid var(--glass-border); z-index: 1000;
         }
-        .header h1 { font-size: 1.2vw; font-weight: 900; letter-spacing: 1px; color: #fff; margin: 0; }
+        .header h1 { font-size: 1.6vw; font-weight: 900; letter-spacing: 1px; color: #fff; margin: 0; }
 
-        /* DASHBOARD GRID - SPAZI RIDOTTI */
+        /* DASHBOARD GRID */
         .dashboard { 
             flex: 1; display: grid; grid-template-columns: 1fr 1fr 1.2fr; 
-            gap: 1.5vw; padding: 2vh 1.5vw; overflow: hidden;
+            gap: 2vw; padding: 3vh 2vw; overflow: hidden;
         }
-        .colonna { display: flex; flex-direction: column; gap: 2vh; height: 100%; }
+        .colonna { display: flex; flex-direction: column; gap: 3vh; height: 100%; }
         
         .colonna-titolo { 
-            font-weight: 800; font-size: 0.85vw; color: var(--blue); 
-            text-transform: uppercase; border-left: 4px solid var(--blue); padding-left: 10px;
+            font-weight: 900; font-size: 1vw; color: var(--blue); 
+            text-transform: uppercase; letter-spacing: 1.5px; padding-left: 12px; 
+            border-left: 5px solid var(--blue);
         }
 
-        /* BOX MEZZO PIÙ COMPATTO */
-        .box-container { position: relative; margin-top: 1.5vh; }
+        /* BOX MEZZO PRINCIPALE */
+        .box-container { position: relative; margin-top: 2vh; }
         .glass-card { 
             background: var(--glass);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 15px;
+            border-radius: 20px;
             position: relative; z-index: 10;
         }
 
         .main-unit { 
-            padding: 1.5vh 1.2vw; 
-            padding-right: 130px; 
-            border-left: 8px solid; 
-            border-radius: 15px 15px 0 0; 
+            padding: 2vh 1.4vw; 
+            padding-right: 160px; /* Protezione codici radio */
+            border-left: 10px solid; 
+            border-radius: 20px 20px 0 0; 
         }
 
         /* FOTO MEZZI */
         .mezzo-foto-container {
             position: absolute; 
-            top: -4vh; 
-            right: -0.5vw; 
+            top: -5vh; 
+            right: -1vw; 
             z-index: 100;
             pointer-events: none;
         }
+
         .mezzo-foto {
-            height: 11vh; 
+            height: 14vh; 
             width: auto;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8));
             transform: scaleX(-1);
         }
 
-        /* 11-81: PIÙ ALTA E PIÙ A DESTRA (FILO BORDO) */
+        /* 11-81: ANCORA PIÙ IN ALTO E PIÙ A DESTRA */
         .img-va11-81 { 
-            height: 16vh !important; 
-            top: -7.5vh !important; 
-            right: -1.2vw !important; /* Spinta più a destra */
+            height: 25vh !important; 
+            top: -15vh !important; /* Da -10vh a -15vh per salire ancora */
+            right: -3vw !important; /* Da -0.5vw a -3vw per spostarla a destra */
         }
 
-        /* TESTI RICALIBRATI */
-        .sigla { font-size: 2.2vw; font-weight: 900; color: #fff; line-height: 1; }
-        .modello-text { font-size: 0.75vw; font-weight: 700; color: rgba(255,255,255,0.4); margin: 2px 0; text-transform: uppercase; }
-        .targa { font-family: 'JetBrains Mono', monospace; font-size: 0.7vw; color: var(--orange); }
+        .sigla { font-size: 2.8vw; font-weight: 900; color: #fff; line-height: 0.95; }
+        .modello-text { font-size: 0.9vw; font-weight: 700; color: rgba(255,255,255,0.5); margin: 4px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono', monospace; font-size: 0.85vw; color: var(--orange); }
 
         .status-badge {
-            display: inline-block; padding: 3px 10px; border-radius: 4px;
-            font-size: 0.6vw; font-weight: 800; text-transform: uppercase; margin-top: 6px;
+            display: inline-block; padding: 5px 12px; border-radius: 6px;
+            font-size: 0.7vw; font-weight: 900; text-transform: uppercase; margin-top: 8px;
         }
 
         /* COLORI STATO */
@@ -98,66 +100,80 @@
         .badge-off { background: rgba(248, 81, 73, 0.2); color: #f87171; border: 1px solid var(--red); }
 
         .backup-unit { 
-            padding: 8px 15px; background: rgba(0,0,0,0.4); 
-            border-top: 1px solid var(--glass-border); border-radius: 0 0 15px 15px;
-            font-size: 0.7vw; color: var(--blue); font-weight: 700; 
+            padding: 10px 20px; background: rgba(0,0,0,0.4); 
+            border-top: 1px solid var(--glass-border); border-radius: 0 0 20px 20px;
+            font-size: 0.8vw; color: var(--blue); font-weight: 800; 
         }
 
-        /* FLOTTA VARIABILE - BORDI INTEGRALI */
-        #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8vw; }
+        /* FLOTTA VARIABILE - SCALATA PER STARE NELLO SCHERMO */
+        #col-altri { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 0.8vw; /* Gap ridotto leggermente per guadagnare spazio */
+            transform: scale(0.85); /* Riduce la dimensione complessiva della flotta */
+            transform-origin: top left; /* Incolla il blocco in alto a sinistra della colonna */
+            width: 118%; /* Compensa la scala per non lasciare troppo vuoto a destra */
+        }
+
         .card-variabile { 
             background: var(--glass);
-            border: 2px solid; 
-            padding: 1vh 0.8vw; border-radius: 12px;
+            border: 2.5px solid; 
+            padding: 1.2vh 1vw; border-radius: 14px;
             display: flex; flex-direction: column; justify-content: space-between;
         }
+
         .card-variabile.status-ok { border-color: var(--green); }
         .card-variabile.status-man { border-color: var(--orange); }
         .card-variabile.status-off { border-color: var(--red); }
 
-        .v-sigla { font-size: 1.2vw; font-weight: 900; color: #fff; display: block; }
-        .v-modello { font-size: 0.6vw; opacity: 0.5; text-transform: uppercase; }
-        .v-status-text { font-size: 0.55vw; font-weight: 900; text-transform: uppercase; margin-top: 4px; }
+        .v-sigla { font-size: 1.4vw; font-weight: 900; color: #fff; display: block; }
+        .v-modello { font-size: 0.7vw; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
         
+        .v-status-text {
+            font-size: 0.65vw; font-weight: 900; text-transform: uppercase;
+            padding: 2px 0; letter-spacing: 0.5px;
+        }
         .text-ok { color: #4ade80; }
         .text-man { color: #fbbf24; }
         .text-off { color: #f87171; }
 
-        /* VIABILITÀ - COMPATTA */
+        /* VIABILITÀ */
         .highway-alert { 
+            height: 10vh; /* Altezza fissa per proteggere lo spazio flotta */
             background: var(--highway-yellow); color: #000; 
-            padding: 1vh 2vw; display: grid; grid-template-columns: auto 1fr 1fr auto; 
-            align-items: center; border-top: 6px solid #000; gap: 30px; 
+            padding: 1vh 2.5vw; display: grid; grid-template-columns: auto 1fr 1fr auto; 
+            align-items: center; border-top: 8px solid #000; gap: 40px; 
         }
-        .highway-title { font-weight: 900; font-size: 0.9vw; text-transform: uppercase; text-decoration: underline; }
-        .highway-detail { font-weight: 700; font-size: 0.8vw; line-height: 1.1; }
+        .highway-title { font-weight: 900; font-size: 1.1vw; text-transform: uppercase; text-decoration: underline; margin-bottom: 3px; display: block; }
+        .highway-detail { font-weight: 700; font-size: 0.95vw; line-height: 1.2; }
 
         /* TICKER */
-        .ticker-wrap { height: 4vh; background: #000; display: flex; align-items: center; overflow: hidden; }
+        .ticker-wrap { height: 5vh; background: #000; border-top: 2px solid var(--blue); display: flex; align-items: center; overflow: hidden; }
         .ticker-text { 
-            white-space: nowrap; animation: scroll 65s linear infinite; 
-            color: #fff; font-weight: 700; font-size: 1vw; 
+            white-space: nowrap; animation: scroll 55s linear infinite; 
+            color: #fff; font-weight: 700; font-size: 1.15vw; 
         }
 
         @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>SITUAZIONE REAL TIME AUTOPARCO</h1>
-        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: 900; font-size: 1.1vw;">00:00</div>
+        <div id="update-time" style="font-family:'JetBrains Mono'; color: var(--blue); font-weight: 900; font-size: 1.3vw;">00:00</div>
     </div>
 
     <div class="dashboard">
         <div class="colonna">
-            <div class="colonna-titolo">Gallarate C1 / C2</div>
+            <div class="colonna-titolo">Gallarate Conv. 1 / Conv. 2</div>
             <div id="sub-gallarate-1"></div>
             <div id="sub-gallarate-2"></div>
         </div>
 
         <div class="colonna">
-            <div class="colonna-titolo">Somma / Sumirago / MXP</div>
+            <div class="colonna-titolo">Somma L.do / Sumirago / Malpensa T1</div>
             <div id="sub-somma"></div>
             <div id="sub-sumirago"></div>
             <div id="sub-malpensa"></div>
@@ -170,7 +186,7 @@
     </div>
 
     <div class="highway-alert">
-        <span style="font-size:2vw;">⚠️</span>
+        <span style="font-size:3vw; animation: blink 1s infinite;">⚠️</span>
         <div>
             <span class="highway-title">A8 GALLARATE - Entrata Chiusa</span>
             <span class="highway-detail">Dalle 21:00 (23/02) alle 05:00 (24/06) verso Milano. Consigliata: Busto A.</span>
@@ -179,12 +195,12 @@
             <span class="highway-title">A8 SOLBIATE / BUSTO - Tratto Chiuso</span>
             <span class="highway-detail">Tra Solbiate e Bivio A8-A36 (22:00-05:00). Consigliata: Busto A.</span>
         </div>
-        <span style="font-size:2vw;">⚠️</span>
+        <span style="font-size:3vw; animation: blink 1s infinite;">⚠️</span>
     </div>
 
     <div class="ticker-wrap">
         <div class="ticker-text">
-            MANDATORIO RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RIGUARDO AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO AL 338.7360099
+            MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO ••• PER OGNI NECESSITÀ RIGUARDO AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO AL 338.7360099
         </div>
     </div>
 
@@ -212,7 +228,7 @@
                     { id: "sub-gallarate-2", m: findM("GALLARATE CONV 2"), b: findM("BACKUP CONV 2") },
                     { id: "sub-somma",       m: findM("SOMMA LOMBARDO"),   b: findM("BACKUP CONV SOMMA L.DO") },
                     { id: "sub-sumirago",    m: data.find(d => d[1]?.includes("11-81")), b: null },
-                    { id: "sub-malpensa",    m: findM("AGG. MXP"),          b: null }
+                    { id: "sub-malpensa",    m: findM("AGG. MXP"),           b: null }
                 ];
 
                 config.forEach(c => {
