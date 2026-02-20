@@ -2,25 +2,27 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUAZIONE REAL TIME AUTOPARCO - V8</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;500;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <title>AUTOPARCO COMMAND CENTER - V10</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0c10;
-            --card-bg: rgba(22, 27, 34, 0.85);
-            --border: rgba(255, 255, 255, 0.15);
-            --blue: #2f81f7;
-            --green: #238636;
+            --bg: #0d1117;
+            --card-bg: rgba(30, 35, 45, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --blue: #58a6ff;
+            --green: #3fb950;
             --orange: #d29922;
-            --red: #da3633;
+            --red: #f85149;
             --text: #c9d1d9;
+            --font-main: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            font-family: 'Inter', sans-serif; 
-            background: radial-gradient(circle at center, #1c2128 0%, #0a0c10 100%);
+            font-family: var(--font-main);
+            background: var(--bg);
             color: var(--text);
             height: 100vh;
             display: flex;
@@ -28,32 +30,33 @@
             overflow: hidden; 
         }
 
-        /* --- HEADER --- */
+        /* --- TOP BAR MINIMAL --- */
         .top-bar {
-            height: 60px;
-            background: #161b22;
+            height: 55px;
+            background: rgba(1, 4, 9, 0.8);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
-            border-bottom: 3px solid var(--blue);
+            padding: 0 25px;
+            border-bottom: 1px solid var(--border);
             z-index: 1000;
         }
 
         .top-bar h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 2px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
             color: #fff;
+            text-transform: uppercase;
         }
 
-        /* --- DASHBOARD --- */
+        /* --- DASHBOARD GRID --- */
         .dashboard {
             flex: 1;
             display: grid;
-            grid-template-columns: 1fr 1fr 1.3fr;
-            gap: 15px;
-            padding: 15px; /* Ridotto leggermente per recuperare spazio */
+            grid-template-columns: 1fr 1fr 1.5fr; /* Colonna flotta leggermente più larga */
+            gap: 12px;
+            padding: 12px;
             min-height: 0;
         }
 
@@ -65,147 +68,127 @@
         }
 
         .column-header {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
+            font-weight: 700;
             color: var(--blue);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             padding-bottom: 5px;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
-        /* --- CARDS MEZZI --- */
+        /* --- CARDS PRINCIPALI --- */
         .unit-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px;
+            border-radius: 12px;
+            padding: 15px;
             position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            min-height: 125px;
+            min-height: 115px;
+            transition: border 0.3s;
         }
 
-        .unit-card.status-ok { border-left: 8px solid var(--green); }
-        .unit-card.status-man { border-left: 8px solid var(--orange); }
-        .unit-card.status-off { border-left: 8px solid var(--red); }
+        .unit-card.status-ok { border-left: 5px solid var(--green); }
+        .unit-card.status-man { border-left: 5px solid var(--orange); }
+        .unit-card.status-off { border-left: 5px solid var(--red); }
 
-        .sigla { font-size: 2.6vw; font-weight: 900; color: #fff; line-height: 1; z-index: 5; }
-        .modello { font-size: 0.85vw; opacity: 0.6; text-transform: uppercase; margin: 4px 0; z-index: 5; }
-        .targa { font-family: 'JetBrains Mono'; font-size: 0.9vw; color: var(--orange); z-index: 5; }
+        .sigla { font-size: 2.2vw; font-weight: 700; color: #fff; line-height: 1; }
+        .modello { font-size: 0.75vw; opacity: 0.5; margin: 3px 0; font-weight: 300; }
+        .targa { font-family: var(--font-mono); font-size: 0.8vw; color: var(--orange); }
 
         .badge {
             align-self: flex-start;
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 0.7vw;
-            font-weight: 900;
-            margin-top: 8px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.65vw;
+            font-weight: 700;
+            margin-top: 6px;
             text-transform: uppercase;
-            z-index: 5;
         }
-        .badge-ok { background: rgba(35, 134, 54, 0.3); color: #4ade80; }
-        .badge-man { background: rgba(210, 153, 34, 0.3); color: #fbbf24; }
-        .badge-off { background: rgba(218, 54, 51, 0.3); color: #ff6b6b; }
+        .badge-ok { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+        .badge-man { background: rgba(210, 153, 34, 0.15); color: var(--orange); }
+        .badge-off { background: rgba(248, 81, 73, 0.15); color: var(--red); }
 
         .backup {
-            margin-top: 8px;
-            font-size: 0.8vw;
-            font-weight: 700;
-            padding-top: 6px;
-            border-top: 1px dashed var(--border);
+            margin-top: 6px;
+            font-size: 0.7vw;
+            padding-top: 4px;
+            border-top: 1px solid var(--border);
             color: var(--blue);
-            z-index: 5;
+            font-weight: 500;
         }
 
-        /* --- FOTO MEZZI --- */
-        .photo-anchor {
-            position: absolute;
-            top: -25px;   
-            right: -35px;  
-            z-index: 50;  
-            pointer-events: none;
-        }
-
+        /* --- FOTO MEZZI (UNIFICATE) --- */
+        .photo-anchor { position: absolute; top: -15px; right: -25px; z-index: 50; pointer-events: none; }
         .img-pop {
-            height: 17vh; 
-            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.8)) contrast(1.1);
+            height: 16vh;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.7));
             transform: scaleX(-1);
         }
+        .shift-left { right: 15px !important; }
 
-    
-        /* 11-32: SPOSTATA A SINISTRA */
-        .photo-anchor.pos-32 {
-            right: 15px !important; /* Spostata "un filo" più a sinistra verso l'interno */
-        }
-
-        /* --- FLOTTA VARIABILE --- */
+        /* --- FLOTTA VARIABILE (3 COLONNE COMPATTE) --- */
         .variable-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(3, 1fr); /* 3 COLONNE PER STARE NELLO SCHERMO */
+            gap: 6px;
             overflow-y: auto;
-            padding-right: 8px;
+            padding-right: 5px;
         }
 
         .v-card {
-            background: var(--card-bg);
-            border: 3px solid;
-            border-radius: 10px;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
+            border-top-width: 3px; /* Bordo colorato solo sopra per pulizia */
         }
 
-        .v-sigla { font-size: 1.2vw; font-weight: 900; color: #fff; }
-        .v-modello { font-size: 0.65vw; opacity: 0.5; text-transform: uppercase; }
-        .v-status { font-size: 0.7vw; font-weight: 900; margin-top: 4px; text-transform: uppercase; }
+        .v-card.status-ok { border-top-color: var(--green); }
+        .v-card.status-man { border-top-color: var(--orange); }
+        .v-card.status-off { border-top-color: var(--red); }
 
-        /* --- FOOTER VIABILITÀ (ALTEZZA RIDOTTA) --- */
+        .v-sigla { font-size: 0.9vw; font-weight: 700; color: #fff; }
+        .v-modello { font-size: 0.55vw; opacity: 0.4; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .v-status { font-size: 0.6vw; font-weight: 700; margin-top: 3px; text-transform: uppercase; }
+
+        /* --- FOOTER INFRASTRUTTURA --- */
         .footer-info {
-            height: 110px; /* Ridotta da 150px */
-            background: var(--orange);
+            height: 100px;
+            background: #f1f1f1; /* Grigio chiarissimo per staccare dal nero tech */
             color: #000;
             display: grid;
-            grid-template-columns: 100px 1fr 1fr 100px;
+            grid-template-columns: 80px 1fr 1fr 80px;
             align-items: center;
             padding: 0 30px;
-            gap: 30px;
-            border-top: 10px solid #000;
+            gap: 25px;
         }
 
-        .h-title { 
-            font-weight: 900; 
-            font-size: 1.3vw; 
-            text-transform: uppercase; 
-            text-decoration: underline;
-            margin-bottom: 2px;
-        }
-        .h-detail { 
-            font-weight: 800; 
-            font-size: 1.1vw; 
-            line-height: 1.1; 
-        }
+        .h-title { font-weight: 700; font-size: 1rem; color: #000; text-transform: uppercase; }
+        .h-detail { font-weight: 500; font-size: 0.85rem; line-height: 1.2; color: #333; }
 
-        /* --- TICKER AVVISI (ALTEZZA AUMENTATA) --- */
+        /* --- SCORREVOLE --- */
         .ticker {
-            height: 65px; /* Aumentata da 45px */
+            height: 65px;
             background: #000;
             color: #fff;
             display: flex;
             align-items: center;
             overflow: hidden;
-            font-family: 'JetBrains Mono';
-            font-size: 1.4rem; /* Testo più grande */
+            font-family: var(--font-mono);
+            font-size: 1.3rem;
             font-weight: 800;
-            border-top: 3px solid var(--blue);
+            border-top: 2px solid var(--blue);
         }
 
         .ticker-move { white-space: nowrap; animation: move 40s linear infinite; }
 
         @keyframes move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        @keyframes flash { 50% { opacity: 0.1; } }
+        @keyframes flash { 50% { opacity: 0.2; } }
         .blink { animation: flash 0.6s infinite; }
 
     </style>
@@ -213,19 +196,19 @@
 <body>
 
     <div class="top-bar">
-        <h1>COMMAND CENTER :: AUTOPARCO</h1>
-        <div id="clock" style="color: var(--blue); font-family: 'JetBrains Mono'; font-weight: 900; font-size: 2.2rem;">00:00</div>
+        <h1>Dashboard Autoparco <span style="font-weight: 300; opacity: 0.5;">| Real-Time Management</span></h1>
+        <div id="clock" style="color: var(--blue); font-family: var(--font-mono); font-weight: 800; font-size: 2rem;">00:00</div>
     </div>
 
     <div class="dashboard">
         <div class="column">
-            <div class="column-header">Presidio Gallarate</div>
+            <div class="column-header">Settore Gallarate</div>
             <div id="slot-gallarate-1"></div>
             <div id="slot-gallarate-2"></div>
         </div>
 
         <div class="column">
-            <div class="column-header">Area Somma / MXP / Sumirago</div>
+            <div class="column-header">Area MXP / Hinterland</div>
             <div id="slot-somma"></div>
             <div id="slot-sumirago"></div>
             <div id="slot-malpensa"></div>
@@ -238,21 +221,21 @@
     </div>
 
     <div class="footer-info">
-        <span class="blink" style="font-size: 4rem; text-align: center;">⚠️</span>
+        <span class="blink" style="font-size: 3rem; text-align: center;">⚠️</span>
         <div>
-            <div class="h-title">A8 GALLARATE - ENTRATA CHIUSA</div>
-            <div class="h-detail">Dalle ore 21:00 (23/02) alle ore 05:00 (24/06) verso Milano. Entrata consigliata Busto Arsizio.</div>
+            <div class="h-title">A8 Gallarate - Entrata Chiusa</div>
+            <div class="h-detail">Dalle ore 21:00 (23/02) alle ore 05:00 (24/06) verso Milano. Deviazione stazione di Busto Arsizio.</div>
         </div>
         <div>
-            <div class="h-title">A8 SOLBIATE / BUSTO - TRATTO CHIUSO</div>
-            <div class="h-detail">Entrata consigliata verso Milano: Busto Arsizio. Uscita consigliata provenendo da Varese: Solbiate Arno - Albizzate.</div>
+            <div class="h-title">A8 Solbiate/Busto - Tratto Chiuso</div>
+            <div class="h-detail">Tra Solbiate e Bivio A8-A36 Pedemontana (22:00-05:00). Seguire deviazioni segnalate in loco.</div>
         </div>
-        <span class="blink" style="font-size: 4rem; text-align: center;">⚠️</span>
+        <span class="blink" style="font-size: 3rem; text-align: center;">⚠️</span>
     </div>
 
     <div class="ticker">
         <div class="ticker-move">
-            MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO • PER OGNI ESIGENZA RIGUARDO AI MEZZI, CONTATTARE RESPONSABILE AUTOPARCO AL 338.7360099 • 
+            MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO • VERIFICARE SEMPRE IL TIPO DI CARBURANTE • RESPONSABILE AUTOPARCO: 338.7360099 • 
         </div>
     </div>
 
@@ -268,8 +251,7 @@
                 const lines = csv.split(/\r?\n/).filter(l => l.trim() !== "");
                 const data = lines.slice(1).map(l => l.split(sep).map(p => p.replace(/^"|"$/g, '').trim()));
                 
-                const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('clock').innerText = ora;
+                document.getElementById('clock').innerText = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
 
                 document.querySelectorAll('[id^="slot-"]').forEach(el => el.innerHTML = '');
 
@@ -291,11 +273,8 @@
                     
                     let photoHtml = "";
                     if (mezziConFoto.includes(sigla)) {
-                        let specialClass = "";
-                        if (sigla === "VA11-81") specialClass = "large";
-                        if (sigla === "VA11-32") specialClass = "pos-32";
-                        
-                        photoHtml = `<div class="photo-anchor ${specialClass}"><img src="${sigla}.png" class="img-pop"></div>`;
+                        let shiftClass = (sigla === "VA11-32" || sigla === "VA11-35") ? "shift-left" : "";
+                        photoHtml = `<div class="photo-anchor ${shiftClass}"><img src="${sigla}.png" class="img-pop"></div>`;
                     }
 
                     document.getElementById(c.id).innerHTML = `
@@ -316,14 +295,14 @@
                     
                     const isMan = s.includes('MANUTENZIONE');
                     const isOff = s.includes('OFF');
-                    const sColor = isMan ? 'var(--orange)' : isOff ? 'var(--red)' : 'var(--green)';
-                    const tColor = isMan ? '#fbbf24' : isOff ? '#f87171' : '#4ade80';
+                    const sType = isMan ? 'status-man' : isOff ? 'status-off' : 'status-ok';
+                    const textClass = isMan ? 'color: var(--orange)' : isOff ? 'color: var(--red)' : 'color: var(--green)';
 
                     document.getElementById('slot-variabile').innerHTML += `
-                        <div class="v-card" style="border-color: ${sColor}">
+                        <div class="v-card ${sType}">
                             <div class="v-sigla">${sigla}</div>
                             <div class="v-modello">${d[2] || '---'}</div>
-                            <div class="v-status" style="color: ${tColor}">● ${s}</div>
+                            <div class="v-status" style="${textClass}">● ${s}</div>
                         </div>`;
                 });
             } catch (e) { console.error(e); }
