@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUAZIONE REAL TIME AUTOPARCO - V3.2</title>
+    <title>SITUAZIONE REAL TIME AUTOPARCO - V3.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -74,11 +74,11 @@
             transform: scaleX(-1);
         }
 
-        /* POSIZIONAMENTO 11-81 IN ALTO A DX */
+        /* 11-81: PIÙ GROSSA E POSIZIONATA IN ALTO A DX */
         .img-va11-81 { 
-            height: 18vh !important; 
-            top: -7vh !important; 
-            right: -0.5vw !important;
+            height: 22vh !important; 
+            top: -10vh !important; 
+            right: -1.5vw !important;
         }
 
         .sigla { font-size: 2.8vw; font-weight: 900; color: #fff; line-height: 0.95; }
@@ -104,18 +104,18 @@
             font-size: 0.8vw; color: var(--blue); font-weight: 800; 
         }
 
-        /* FLOTTA VARIABILE */
+        /* FLOTTA VARIABILE - RIPRISTINO STILE ORIGINALE (Bordo laterale) */
         #col-altri { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; }
         .card-variabile { 
             background: var(--glass);
-            border: 2px solid; 
+            border: 1px solid var(--glass-border); 
+            border-left: 6px solid; /* Ripristinato bordo laterale */
             padding: 1.2vh 1vw; border-radius: 14px;
             display: flex; flex-direction: column; justify-content: space-between;
         }
         .v-sigla { font-size: 1.4vw; font-weight: 900; color: #fff; display: block; }
         .v-modello { font-size: 0.7vw; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
         
-        /* NUOVO STATUS PER FLOTTA VARIABILE */
         .v-status-text {
             font-size: 0.65vw; font-weight: 900; text-transform: uppercase;
             padding: 2px 0; letter-spacing: 0.5px;
