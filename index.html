@@ -2,19 +2,18 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>SITUAZIONE REAL TIME AUTOPARCO - V6</title>
+    <title>SITUAZIONE REAL TIME AUTOPARCO - V7</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;500;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0a0c10;
-            --card-bg: rgba(22, 27, 34, 0.8);
+            --card-bg: rgba(22, 27, 34, 0.85);
             --border: rgba(255, 255, 255, 0.15);
             --blue: #2f81f7;
             --green: #238636;
             --orange: #d29922;
             --red: #da3633;
             --text: #c9d1d9;
-            --neon-glow: drop-shadow(0 0 15px rgba(47, 129, 247, 0.5));
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,23 +30,21 @@
 
         /* --- HEADER --- */
         .top-bar {
-            height: 65px;
+            height: 60px;
             background: #161b22;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 30px;
             border-bottom: 3px solid var(--blue);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             z-index: 1000;
         }
 
         .top-bar h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.6rem;
-            letter-spacing: 3px;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
             color: #fff;
-            text-shadow: 0 0 10px var(--blue);
         }
 
         /* --- DASHBOARD --- */
@@ -55,148 +52,155 @@
             flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr 1.3fr;
-            gap: 20px;
-            padding: 25px;
+            gap: 15px;
+            padding: 20px;
             min-height: 0;
         }
 
         .column {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             min-height: 0;
         }
 
         .column-header {
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--blue);
             text-transform: uppercase;
             letter-spacing: 2px;
-            padding-bottom: 8px;
+            padding-bottom: 5px;
             border-bottom: 2px solid var(--border);
         }
 
-        /* --- CARDS MEZZI (OVERFLOW VISIBILE PER FAR USCIRE LE FOTO) --- */
+        /* --- CARDS MEZZI --- */
         .unit-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            position: relative;
+            border-radius: 14px;
+            padding: 18px;
+            position: relative; /* Necessario per anchor delle foto */
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 140px;
-            /* IMPORTANTE: Nessun overflow hidden qui per far uscire le foto */
+            min-height: 130px;
         }
 
-        .unit-card.status-ok { border-left: 8px solid var(--green); box-shadow: -5px 0 15px rgba(35, 134, 54, 0.2); }
-        .unit-card.status-man { border-left: 8px solid var(--orange); box-shadow: -5px 0 15px rgba(210, 153, 34, 0.2); }
-        .unit-card.status-off { border-left: 8px solid var(--red); box-shadow: -5px 0 15px rgba(218, 54, 51, 0.2); }
+        .unit-card.status-ok { border-left: 8px solid var(--green); }
+        .unit-card.status-man { border-left: 8px solid var(--orange); }
+        .unit-card.status-off { border-left: 8px solid var(--red); }
 
-        .sigla { font-size: 2.8vw; font-weight: 900; color: #fff; line-height: 1; }
-        .modello { font-size: 0.9vw; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin: 5px 0; }
-        .targa { font-family: 'JetBrains Mono'; font-size: 1vw; color: var(--orange); letter-spacing: 1px; }
+        .sigla { font-size: 2.6vw; font-weight: 900; color: #fff; line-height: 1; z-index: 5; }
+        .modello { font-size: 0.85vw; opacity: 0.6; text-transform: uppercase; margin: 4px 0; z-index: 5; }
+        .targa { font-family: 'JetBrains Mono'; font-size: 0.9vw; color: var(--orange); z-index: 5; }
 
         .badge {
             align-self: flex-start;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 0.75vw;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.7vw;
             font-weight: 900;
-            margin-top: 10px;
+            margin-top: 8px;
             text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 5;
         }
         .badge-ok { background: rgba(35, 134, 54, 0.3); color: #4ade80; }
         .badge-man { background: rgba(210, 153, 34, 0.3); color: #fbbf24; }
         .badge-off { background: rgba(218, 54, 51, 0.3); color: #ff6b6b; }
 
         .backup {
-            margin-top: 12px;
-            font-size: 0.85vw;
+            margin-top: 10px;
+            font-size: 0.8vw;
             font-weight: 700;
-            padding-top: 8px;
+            padding-top: 6px;
             border-top: 1px dashed var(--border);
             color: var(--blue);
+            z-index: 5;
         }
 
-        /* --- LOGICA FOTO CHE "BUCANO" --- */
-        .photo-container {
+        /* --- FOTO MEZZI (ALTO A DESTRA E GIGANTI) --- */
+        .photo-anchor {
             position: absolute;
-            z-index: 100; /* Sopra a tutto */
+            top: -25px;   /* Esce dal box in alto */
+            right: -35px;  /* Esce dal box a destra */
+            z-index: 50;  /* Sopra al testo ma non all'header */
             pointer-events: none;
         }
 
         .img-pop {
-            height: 16vh;
-            width: auto;
-            /* FILTRI AGGRESSIVI */
-            filter: contrast(1.2) brightness(1.1) drop-shadow(0 15px 25px rgba(0,0,0,0.9));
-            transform: scaleX(-1) rotate(-5deg); /* Leggera rotazione per dinamismo */
-            transition: all 0.5s ease;
+            height: 18vh; /* Dimensione massiccia */
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.8)) contrast(1.1);
+            transform: scaleX(-1);
         }
 
-        /* Posizionamento specifico per 11-81 */
-        .pos-11-81 {
-            top: -45px;   /* Molto fuori dal box in alto */
-            right: -50px;  /* Molto fuori dal box a destra */
+        /* Speciale per 11-81 */
+        .photo-anchor.large {
+            top: -45px;
+            right: -45px;
         }
-        .pos-11-81 .img-pop {
-            height: 22vh; /* Gigante */
-            filter: contrast(1.3) brightness(1.2) drop-shadow(0 20px 30px rgba(0,0,0,1));
+        .photo-anchor.large .img-pop {
+            height: 24vh;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,1)) contrast(1.2) brightness(1.1);
         }
 
-        /* --- FLOTTA VARIABILE --- */
+        /* --- FLOTTA VARIABILE (DENSITÀ OTTIMIZZATA) --- */
         .variable-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 8px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 8px;
         }
 
         .v-card {
             background: var(--card-bg);
             border: 3px solid;
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s;
         }
 
-        .v-sigla { font-size: 1.3vw; font-weight: 900; color: #fff; }
-        .v-modello { font-size: 0.7vw; font-weight: 600; opacity: 0.5; text-transform: uppercase; }
-        .v-status { font-size: 0.75vw; font-weight: 900; margin-top: 6px; text-transform: uppercase; }
+        .v-sigla { font-size: 1.2vw; font-weight: 900; color: #fff; }
+        .v-modello { font-size: 0.65vw; opacity: 0.5; text-transform: uppercase; }
+        .v-status { font-size: 0.7vw; font-weight: 900; margin-top: 4px; text-transform: uppercase; }
 
-        /* --- FOOTER VIABILITÀ --- */
+        /* --- FOOTER VIABILITÀ (AVVISI GIGANTI) --- */
         .footer-info {
-            height: 110px;
+            height: 150px; /* Aumentato per visibilità */
             background: var(--orange);
             color: #000;
             display: grid;
-            grid-template-columns: 80px 1fr 1fr 80px;
+            grid-template-columns: 120px 1fr 1fr 120px;
             align-items: center;
-            padding: 0 30px;
-            gap: 40px;
-            border-top: 10px solid #000;
+            padding: 0 40px;
+            gap: 50px;
+            border-top: 12px solid #000;
         }
 
-        .highway-block { display: flex; flex-direction: column; gap: 4px; }
-        .h-title { font-weight: 900; font-size: 1.1vw; text-transform: uppercase; text-decoration: underline; }
-        .h-detail { font-weight: 700; font-size: 0.95vw; line-height: 1.2; }
+        .h-title { 
+            font-weight: 900; 
+            font-size: 1.5vw; /* Testo più grande */
+            text-transform: uppercase; 
+            text-decoration: underline;
+            margin-bottom: 5px;
+        }
+        .h-detail { 
+            font-weight: 800; 
+            font-size: 1.2vw; /* Dettaglio molto più leggibile */
+            line-height: 1.1; 
+        }
 
         .ticker {
-            height: 40px;
+            height: 45px;
             background: #000;
             color: #fff;
             display: flex;
             align-items: center;
             overflow: hidden;
             font-family: 'JetBrains Mono';
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
             border-top: 2px solid var(--blue);
         }
@@ -204,21 +208,21 @@
         .ticker-move { white-space: nowrap; animation: move 45s linear infinite; }
 
         @keyframes move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        @keyframes flash { 50% { opacity: 0.2; } }
-        .blink { animation: flash 0.8s infinite; }
+        @keyframes flash { 50% { opacity: 0.1; } }
+        .blink { animation: flash 0.6s infinite; }
 
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <h1>COMMAND CENTER :: REAL TIME</h1>
-        <div id="clock" style="color: var(--blue); font-family: 'JetBrains Mono'; font-weight: 900; font-size: 1.8rem;">00:00</div>
+        <h1>COMMAND CENTER :: AUTOPARCO</h1>
+        <div id="clock" style="color: var(--blue); font-family: 'JetBrains Mono'; font-weight: 900; font-size: 2rem;">00:00</div>
     </div>
 
     <div class="dashboard">
         <div class="column">
-            <div class="column-header">Settore Gallarate</div>
+            <div class="column-header">Presidio Gallarate</div>
             <div id="slot-gallarate-1"></div>
             <div id="slot-gallarate-2"></div>
         </div>
@@ -237,21 +241,21 @@
     </div>
 
     <div class="footer-info">
-        <span class="blink" style="font-size: 3.5rem; text-align: center;">⚠️</span>
-        <div class="highway-block">
+        <span class="blink" style="font-size: 5rem; text-align: center;">⚠️</span>
+        <div>
             <div class="h-title">A8 GALLARATE - ENTRATA CHIUSA</div>
-            <div class="h-detail">Dalle ore 21:00 (23/02) alle ore 05:00 (24/06) in direzione Milano. Consigliata stazione di Busto Arsizio.</div>
+            <div class="h-detail">Dalle ore 21:00 (23/02) alle ore 05:00 (24/06) verso Milano. Deviazione stazione di Busto Arsizio.</div>
         </div>
-        <div class="highway-block">
+        <div>
             <div class="h-title">A8 SOLBIATE / BUSTO - TRATTO CHIUSO</div>
-            <div class="h-detail">Chiusura tra Solbiate e Bivio A8-A36 Pedemontana (22:00-05:00). Seguire deviazioni per Busto A.</div>
+            <div class="h-detail">Tra Solbiate e Bivio A8-A36 Pedemontana (22:00-05:00). Seguire deviazioni segnalate in loco.</div>
         </div>
-        <span class="blink" style="font-size: 3.5rem; text-align: center;">⚠️</span>
+        <span class="blink" style="font-size: 5rem; text-align: center;">⚠️</span>
     </div>
 
     <div class="ticker">
         <div class="ticker-move">
-            ATTENZIONE: MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO • VERIFICARE TIPO CARBURANTE (GASOLIO/BENZINA) • RESPONSABILE AUTOPARCO REPERIBILE AL: 338.7360099 • 
+            MANDATORIO RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO • VERIFICARE TIPO CARBURANTE DEL MEZZO • RESPONSABILE AUTOPARCO: 338.7360099 • 
         </div>
     </div>
 
@@ -267,9 +271,8 @@
                 const lines = csv.split(/\r?\n/).filter(l => l.trim() !== "");
                 const data = lines.slice(1).map(l => l.split(sep).map(p => p.replace(/^"|"$/g, '').trim()));
                 
-                // Orologio senza secondi
                 const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('clock').innerText = `● LIVE ${ora}`;
+                document.getElementById('clock').innerText = `● ${ora}`;
 
                 document.querySelectorAll('[id^="slot-"]').forEach(el => el.innerHTML = '');
 
@@ -289,11 +292,10 @@
                     const status = (c.m[4] || "").toUpperCase();
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
                     
-                    // Gestione foto Pop-Out
                     let photoHtml = "";
                     if (mezziConFoto.includes(sigla)) {
-                        const specialClass = (sigla === "VA11-81") ? "pos-11-81" : "pos-standard";
-                        photoHtml = `<div class="photo-container ${specialClass}"><img src="${sigla}.png" class="img-pop"></div>`;
+                        const isLarge = (sigla === "VA11-81");
+                        photoHtml = `<div class="photo-anchor ${isLarge ? 'large' : ''}"><img src="${sigla}.png" class="img-pop"></div>`;
                     }
 
                     document.getElementById(c.id).innerHTML = `
@@ -307,7 +309,6 @@
                         </div>`;
                 });
 
-                // Flotta Variabile
                 data.forEach(d => {
                     const s = (d[4] || "").toUpperCase();
                     const sigla = d[1];
@@ -325,7 +326,6 @@
                             <div class="v-status" style="color: ${tColor}">● ${s}</div>
                         </div>`;
                 });
-
             } catch (e) { console.error(e); }
         }
 
