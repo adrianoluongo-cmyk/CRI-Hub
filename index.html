@@ -155,7 +155,7 @@
         .card.status-man::before { background: var(--orange); color: var(--orange); }
         .card.status-off::before { background: var(--red); color: var(--red); }
 
-        .sigla, .modello, .targa, .badge, .backup {
+        .sigla, .modello, .targa, .badge, .backup, .segnalazione {
             position: relative;
             z-index: 5;
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
@@ -195,6 +195,13 @@
             display: flex; align-items: center; gap: 8px;
         }
         .backup strong { color: var(--blue); font-weight: 700; letter-spacing: 0.5px; }
+
+        /* NUOVA CLASSE PER SEGNALAZIONI CARD PRINCIPALI */
+        .segnalazione {
+            font-size: 0.75vw; color: var(--orange);
+            margin-top: 8px; font-weight: 600;
+            display: flex; align-items: center; gap: 6px;
+        }
 
         /* --- IMMAGINI INTEGRATE --- */
         .img-container {
@@ -243,6 +250,8 @@
             position: relative;
             overflow: hidden;
             transition: background 0.2s ease;
+            display: flex;
+            flex-direction: column;
         }
         
         .v-card:hover { background: var(--glass-highlight); }
@@ -255,10 +264,17 @@
         .v-card.man::before { background: var(--orange); color: var(--orange); }
         .v-card.off::before { background: var(--red); color: var(--red); }
 
-        /* MODIFICA FONT FLOTTA VARIABILE: Stesso font pulito dei titoli principali */
         .v-sigla { font-family: 'Inter', sans-serif; font-size: 1vw; font-weight: 700; display: block; letter-spacing: 0; }
         .v-modello { font-size: 0.6vw; color: var(--text-muted); text-transform: uppercase; display: block; margin: 4px 0; }
-        .v-status { font-size: 0.55vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-top: 4px; }
+        .v-status { font-size: 0.55vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-top: auto; }
+
+        /* NUOVA CLASSE PER SEGNALAZIONI FLOTTA VARIABILE */
+        .v-segnalazione {
+            font-size: 0.55vw; color: var(--orange);
+            margin-top: 6px; font-weight: 600;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            display: block;
+        }
 
         /* --- FOOTER & AVVISI --- */
         .footer {
@@ -384,7 +400,6 @@
 
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
-        // AGGIUNTO VA11-48
         const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-48", "VA11-49", "VA11-81"];
 
         async function update() {
@@ -414,6 +429,8 @@
                     const sigla = c.m[1].toUpperCase();
                     const status = (c.m[4] || "").toUpperCase();
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
+                    // RECUPERO SEGNALAZIONE (Colonna F / Indice 5)
+                    const notes = (c.m[5] || "").trim();
                     
                     let photo = conFoto.includes(sigla) ? 
                         `<div class="img-container"><img src="${sigla}.png" class="vehicle-img"></div>` : '';
@@ -426,6 +443,7 @@
                             <div class="targa">${c.m[3] || '---'}</div>
                             <div class="badge badge-${sType}">${status}</div>
                             ${c.b ? `<div class="backup">BACKUP: <strong>${c.b[1]}</strong></div>` : ''}
+                            ${notes ? `<div class="segnalazione">⚠️ ${notes}</div>` : ''}
                         </div>`;
                 });
 
@@ -438,12 +456,15 @@
                     const isM = s.includes('MANUTENZIONE');
                     const isO = s.includes('OFF');
                     const type = isM ? 'man' : isO ? 'off' : 'ok';
+                    // RECUPERO SEGNALAZIONE FLOTTA VARIABILE (Colonna F / Indice 5)
+                    const notes = (d[5] || "").trim();
 
                     document.getElementById('slot-var').innerHTML += `
                         <div class="v-card ${type}">
                             <span class="v-sigla">${sigla}</span>
                             <span class="v-modello">${modello}</span>
                             <span class="v-status" style="color: ${isM ? 'var(--orange)' : isO ? 'var(--red)' : 'var(--green)'}">● ${s}</span>
+                            ${notes ? `<span class="v-segnalazione">⚠️ ${notes}</span>` : ''}
                         </div>`;
                 });
             } catch (e) { console.error(e); }
