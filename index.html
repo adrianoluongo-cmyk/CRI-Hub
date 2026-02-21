@@ -119,31 +119,51 @@
             border-top: 1px solid var(--glass-border);
         }
 
-        /* --- IMMAGINI (SOLO PARTE MODIFICATA) --- */
+        /* --- IMMAGINI (INTEGRATE NEL BOX) --- */
         .img-container {
             position: absolute;
-            top: -15px; /* Ancoraggio al bordo uniforme */
-            right: -15px;
-            z-index: 100;
+            /* Coordinate positive per stare dentro al box */
+            top: 10px;   
+            right: 10px;
+            /* Z-index basso per stare DIETRO al testo */
+            z-index: 0; 
             pointer-events: none;
+            /* Opzionale: per evitare che esca se il box è piccolo */
+            overflow: hidden; 
+            border-radius: 12px;
         }
 
         .vehicle-img {
-            height: 11vh; /* Dimensione ridotta e uguale per tutti */
+            /* Altezza leggermente ridotta per non ingombrare */
+            height: 10vh; 
             width: auto;
-            /* Effetto tecnologico mantenuto senza rotazione */
-            filter: contrast(1.1) brightness(1.1) 
-                    drop-shadow(0 10px 20px rgba(0,0,0,0.8)) 
-                    drop-shadow(0 0 8px rgba(0, 242, 255, 0.4));
-            transform: scaleX(-1); /* Tolto l'angolo/rotazione */
+            
+            /* FONDAMENTALE: Opacità per far leggere il testo sopra */
+            opacity: 0.4; 
+            
+            /* Filtri ridotti: via il bagliore cyan, solo un'ombra scura pulita */
+            filter: contrast(1.1) brightness(0.9) grayscale(0.3)
+                    drop-shadow(0 5px 10px rgba(0,0,0,0.8));
+                    
+            transform: scaleX(-1);
             transition: all 0.4s ease;
         }
 
-        /* Uniformità totale: sovrascrivo eventuali residui pop */
+        /* Reset totale per la classe pop non più usata */
         .img-pop {
-            height: 11vh !important;
-            top: 0 !important;
-            right: 0 !important;
+            height: 10vh !important;
+            top: 10px !important;
+            right: 10px !important;
+        }
+
+     /* --- GARANZIA LEGGIBILITÀ TESTO --- */
+        /* Forza tutti gli elementi testuali a stare sopra l'immagine (z-index > 0) */
+        .sigla, .modello, .targa, .badge, .backup {
+            position: relative;
+            z-index: 2;
+            /* Aumenta il contrasto del testo sullo sfondo dell'immagine */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9); 
+        
         }
 
         /* --- FLOTTA VARIABILE --- */
