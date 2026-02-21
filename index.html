@@ -161,13 +161,12 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
-        /* MODIFICA FONT SIGLA: Più chiaro e minimal (Inter) */
         .sigla { 
-            font-family: 'Inter', sans-serif; /* Cambiato da Orbitron a Inter */
+            font-family: 'Inter', sans-serif; 
             font-size: 2.1vw; 
             font-weight: 700; 
             line-height: 1.1; 
-            letter-spacing: 0; /* Ridotto spaziatura per look più pulito */
+            letter-spacing: 0; 
         }
         
         .modello { font-size: 0.75vw; color: var(--text-muted); margin: 6px 0; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
@@ -197,7 +196,7 @@
         }
         .backup strong { color: var(--blue); font-weight: 700; letter-spacing: 0.5px; }
 
-        /* --- IMMAGINI INTEGRATE (FIX TAGLIO) --- */
+        /* --- IMMAGINI INTEGRATE --- */
         .img-container {
             position: absolute;
             top: 0; right: 0; bottom: 0;
@@ -213,16 +212,15 @@
             mask-image: linear-gradient(to right, transparent 0%, black 50%);
         }
 
-        /* MODIFICA VEICOLO: Fix per non tagliare l'immagine */
         .vehicle-img {
-            max-height: 100%; /* Non forzare altezza fissa */
-            max-width: 100%;  /* Assicura che stia nel contenitore */
+            max-height: 100%; 
+            max-width: 100%;  
             height: auto;
             width: auto;
             opacity: 0.35; 
             filter: contrast(1.1) brightness(1.2) grayscale(0.3);
-            transform: scaleX(-1); /* Rimossa la traslazione che la spingeva fuori */
-            object-fit: contain; /* Fondamentale per non tagliare */
+            transform: scaleX(-1); 
+            object-fit: contain; 
             mix-blend-mode: screen;
         }
 
@@ -257,7 +255,8 @@
         .v-card.man::before { background: var(--orange); color: var(--orange); }
         .v-card.off::before { background: var(--red); color: var(--red); }
 
-        .v-sigla { font-family: 'Orbitron', sans-serif; font-size: 1vw; font-weight: 700; display: block; letter-spacing: 1px; }
+        /* MODIFICA FONT FLOTTA VARIABILE: Stesso font pulito dei titoli principali */
+        .v-sigla { font-family: 'Inter', sans-serif; font-size: 1vw; font-weight: 700; display: block; letter-spacing: 0; }
         .v-modello { font-size: 0.6vw; color: var(--text-muted); text-transform: uppercase; display: block; margin: 4px 0; }
         .v-status { font-size: 0.55vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-top: 4px; }
 
@@ -385,7 +384,8 @@
 
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
-        const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49", "VA11-81", "VA11-48"];
+        // AGGIUNTO VA11-48
+        const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-48", "VA11-49", "VA11-81"];
 
         async function update() {
             try {
