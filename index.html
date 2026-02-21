@@ -2,232 +2,228 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>AUTOPARCO COMMAND CENTER - V11.1</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+    <title>SITUAZIONE REAL TIME - V11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0d1117;
-            --card-bg: rgba(30, 35, 45, 0.6);
-            --border: rgba(255, 255, 255, 0.08);
-            --blue: #58a6ff;
-            --green: #3fb950;
-            --orange: #d29922;
-            --red: #f85149;
-            --text: #c9d1d9;
-            --font-main: 'Space Grotesk', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --bg: #05070a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --blue: #007aff;
+            --green: #34c759;
+            --orange: #ff9500;
+            --red: #ff3b30;
+            --text: #ffffff;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            font-family: var(--font-main);
+            font-family: 'Inter', sans-serif; 
             background: var(--bg);
             color: var(--text);
             height: 100vh;
+            width: 100vw;
             display: flex;
             flex-direction: column;
             overflow: hidden; 
         }
 
-        /* --- TOP BAR --- */
-        .top-bar {
-            height: 45px;
-            background: rgba(1, 4, 9, 0.8);
+        /* --- HEADER --- */
+        .header {
+            height: 60px;
+            padding: 0 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
-            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
         }
-        .top-bar h1 { font-size: 1rem; font-weight: 700; color: #fff; text-transform: uppercase; }
 
-        /* --- DASHBOARD --- */
+        .header h1 { font-weight: 900; font-size: 1.4rem; letter-spacing: -0.5px; }
+        #clock { font-family: 'JetBrains Mono'; font-size: 1.8rem; color: var(--blue); }
+
+        /* --- DASHBOARD GRID --- */
         .dashboard {
             flex: 1;
             display: grid;
-            grid-template-columns: 1fr 1fr 1.3fr; /* Bilanciamento per le 2 colonne variabili */
-            gap: 10px;
-            padding: 10px;
+            grid-template-columns: 1fr 1fr 1.4fr;
+            gap: 20px;
+            padding: 20px;
             min-height: 0;
         }
 
-        .column {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-height: 0;
+        .col { display: flex; flex-direction: column; gap: 15px; min-height: 0; }
+        .col-title { 
+            font-size: 0.8rem; font-weight: 700; color: var(--blue); 
+            text-transform: uppercase; letter-spacing: 1px;
+            padding-bottom: 5px; border-bottom: 1px solid var(--glass-border);
         }
 
-        .column-header {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--blue);
-            text-transform: uppercase;
-            padding-bottom: 4px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        /* --- CARDS UNITÀ PRINCIPALI --- */
-        .unit-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 10px 15px;
+        /* --- BOX MEZZI (SPECCHIO) --- */
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
             position: relative;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            flex: 1;
         }
 
-        .unit-card.status-ok { border-left: 4px solid var(--green); }
-        .unit-card.status-man { border-left: 4px solid var(--orange); }
-        .unit-card.status-off { border-left: 4px solid var(--red); }
+        .card.status-ok { border-left: 4px solid var(--green); }
+        .card.status-man { border-left: 4px solid var(--orange); }
+        .card.status-off { border-left: 4px solid var(--red); }
 
-        .sigla { font-size: 1.8vw; font-weight: 700; color: #fff; line-height: 1; z-index: 2; position: relative; }
-        .modello { font-size: 0.7vw; opacity: 0.6; margin: 2px 0; z-index: 2; position: relative; }
-        .targa { font-family: var(--font-mono); font-size: 0.75vw; color: var(--orange); z-index: 2; position: relative; }
+        .sigla { font-size: 2.2vw; font-weight: 900; line-height: 1; }
+        .modello { font-size: 0.8vw; opacity: 0.4; margin: 4px 0; text-transform: uppercase; }
+        .targa { font-family: 'JetBrains Mono'; font-size: 0.9vw; color: var(--orange); }
 
         .badge {
             align-self: flex-start;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.6vw;
-            font-weight: 700;
-            margin-top: 4px;
+            margin-top: 10px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7vw;
+            font-weight: 800;
             text-transform: uppercase;
-            z-index: 2;
-            position: relative;
         }
-        .badge-ok { background: rgba(63, 185, 80, 0.15); color: var(--green); }
-        .badge-man { background: rgba(210, 153, 34, 0.15); color: var(--orange); }
-        .badge-off { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+        .badge-ok { background: rgba(52, 199, 89, 0.2); color: var(--green); }
+        .badge-man { background: rgba(255, 149, 0, 0.2); color: var(--orange); }
+        .badge-off { background: rgba(255, 59, 48, 0.2); color: var(--red); }
 
         .backup {
-            margin-top: 5px;
-            font-size: 0.65vw;
-            padding-top: 3px;
-            border-top: 1px solid var(--border);
-            color: var(--blue);
-            z-index: 2;
-            position: relative;
+            font-size: 0.8vw; color: var(--blue);
+            margin-top: 10px; padding-top: 8px;
+            border-top: 1px solid var(--glass-border);
         }
 
-        /* --- FOTO MEZZI --- */
-        .photo-anchor { position: absolute; top: 0px; right: 0px; z-index: 1; pointer-events: none; }
-        .img-pop {
-            height: 10vh; /* Dimensione ridotta */
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+        /* --- IMMAGINI UNIFICATE (STESSA DIMENSIONE) --- */
+        .img-container {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .vehicle-img {
+            height: 13vh; /* Dimensione fissa per TUTTI i mezzi */
+            width: auto;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
             transform: scaleX(-1);
-            opacity: 0.8;
         }
 
-        /* --- FLOTTA VARIABILE (2 COLONNE) --- */
-        .variable-grid {
+        /* --- FLOTTA VARIABILE (3 COLONNE - COMPATTA) --- */
+        .var-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 COLONNE */
-            gap: 6px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             overflow-y: auto;
-            padding-right: 4px;
         }
 
         .v-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 6px;
-            border-top-width: 3px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 10px;
+            border-top: 4px solid;
         }
-        .v-card.status-ok { border-top-color: var(--green); }
-        .v-card.status-man { border-top-color: var(--orange); }
-        .v-card.status-off { border-top-color: var(--red); }
+        .v-card.ok { border-top-color: var(--green); }
+        .v-card.man { border-top-color: var(--orange); }
+        .v-card.off { border-top-color: var(--red); }
 
-        .v-sigla { font-size: 0.8vw; font-weight: 700; color: #fff; }
-        .v-modello { font-size: 0.5vw; opacity: 0.4; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .v-status { font-size: 0.55vw; font-weight: 700; margin-top: 2px; text-transform: uppercase; }
+        .v-sigla { font-size: 1.1vw; font-weight: 900; display: block; }
+        .v-status { font-size: 0.65vw; font-weight: 700; margin-top: 5px; text-transform: uppercase; }
 
-        /* --- FOOTER & INFO --- */
-        .footer-info {
-            height: 80px;
-            background: #e1e1e1;
+        /* --- FOOTER & AVVISI --- */
+        .footer {
+            height: 100px;
+            background: var(--orange);
             color: #000;
             display: grid;
-            grid-template-columns: 60px 1fr 1fr 60px;
+            grid-template-columns: 80px 1fr 1fr 80px;
             align-items: center;
-            padding: 0 20px;
-            gap: 15px;
+            padding: 0 40px;
+            gap: 40px;
+            border-top: 8px solid #000;
         }
-        .h-title { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
-        .h-detail { font-weight: 500; font-size: 0.7rem; line-height: 1.1; color: #333; }
+
+        .alert-title { font-weight: 900; font-size: 1.1vw; text-transform: uppercase; text-decoration: underline; }
+        .alert-desc { font-weight: 700; font-size: 1vw; line-height: 1.2; }
 
         .ticker {
-            height: 40px;
+            height: 60px;
             background: #000;
             color: #fff;
             display: flex;
             align-items: center;
             overflow: hidden;
-            font-family: var(--font-mono);
-            font-size: 1rem;
+            font-family: 'JetBrains Mono';
+            font-size: 1.4rem;
             border-top: 2px solid var(--blue);
         }
-        .ticker-move { white-space: nowrap; animation: move 35s linear infinite; }
-        @keyframes move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .blink { animation: flash 0.6s infinite; }
-        @keyframes flash { 50% { opacity: 0.2; } }
+
+        .ticker-text { white-space: nowrap; animation: scroll 40s linear infinite; }
+
+        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes blink { 50% { opacity: 0.1; } }
+        .blink { animation: blink 0.8s infinite; }
 
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <h1>Dashboard Autoparco <span style="font-weight: 300; opacity: 0.5;">| Real-Time Management</span></h1>
-        <div id="clock" style="color: var(--blue); font-family: var(--font-mono); font-weight: 800; font-size: 1.5rem;">00:00</div>
+    <div class="header">
+        <h1>AUTOPARCO MANAGEMENT :: REAL-TIME</h1>
+        <div id="clock">00:00</div>
     </div>
 
     <div class="dashboard">
-        <div class="column">
-            <div class="column-header">Settore Gallarate</div>
-            <div id="slot-gallarate-1" style="display:contents"></div>
-            <div id="slot-gallarate-2" style="display:contents"></div>
+        <div class="col">
+            <div class="col-title">Settore Gallarate</div>
+            <div id="slot-1"></div>
+            <div id="slot-2"></div>
         </div>
 
-        <div class="column">
-            <div class="column-header">Area MXP / Hinterland</div>
-            <div id="slot-somma" style="display:contents"></div>
-            <div id="slot-sumirago" style="display:contents"></div>
-            <div id="slot-malpensa" style="display:contents"></div>
+        <div class="col">
+            <div class="col-title">Area Nord / Malpensa</div>
+            <div id="slot-3"></div>
+            <div id="slot-4"></div>
+            <div id="slot-5"></div>
         </div>
 
-        <div class="column">
-            <div class="column-header" style="color: var(--orange);">Disponibilità Flotta Variabile</div>
-            <div id="slot-variabile" class="variable-grid"></div>
+        <div class="col">
+            <div class="col-title" style="color: var(--orange)">Disponibilità Flotta Variabile</div>
+            <div id="slot-var" class="var-grid"></div>
         </div>
     </div>
 
-    <div class="footer-info">
-        <span class="blink" style="font-size: 2rem; text-align: center;">⚠️</span>
+    <div class="footer">
+        <span class="blink" style="font-size: 3rem; text-align: center;">⚠️</span>
         <div>
-            <div class="h-title">A8 Gallarate - Entrata Chiusa</div>
-            <div class="h-detail">Chiusura per lavori dalle 21:00 del 23/02 alle 05:00 del 24/06 verso Milano. Entrata consigliata: Busto Arsizio.</div>
+            <p class="alert-title">A8 GALLARATE - ENTRATA CHIUSA</p>
+            <p class="alert-desc">Dalle ore 21:00 alle ore 05:00 verso Milano. Deviazione stazione di Busto Arsizio.</p>
         </div>
         <div>
-            <div class="h-title">A8 Solbiate/Busto - Tratto Chiuso</div>
-            <div class="h-detail">Chiuso tra Solbiate Arno e Bivio A8-A36 ore 22-05. Entrata consigliata verso Milano: Busto Arsizio.</div>
+            <p class="alert-title">A8 SOLBIATE / BUSTO - TRATTO CHIUSO</p>
+            <p class="alert-desc">Tra Solbiate e Bivio A8-A36 (22:00-05:00). Seguire deviazioni segnalate.</p>
         </div>
-        <span class="blink" style="font-size: 2rem; text-align: center;">⚠️</span>
+        <span class="blink" style="font-size: 3rem; text-align: center;">⚠️</span>
     </div>
 
     <div class="ticker">
-        <div class="ticker-move">
-            MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO • VERIFICARE SEMPRE IL TIPO DI CARBURANTE • RESPONSABILE AUTOPARCO: 338.7360099 • 
+        <div class="ticker-text">
+            MANDATORIO RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO • VERIFICARE SEMPRE IL TIPO DI CARBURANTE • RESPONSABILE AUTOPARCO: 338.7360099 • 
         </div>
     </div>
 
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
-        const mezziConFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49", "VA11-81"];
+        const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49", "VA11-81"];
 
         async function update() {
             try {
@@ -243,29 +239,26 @@
 
                 const findM = (txt) => data.find(d => d[4]?.toUpperCase().includes(txt.toUpperCase())) || null;
 
-                const mainConfig = [
-                    { id: "slot-gallarate-1", m: findM("GALLARATE CONV 1"), b: findM("BACKUP CONV 1") },
-                    { id: "slot-gallarate-2", m: findM("GALLARATE CONV 2"), b: findM("BACKUP CONV 2") },
-                    { id: "slot-somma",       m: findM("SOMMA LOMBARDO"),   b: findM("BACKUP CONV SOMMA L.DO") },
-                    { id: "slot-sumirago",    m: data.find(d => d[1]?.includes("11-81")), b: null },
-                    { id: "slot-malpensa",    m: findM("AGG. MXP"),           b: null }
+                const config = [
+                    { id: "slot-1", m: findM("GALLARATE CONV 1"), b: findM("BACKUP CONV 1") },
+                    { id: "slot-2", m: findM("GALLARATE CONV 2"), b: findM("BACKUP CONV 2") },
+                    { id: "slot-3", m: findM("SOMMA LOMBARDO"),   b: findM("BACKUP CONV SOMMA L.DO") },
+                    { id: "slot-4", m: data.find(d => d[1]?.includes("11-81")), b: null },
+                    { id: "slot-5", m: findM("AGG. MXP"),           b: null }
                 ];
 
-                mainConfig.forEach(c => {
+                config.forEach(c => {
                     if (!c.m) return;
                     const sigla = c.m[1].toUpperCase();
                     const status = (c.m[4] || "").toUpperCase();
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
                     
-                    let photoHtml = "";
-                    if (mezziConFoto.includes(sigla)) {
-                        // VA11-35 e le altre ora usano tutte la posizione standard a destra
-                        photoHtml = `<div class="photo-anchor"><img src="${sigla}.png" class="img-pop"></div>`;
-                    }
+                    let photo = conFoto.includes(sigla) ? 
+                        `<div class="img-container"><img src="${sigla}.png" class="vehicle-img"></div>` : '';
 
                     document.getElementById(c.id).innerHTML = `
-                        <div class="unit-card status-${sType}">
-                            ${photoHtml}
+                        <div class="card status-${sType}">
+                            ${photo}
                             <div class="sigla">${sigla}</div>
                             <div class="modello">${c.m[2] || '---'}</div>
                             <div class="targa">${c.m[3] || '---'}</div>
@@ -279,16 +272,14 @@
                     const sigla = d[1];
                     if (!sigla || s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP") || sigla.includes("11-81") || s.includes("MXP")) return;
                     
-                    const isMan = s.includes('MANUTENZIONE');
-                    const isOff = s.includes('OFF');
-                    const sType = isMan ? 'status-man' : isOff ? 'status-off' : 'status-ok';
-                    const textClass = isMan ? 'color: var(--orange)' : isOff ? 'color: var(--red)' : 'color: var(--green)';
+                    const isM = s.includes('MANUTENZIONE');
+                    const isO = s.includes('OFF');
+                    const type = isM ? 'man' : isO ? 'off' : 'ok';
 
-                    document.getElementById('slot-variabile').innerHTML += `
-                        <div class="v-card ${sType}">
-                            <div class="v-sigla">${sigla}</div>
-                            <div class="v-modello">${d[2] || '---'}</div>
-                            <div class="v-status" style="${textClass}">● ${s}</div>
+                    document.getElementById('slot-var').innerHTML += `
+                        <div class="v-card ${type}">
+                            <span class="v-sigla">${sigla}</span>
+                            <span class="v-status" style="color: ${isM ? 'var(--orange)' : isO ? 'var(--red)' : 'var(--green)'}">● ${s}</span>
                         </div>`;
                 });
             } catch (e) { console.error(e); }
