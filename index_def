@@ -305,4 +305,141 @@
         }
         
         .ticker::after {
-            content: ''; position: absolute; top
+            content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 50px;
+            background: linear-gradient(to right, rgba(0,0,0,1), transparent);
+        }
+        .ticker::before {
+            content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 50px;
+            background: linear-gradient(to left, rgba(0,0,0,1), transparent);
+            z-index: 2;
+        }
+
+        .ticker-text { white-space: nowrap; animation: scroll 35s linear infinite; font-weight: 300; }
+        .ticker-text strong { color: var(--blue); font-weight: 700; }
+
+        @keyframes scroll { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 15px rgba(255, 61, 87, 0.4); } 50% { opacity: 0.5; box-shadow: 0 0 0px transparent; } }
+        @keyframes blink { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px var(--orange)); } 50% { opacity: 0.2; filter: none; } }
+        .blink { animation: blink 1.5s infinite; filter: grayscale(0.2); }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>DASHBOARD AUTOPARCO | REAL-TIME MANAGEMENT</h1>
+        <div class="clock-wrapper">
+            <span class="live-tag">Live</span>
+            <div id="clock">00:00</div>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="col">
+            <div class="col-title">Gallarate</div>
+            <div id="slot-1"></div>
+            <div id="slot-2"></div>
+        </div>
+
+        <div class="col">
+            <div class="col-title">Somma L.do - Sumirago - Malpensa T1</div>
+            <div id="slot-3"></div>
+            <div id="slot-4"></div>
+            <div id="slot-5"></div>
+        </div>
+
+        <div class="col">
+            <div class="col-title" style="color: var(--orange); --blue: var(--orange);">Disponibilità Flotta Variabile</div>
+            <div id="slot-var" class="var-grid"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span class="blink" style="font-size: 2.5rem; text-align: center;">⚠️</span>
+        <div>
+            <p class="alert-title">A8 SOLBIATE ARNO / BIVIO A8-A36 - TRATTO CHIUSO</p>
+            <p class="alert-desc">Chiuso tra Solbiate Arno-Albizzate e Bivio A8-A36 dalle 22:00 alle 05:00 (dal 23/02 al 24/02). Entrata consigliata: Busto Arsizio. Uscita consigliata: Solbiate Arno.</p>
+        </div>
+        <div>
+            <p class="alert-title">A8 GALLARATE - ENTRATA CHIUSA</p>
+            <p class="alert-desc">Entrata chiusa dalle ore 21:00 del 23/02/2026 alle ore 05:00 del 24/06/2026 in direzione Milano per lavori. Entrata consigliata verso Milano: Busto Arsizio.</p>
+        </div>
+        <span class="blink" style="font-size: 2.5rem; text-align: center;">⚠️</span>
+    </div>
+
+    <div class="ticker">
+        <div class="ticker-text">
+            MANDATORIO EFFETTUARE RIFORNIMENTO PRIMA DELLA METÀ SERBATOIO, VERIFICANDO IL TIPO DI CARBURANTE DEL MEZZO IN USO • PER OGNI NECESSITÀ RELATIVA AI MEZZI, CONTATTARE IL RESPONSABILE AUTOPARCO AL <strong>338.7360099</strong> • 
+        </div>
+    </div>
+
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
+        const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49", "VA11-81"];
+
+        async function update() {
+            try {
+                const res = await fetch(sheetUrl + '&t=' + Date.now());
+                const csv = await res.text();
+                const sep = csv.includes(';') ? ';' : ',';
+                const lines = csv.split(/\r?\n/).filter(l => l.trim() !== "");
+                const data = lines.slice(1).map(l => l.split(sep).map(p => p.replace(/^"|"$/g, '').trim()));
+                
+                document.getElementById('clock').innerText = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+
+                document.querySelectorAll('[id^="slot-"]').forEach(el => el.innerHTML = '');
+
+                const findM = (txt) => data.find(d => d[4]?.toUpperCase().includes(txt.toUpperCase())) || null;
+
+                const config = [
+                    { id: "slot-1", m: findM("GALLARATE CONV 1"), b: findM("BACKUP CONV 1") },
+                    { id: "slot-2", m: findM("GALLARATE CONV 2"), b: findM("BACKUP CONV 2") },
+                    { id: "slot-3", m: findM("SOMMA LOMBARDO"),   b: findM("BACKUP CONV SOMMA L.DO") },
+                    { id: "slot-4", m: data.find(d => d[1]?.includes("VA11-81")), b: null },
+                    { id: "slot-5", m: findM("AGG. MXP"),           b: null }
+                ];
+
+                config.forEach(c => {
+                    if (!c.m) return;
+                    const sigla = c.m[1].toUpperCase();
+                    const status = (c.m[4] || "").toUpperCase();
+                    const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
+                    
+                    let photo = conFoto.includes(sigla) ? 
+                        `<div class="img-container"><img src="${sigla}.png" class="vehicle-img"></div>` : '';
+
+                    document.getElementById(c.id).innerHTML = `
+                        <div class="card status-${sType}">
+                            ${photo}
+                            <div class="sigla">${sigla}</div>
+                            <div class="modello">${c.m[2] || '---'}</div>
+                            <div class="targa">${c.m[3] || '---'}</div>
+                            <div class="badge badge-${sType}">${status}</div>
+                            ${c.b ? `<div class="backup">BACKUP: <strong>${c.b[1]}</strong></div>` : ''}
+                        </div>`;
+                });
+
+                data.forEach(d => {
+                    const s = (d[4] || "").toUpperCase();
+                    const sigla = d[1];
+                    const modello = d[2] || '---';
+                    if (!sigla || s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP") || sigla.includes("11-81") || s.includes("MXP")) return;
+                    
+                    const isM = s.includes('MANUTENZIONE');
+                    const isO = s.includes('OFF');
+                    const type = isM ? 'man' : isO ? 'off' : 'ok';
+
+                    document.getElementById('slot-var').innerHTML += `
+                        <div class="v-card ${type}">
+                            <span class="v-sigla">${sigla}</span>
+                            <span class="v-modello">${modello}</span>
+                            <span class="v-status" style="color: ${isM ? 'var(--orange)' : isO ? 'var(--red)' : 'var(--green)'}">● ${s}</span>
+                        </div>`;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        setInterval(update, 30000); update();
+    </script>
+</body>
+</html>
