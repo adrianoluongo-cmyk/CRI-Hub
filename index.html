@@ -146,7 +146,7 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* Effetti Glow per gli stati (invece del bordo spesso, usiamo un glow elegante) */
+        /* Effetti Glow per gli stati */
         .card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
             box-shadow: 0 0 15px currentColor;
@@ -161,7 +161,15 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
-        .sigla { font-family: 'Orbitron', sans-serif; font-size: 2vw; font-weight: 700; line-height: 1.1; letter-spacing: 1px; }
+        /* MODIFICA FONT SIGLA: Più chiaro e minimal (Inter) */
+        .sigla { 
+            font-family: 'Inter', sans-serif; /* Cambiato da Orbitron a Inter */
+            font-size: 2.1vw; 
+            font-weight: 700; 
+            line-height: 1.1; 
+            letter-spacing: 0; /* Ridotto spaziatura per look più pulito */
+        }
+        
         .modello { font-size: 0.75vw; color: var(--text-muted); margin: 6px 0; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
         .targa { font-family: 'JetBrains Mono', monospace; font-size: 0.85vw; color: #fff; background: rgba(0,0,0,0.4); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--glass-border); display: inline-block; width: fit-content; }
 
@@ -189,7 +197,7 @@
         }
         .backup strong { color: var(--blue); font-weight: 700; letter-spacing: 0.5px; }
 
-        /* --- IMMAGINI INTEGRATE (Effetto fade cristallino) --- */
+        /* --- IMMAGINI INTEGRATE (FIX TAGLIO) --- */
         .img-container {
             position: absolute;
             top: 0; right: 0; bottom: 0;
@@ -201,19 +209,21 @@
             justify-content: flex-end; 
             overflow: hidden;
             border-radius: 0 16px 16px 0;
-            /* Maschera per far sfumare dolcemente l'immagine nel background */
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 50%);
             mask-image: linear-gradient(to right, transparent 0%, black 50%);
         }
 
+        /* MODIFICA VEICOLO: Fix per non tagliare l'immagine */
         .vehicle-img {
-            height: 100%; 
+            max-height: 100%; /* Non forzare altezza fissa */
+            max-width: 100%;  /* Assicura che stia nel contenitore */
+            height: auto;
             width: auto;
-            opacity: 0.35; /* Super minimale, non disturba la lettura */
+            opacity: 0.35; 
             filter: contrast(1.1) brightness(1.2) grayscale(0.3);
-            transform: scaleX(-1) translateX(-10%); 
-            object-fit: contain;
-            mix-blend-mode: screen; /* Fusione perfetta col buio */
+            transform: scaleX(-1); /* Rimossa la traslazione che la spingeva fuori */
+            object-fit: contain; /* Fondamentale per non tagliare */
+            mix-blend-mode: screen;
         }
 
         .img-pop { height: 90% !important; }
@@ -251,11 +261,11 @@
         .v-modello { font-size: 0.6vw; color: var(--text-muted); text-transform: uppercase; display: block; margin: 4px 0; }
         .v-status { font-size: 0.55vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-top: 4px; }
 
-        /* --- FOOTER & AVVISI (Ridisegnato stile HUD Emergenza) --- */
+        /* --- FOOTER & AVVISI --- */
         .footer {
             height: auto;
             min-height: 100px;
-            background: rgba(255, 171, 0, 0.05); /* Vetro arancio scuro al posto del blocco solido */
+            background: rgba(255, 171, 0, 0.05);
             border-top: 1px solid rgba(255, 171, 0, 0.3);
             display: grid;
             grid-template-columns: 60px 1fr 1fr 60px;
