@@ -119,20 +119,31 @@
             border-top: 1px solid var(--glass-border);
         }
 
-        /* --- IMMAGINI --- */
+        /* --- IMMAGINI (SOLO PARTE MODIFICATA) --- */
         .img-container {
             position: absolute;
-            top: -10px;
-            right: -10px;
+            top: -35px; /* Spostate massicciamente verso l'alto */
+            right: -35px; /* Spostate massicciamente verso destra */
             z-index: 100;
             pointer-events: none;
         }
 
         .vehicle-img {
-            height: 13vh;
+            height: 19vh; /* Ingrandite per bucare lo schermo */
             width: auto;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
-            transform: scaleX(-1);
+            /* Effetto tecnologico: contrasto e bagliore cyber cyan */
+            filter: contrast(1.1) brightness(1.1) 
+                    drop-shadow(0 15px 25px rgba(0,0,0,0.9)) 
+                    drop-shadow(0 0 10px rgba(0, 242, 255, 0.5));
+            transform: scaleX(-1) rotate(-3deg); /* Piccola rotazione per dinamismo */
+            transition: all 0.4s ease;
+        }
+
+        /* Uniformità totale: sovrascrivo le eccezioni per renderle tutte uguali */
+        .img-pop {
+            height: 19vh !important;
+            top: 0 !important;
+            right: 0 !important;
         }
 
        
@@ -248,7 +259,7 @@
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
         const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49", "VA11-81"];
-        const mezziLarge = ["VA11-34", "VA11-35", "VA11-49"];
+        const mezziLarge = ["VA11-34", "VA11-35", "VA11-49", "VA11-81"];
 
         async function update() {
             try {
@@ -268,7 +279,7 @@
                     { id: "slot-1", m: findM("GALLARATE CONV 1"), b: findM("BACKUP CONV 1") },
                     { id: "slot-2", m: findM("GALLARATE CONV 2"), b: findM("BACKUP CONV 2") },
                     { id: "slot-3", m: findM("SOMMA LOMBARDO"),   b: findM("BACKUP CONV SOMMA L.DO") },
-                    { id: "slot-4", m: data.find(d => d[1]?.includes("11-81")), b: null },
+                    { id: "slot-4", m: data.find(d => d[1]?.includes("VA11-81")), b: null },
                     { id: "slot-5", m: findM("AGG. MXP"),           b: null }
                 ];
 
