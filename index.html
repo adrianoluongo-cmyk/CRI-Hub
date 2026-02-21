@@ -90,14 +90,22 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            overflow: hidden; /* Mantiene l'immagine dentro il box */
         }
 
         .card.status-ok { border-left: 4px solid var(--green); }
         .card.status-man { border-left: 4px solid var(--orange); }
         .card.status-off { border-left: 4px solid var(--red); }
 
+        /* Priorità ai testi per la leggibilità sopra l'immagine */
+        .sigla, .modello, .targa, .badge, .backup {
+            position: relative;
+            z-index: 5;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
         .sigla { font-size: 2.2vw; font-weight: 900; line-height: 1; }
-        .modello { font-size: 0.8vw; opacity: 0.4; margin: 4px 0; text-transform: uppercase; }
+        .modello { font-size: 0.8vw; opacity: 0.6; margin: 4px 0; text-transform: uppercase; }
         .targa { font-family: 'JetBrains Mono'; font-size: 0.9vw; color: var(--orange); }
 
         .badge {
@@ -119,51 +127,30 @@
             border-top: 1px solid var(--glass-border);
         }
 
-        /* --- IMMAGINI (INTEGRATE NEL BOX) --- */
+        /* --- IMMAGINI INTEGRATE (DENTRO AL BOX) --- */
         .img-container {
             position: absolute;
-            /* Coordinate positive per stare dentro al box */
-            top: 10px;   
-            right: 10px;
-            /* Z-index basso per stare DIETRO al testo */
-            z-index: 0; 
+            top: 5px;      /* Posizione interna */
+            right: 5px;    /* Posizione interna */
+            z-index: 1;    /* Sotto ai testi */
             pointer-events: none;
-            /* Opzionale: per evitare che esca se il box è piccolo */
-            overflow: hidden; 
-            border-radius: 12px;
         }
 
         .vehicle-img {
-            /* Altezza leggermente ridotta per non ingombrare */
-            height: 10vh; 
+            height: 9.5vh; /* Dimensione ridotta per stare nel box */
             width: auto;
-            
-            /* FONDAMENTALE: Opacità per far leggere il testo sopra */
-            opacity: 0.4; 
-            
-            /* Filtri ridotti: via il bagliore cyan, solo un'ombra scura pulita */
-            filter: contrast(1.1) brightness(0.9) grayscale(0.3)
-                    drop-shadow(0 5px 10px rgba(0,0,0,0.8));
-                    
-            transform: scaleX(-1);
+            /* Effetto tecnologico: semitrasparenza e contrasto */
+            opacity: 0.35; 
+            filter: contrast(1.2) brightness(1.2) grayscale(0.2);
+            transform: scaleX(-1); /* Tolta rotazione */
             transition: all 0.4s ease;
         }
 
-        /* Reset totale per la classe pop non più usata */
+        /* Uniformità totale per tutti i mezzi con foto */
         .img-pop {
-            height: 10vh !important;
-            top: 10px !important;
-            right: 10px !important;
-        }
-
-     /* --- GARANZIA LEGGIBILITÀ TESTO --- */
-        /* Forza tutti gli elementi testuali a stare sopra l'immagine (z-index > 0) */
-        .sigla, .modello, .targa, .badge, .backup {
-            position: relative;
-            z-index: 2;
-            /* Aumenta il contrasto del testo sullo sfondo dell'immagine */
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9); 
-        
+            height: 9.5vh !important;
+            top: 5px !important;
+            right: 5px !important;
         }
 
         /* --- FLOTTA VARIABILE --- */
@@ -278,7 +265,6 @@
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
         const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-49", "VA11-81"];
-        const mezziLarge = ["VA11-34", "VA11-35", "VA11-49", "VA11-81"];
 
         async function update() {
             try {
@@ -309,7 +295,7 @@
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
                     
                     let photo = conFoto.includes(sigla) ? 
-                        `<div class="img-container"><img src="${sigla}.png" class="vehicle-img ${mezziLarge.includes(sigla) ? 'img-pop' : ''}"></div>` : '';
+                        `<div class="img-container"><img src="${sigla}.png" class="vehicle-img"></div>` : '';
 
                     document.getElementById(c.id).innerHTML = `
                         <div class="card status-${sType}">
