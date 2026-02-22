@@ -188,19 +188,29 @@
         .badge-man { background: rgba(255, 171, 0, 0.1); color: var(--orange); box-shadow: 0 0 10px rgba(255, 171, 0, 0.2); }
         .badge-off { background: rgba(255, 61, 87, 0.1); color: var(--red); box-shadow: 0 0 10px rgba(255, 61, 87, 0.2); }
 
+        /* MODIFICA BACKUP: Visibilità aumentata e fix sovrapposizione */
         .backup {
-            font-size: 0.75vw; color: var(--text-muted);
-            margin-top: 12px; padding-top: 10px;
+            font-size: 0.85vw; /* Aumentato font */
+            color: var(--text-main); /* Colore più luminoso */
+            font-weight: 600; /* Più grassetto */
+            margin-top: 14px; padding-top: 12px;
             border-top: 1px solid var(--glass-border);
             display: flex; align-items: center; gap: 8px;
+            max-width: 40%; /* Limita la larghezza per non coprire la foto */
         }
-        .backup strong { color: var(--blue); font-weight: 700; letter-spacing: 0.5px; }
+        .backup strong { 
+            color: var(--blue); 
+            font-weight: 800; 
+            letter-spacing: 0.5px;
+            font-size: 1vw; /* Sigla ancora più grande */
+        }
 
         /* NUOVA CLASSE PER SEGNALAZIONI CARD PRINCIPALI */
         .segnalazione {
             font-size: 0.75vw; color: var(--orange);
             margin-top: 8px; font-weight: 600;
             display: flex; align-items: center; gap: 6px;
+            max-width: 40%; /* Anche la segnalazione non deve coprire la foto */
         }
 
         /* --- IMMAGINI INTEGRATE --- */
