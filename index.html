@@ -411,11 +411,11 @@
             text-shadow: none;
         }
 
-        /* Immagine filigranata per fondo chiaro */
+        /* MODIFICA IMMAGINI IN LIGHT MODE: Visibili e definite */
         body.light-mode .vehicle-img {
-            opacity: 0.15; 
-            filter: contrast(1) grayscale(0.8);
-            mix-blend-mode: multiply;
+            opacity: 0.85; /* Molto più visibile */
+            filter: contrast(1.1) brightness(1.05) grayscale(0.2); /* Colori più vivi e contrastati */
+            mix-blend-mode: normal; /* Rimossa la fusione scura */
         }
 
         body.light-mode .footer {
