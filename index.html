@@ -231,13 +231,15 @@
             mask-image: linear-gradient(to right, transparent 0%, black 50%);
         }
 
+        /* MODIFICA AGGIUNTA OMBRA NIGHT MODE */
         .vehicle-img {
             max-height: 100%; 
             max-width: 100%;  
             height: auto;
             width: auto;
             opacity: 0.35; 
-            filter: contrast(1.1) brightness(1.2) grayscale(0.3);
+            /* Aggiunto drop-shadow alla fine del filtro */
+            filter: contrast(1.1) brightness(1.2) grayscale(0.3) drop-shadow(0 15px 10px rgba(0,0,0,0.3));
             transform: scaleX(-1); 
             object-fit: contain; 
             mix-blend-mode: screen;
@@ -411,11 +413,12 @@
             text-shadow: none;
         }
 
-        /* MODIFICA IMMAGINI IN LIGHT MODE: Visibili e definite */
+        /* MODIFICA AGGIUNTA OMBRA LIGHT MODE */
         body.light-mode .vehicle-img {
-            opacity: 0.85; /* Molto più visibile */
-            filter: contrast(1.1) brightness(1.05) grayscale(0.2); /* Colori più vivi e contrastati */
-            mix-blend-mode: normal; /* Rimossa la fusione scura */
+            opacity: 0.85; 
+            /* Aggiunto drop-shadow alla fine del filtro */
+            filter: contrast(1.1) brightness(1.05) grayscale(0.2) drop-shadow(0 15px 15px rgba(0,0,0,0.2));
+            mix-blend-mode: normal; 
         }
 
         body.light-mode .footer {
