@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Palette Tecnologica e Minimale */
+            /* Palette Tecnologica e Minimale (NIGHT MODE DEFAULT) */
             --bg-base: #030508;
             --bg-glow: #0a1118;
             --glass-bg: rgba(255, 255, 255, 0.015);
@@ -35,6 +35,7 @@
             flex-direction: column;
             overflow: hidden; 
             -webkit-font-smoothing: antialiased;
+            transition: background 0.5s ease, color 0.5s ease;
         }
 
         /* --- SCROLLBAR CUSTOM MINIMALE --- */
@@ -56,6 +57,7 @@
             -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            transition: background 0.5s ease;
         }
 
         .header h1 { 
@@ -143,7 +145,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.5s ease;
         }
 
         /* Effetti Glow per gli stati */
@@ -188,29 +190,29 @@
         .badge-man { background: rgba(255, 171, 0, 0.1); color: var(--orange); box-shadow: 0 0 10px rgba(255, 171, 0, 0.2); }
         .badge-off { background: rgba(255, 61, 87, 0.1); color: var(--red); box-shadow: 0 0 10px rgba(255, 61, 87, 0.2); }
 
-        /* MODIFICA BACKUP: Visibilità aumentata e fix sovrapposizione */
+        /* BACKUP */
         .backup {
-            font-size: 0.85vw; /* Aumentato font */
-            color: var(--text-main); /* Colore più luminoso */
-            font-weight: 600; /* Più grassetto */
+            font-size: 0.85vw; 
+            color: var(--text-main); 
+            font-weight: 600; 
             margin-top: 14px; padding-top: 12px;
             border-top: 1px solid var(--glass-border);
             display: flex; align-items: center; gap: 8px;
-            max-width: 40%; /* Limita la larghezza per non coprire la foto */
+            max-width: 40%; 
         }
         .backup strong { 
             color: var(--blue); 
             font-weight: 800; 
             letter-spacing: 0.5px;
-            font-size: 1vw; /* Sigla ancora più grande */
+            font-size: 1vw; 
         }
 
-        /* NUOVA CLASSE PER SEGNALAZIONI CARD PRINCIPALI */
+        /* SEGNALAZIONI CARD PRINCIPALI */
         .segnalazione {
             font-size: 0.75vw; color: var(--orange);
             margin-top: 8px; font-weight: 600;
             display: flex; align-items: center; gap: 6px;
-            max-width: 40%; /* Anche la segnalazione non deve coprire la foto */
+            max-width: 40%; 
         }
 
         /* --- IMMAGINI INTEGRATE --- */
@@ -239,9 +241,8 @@
             transform: scaleX(-1); 
             object-fit: contain; 
             mix-blend-mode: screen;
+            transition: all 0.5s ease;
         }
-
-        .img-pop { height: 90% !important; }
 
         /* --- FLOTTA VARIABILE --- */
         .var-grid {
@@ -278,7 +279,7 @@
         .v-modello { font-size: 0.6vw; color: var(--text-muted); text-transform: uppercase; display: block; margin: 4px 0; }
         .v-status { font-size: 0.55vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-top: auto; }
 
-        /* NUOVA CLASSE PER SEGNALAZIONI FLOTTA VARIABILE */
+        /* SEGNALAZIONI FLOTTA VARIABILE */
         .v-segnalazione {
             font-size: 0.55vw; color: var(--orange);
             margin-top: 6px; font-weight: 600;
@@ -299,6 +300,7 @@
             gap: 40px;
             position: relative;
             box-shadow: inset 0 20px 40px rgba(0,0,0,0.5);
+            transition: background 0.5s ease;
         }
 
         .footer::before {
@@ -337,6 +339,7 @@
             font-size: 1rem;
             border-top: 1px solid var(--glass-border);
             position: relative;
+            transition: background 0.5s ease;
         }
         
         .ticker::after {
@@ -356,6 +359,81 @@
         @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 15px rgba(255, 61, 87, 0.4); } 50% { opacity: 0.5; box-shadow: 0 0 0px transparent; } }
         @keyframes blink { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px var(--orange)); } 50% { opacity: 0.2; filter: none; } }
         .blink { animation: blink 1.5s infinite; filter: grayscale(0.2); }
+
+        /* ========================================= */
+        /* --- AUTO LIGHT MODE (08:00 - 18:00) --- */
+        /* ========================================= */
+        
+        body.light-mode {
+            --bg-base: #e2e8f0;
+            --bg-glow: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.9);
+            
+            --blue: #0066cc;
+            --tech-cyan: #0088aa;
+            --green: #009944;
+            --orange: #d97700;
+            --red: #d9263b;
+            --text-main: #0f172a;
+            --text-muted: rgba(0, 0, 0, 0.6);
+        }
+
+        body.light-mode .header {
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        body.light-mode .header h1,
+        body.light-mode #clock {
+            color: var(--text-main);
+            text-shadow: none;
+        }
+        
+        body.light-mode .card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+        }
+
+        body.light-mode .targa {
+            color: var(--text-main);
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        /* Testi senza ombre per look più pulito su sfondo chiaro */
+        body.light-mode .sigla, 
+        body.light-mode .modello, 
+        body.light-mode .targa, 
+        body.light-mode .badge, 
+        body.light-mode .backup, 
+        body.light-mode .segnalazione {
+            text-shadow: none;
+        }
+
+        /* Immagine filigranata per fondo chiaro */
+        body.light-mode .vehicle-img {
+            opacity: 0.15; 
+            filter: contrast(1) grayscale(0.8);
+            mix-blend-mode: multiply;
+        }
+
+        body.light-mode .footer {
+            background: rgba(217, 119, 0, 0.05);
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        body.light-mode .ticker {
+            background: #ffffff;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        body.light-mode .ticker::after {
+            background: linear-gradient(to right, #ffffff, transparent);
+        }
+        body.light-mode .ticker::before {
+            background: linear-gradient(to left, #ffffff, transparent);
+        }
 
     </style>
 </head>
@@ -414,6 +492,14 @@
 
         async function update() {
             try {
+                // Controllo automatico Tema (Light Mode dalle 08:00 alle 17:59)
+                const currentHour = new Date().getHours();
+                if (currentHour >= 8 && currentHour < 18) {
+                    document.body.classList.add('light-mode');
+                } else {
+                    document.body.classList.remove('light-mode');
+                }
+
                 const res = await fetch(sheetUrl + '&t=' + Date.now());
                 const csv = await res.text();
                 const sep = csv.includes(';') ? ';' : ',';
