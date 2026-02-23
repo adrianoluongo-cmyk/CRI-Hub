@@ -461,6 +461,74 @@
             background: linear-gradient(to left, #ffffff, transparent);
         }
 
+        /* ========================================= */
+        /* --- RESPONSIVE MOBILE (SMARTPHONE) --- */
+        /* ========================================= */
+        @media (max-width: 850px) {
+            body { 
+                height: auto; 
+                min-height: 100vh; 
+                overflow-y: auto; 
+            }
+            .header { 
+                padding: 15px 20px; 
+                flex-direction: column; 
+                gap: 15px; 
+                height: auto;
+                text-align: center;
+            }
+            .dashboard { 
+                grid-template-columns: 1fr; 
+                padding: 20px; 
+                gap: 20px;
+                overflow-y: visible;
+            }
+            .var-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+            .img-container { 
+                width: 50%; 
+            }
+            
+            /* Sovrascrivo le unità vw con rem per renderle leggibili su schermi piccoli */
+            .sigla { font-size: 1.5rem; }
+            .modello { font-size: 0.8rem; }
+            .targa { font-size: 0.85rem; }
+            .badge { font-size: 0.7rem; }
+            .backup { font-size: 0.85rem; max-width: 55%; }
+            .backup strong { font-size: 0.95rem; }
+            .segnalazione { font-size: 0.75rem; max-width: 55%; }
+            
+            .v-sigla { font-size: 1.1rem; }
+            .v-modello { font-size: 0.75rem; }
+            .v-status { font-size: 0.7rem; }
+            .v-segnalazione { font-size: 0.7rem; white-space: normal; }
+
+            .footer { 
+                grid-template-columns: 30px 1fr 30px; 
+                padding: 15px; 
+                gap: 10px;
+            }
+            .alert-title { font-size: 0.9rem; text-align: center; }
+            .alert-desc { font-size: 0.8rem; text-align: center; }
+            .blink { font-size: 1.8rem !important; }
+            
+            .ticker { font-size: 0.85rem; }
+        }
+
+        /* Adattamento estremo per telefoni molto stretti in verticale */
+        @media (max-width: 480px) {
+            .var-grid { grid-template-columns: 1fr; }
+            .footer { 
+                display: flex; 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 20px 15px;
+            }
+            .blink { display: none; } /* Nascondo i warning giganti per fare spazio al testo */
+            .alert-wrapper { grid-column: 1 / -1; }
+        }
+
     </style>
 </head>
 <body>
