@@ -231,14 +231,12 @@
             mask-image: linear-gradient(to right, transparent 0%, black 50%);
         }
 
-        /* MODIFICA AGGIUNTA OMBRA NIGHT MODE */
         .vehicle-img {
             max-height: 100%; 
             max-width: 100%;  
             height: auto;
             width: auto;
             opacity: 0.35; 
-            /* Aggiunto drop-shadow alla fine del filtro */
             filter: contrast(1.1) brightness(1.2) grayscale(0.3) drop-shadow(0 15px 10px rgba(0,0,0,0.3));
             transform: scaleX(-1); 
             object-fit: contain; 
@@ -310,6 +308,33 @@
             background: linear-gradient(90deg, transparent, var(--orange), transparent);
         }
 
+        /* CAROSELLO ALERT FOOTER */
+        .alert-wrapper {
+            grid-column: 2 / 4; /* Occupa entrambe le colonne centrali del footer */
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .alert-item {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(10px);
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .alert-item.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+        }
+
         .alert-title { 
             font-weight: 900; 
             font-size: 0.85vw; 
@@ -319,6 +344,7 @@
             letter-spacing: 1px;
             display: flex;
             align-items: center;
+            justify-content: center; /* Centrato per il carosello */
             gap: 8px;
         }
         
@@ -403,7 +429,6 @@
             background: rgba(0, 0, 0, 0.06);
         }
 
-        /* Testi senza ombre per look più pulito su sfondo chiaro */
         body.light-mode .sigla, 
         body.light-mode .modello, 
         body.light-mode .targa, 
@@ -413,10 +438,8 @@
             text-shadow: none;
         }
 
-        /* MODIFICA AGGIUNTA OMBRA LIGHT MODE */
         body.light-mode .vehicle-img {
             opacity: 0.85; 
-            /* Aggiunto drop-shadow alla fine del filtro */
             filter: contrast(1.1) brightness(1.05) grayscale(0.2) drop-shadow(0 15px 15px rgba(0,0,0,0.2));
             mix-blend-mode: normal; 
         }
@@ -472,14 +495,22 @@
 
     <div class="footer">
         <span class="blink" style="font-size: 2.5rem; text-align: center;">⚠️</span>
-        <div>
-            <p class="alert-title">A8 SOLBIATE ARNO / BIVIO A8-A36 - TRATTO CHIUSO</p>
-            <p class="alert-desc">Chiuso tra Solbiate Arno-Albizzate e Bivio A8-A36 dalle 22:00 alle 05:00 (dal 23/02 al 24/02). Entrata consigliata: Busto Arsizio. Uscita consigliata: Solbiate Arno.</p>
+        
+        <div class="alert-wrapper">
+            <div class="alert-item active">
+                <p class="alert-title">A8 SOLBIATE ARNO / BIVIO A8-A36 - TRATTO CHIUSO</p>
+                <p class="alert-desc">Chiuso tra Solbiate Arno-Albizzate e Bivio A8-A36 dalle 22:00 alle 05:00 (dal 23/02 al 24/02). Entrata consigliata: Busto Arsizio. Uscita consigliata: Solbiate Arno.</p>
+            </div>
+            <div class="alert-item">
+                <p class="alert-title">A8 GALLARATE - ENTRATA CHIUSA</p>
+                <p class="alert-desc">Entrata chiusa dalle ore 21:00 del 23/02/2026 alle ore 05:00 del 24/06/2026 in direzione Milano per lavori. Entrata consigliata verso Milano: Busto Arsizio.</p>
+            </div>
+            <div class="alert-item">
+                <p class="alert-title">CASTELLANZA - ENTRATA CHIUSA (AL KM 18 - DIR. MILANO)</p>
+                <p class="alert-desc">Castellanza in entrata e' chiuso al traffico dalle ore 21:00 alle ore 05:00 dal giorno 24/02/2026 al giorno 28/02/2026 verso Milano per lavori. Entrata consigliata verso Milano: Legnano.</p>
+            </div>
         </div>
-        <div>
-            <p class="alert-title">A8 GALLARATE - ENTRATA CHIUSA</p>
-            <p class="alert-desc">Entrata chiusa dalle ore 21:00 del 23/02/2026 alle ore 05:00 del 24/06/2026 in direzione Milano per lavori. Entrata consigliata verso Milano: Busto Arsizio.</p>
-        </div>
+        
         <span class="blink" style="font-size: 2.5rem; text-align: center;">⚠️</span>
     </div>
 
@@ -492,6 +523,17 @@
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
         const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-48", "VA11-49", "VA11-81"];
+
+        // Gestione Rotazione Avvisi Footer
+        const alerts = document.querySelectorAll('.alert-item');
+        let currentAlertIndex = 0;
+        if (alerts.length > 1) {
+            setInterval(() => {
+                alerts[currentAlertIndex].classList.remove('active');
+                currentAlertIndex = (currentAlertIndex + 1) % alerts.length;
+                alerts[currentAlertIndex].classList.add('active');
+            }, 8000); // Cambia avviso ogni 8 secondi
+        }
 
         async function update() {
             try {
@@ -541,8 +583,8 @@
                             <div class="modello">${c.m[2] || '---'}</div>
                             <div class="targa">${c.m[3] || '---'}</div>
                             <div class="badge badge-${sType}">${status}</div>
-                            ${c.b ? `<div class="backup">BACKUP: <strong>${c.b[1]}</strong></div>` : ''}
                             ${notes ? `<div class="segnalazione">⚠️ ${notes}</div>` : ''}
+                            ${c.b ? `<div class="backup">BACKUP: <strong>${c.b[1]}</strong></div>` : ''}
                         </div>`;
                 });
 
