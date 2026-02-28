@@ -19,6 +19,7 @@
             --green: #00e676;
             --orange: #ffab00;
             --red: #ff3d57;
+            --red-bg: rgba(255, 61, 87, 0.15); /* Sfondo per fuori servizio */
             --text-main: #f0f4f8;
             --text-muted: rgba(255, 255, 255, 0.5);
         }
@@ -145,10 +146,15 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.5s ease;
+            transition: all 0.5s ease;
         }
 
-        /* Effetti Glow per gli stati */
+        /* LOGICA CAMBIO COLORE ROSSO PER STATUS OFF */
+        .card.status-off {
+            background: linear-gradient(135deg, var(--red-bg) 0%, rgba(255, 61, 87, 0.05) 100%);
+            border: 1px solid rgba(255, 61, 87, 0.3);
+        }
+
         .card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
             box-shadow: 0 0 15px currentColor;
@@ -188,9 +194,8 @@
         }
         .badge-ok { background: rgba(0, 230, 118, 0.1); color: var(--green); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .badge-man { background: rgba(255, 171, 0, 0.1); color: var(--orange); box-shadow: 0 0 10px rgba(255, 171, 0, 0.2); }
-        .badge-off { background: rgba(255, 61, 87, 0.1); color: var(--red); box-shadow: 0 0 10px rgba(255, 61, 87, 0.2); }
+        .badge-off { background: rgba(255, 61, 87, 0.2); color: var(--red); box-shadow: 0 0 10px rgba(255, 61, 87, 0.4); }
 
-        /* BACKUP */
         .backup {
             font-size: 0.85vw; 
             color: var(--text-main); 
@@ -207,7 +212,6 @@
             font-size: 1vw; 
         }
 
-        /* SEGNALAZIONI CARD PRINCIPALI */
         .segnalazione {
             font-size: 0.75vw; color: var(--orange);
             margin-top: 8px; font-weight: 600;
@@ -215,7 +219,7 @@
             max-width: 40%; 
         }
 
-        /* --- IMMAGINI INTEGRATE --- */
+        /* --- IMMAGINI --- */
         .img-container {
             position: absolute;
             top: 0; right: 0; bottom: 0;
@@ -260,9 +264,14 @@
             padding: 12px;
             position: relative;
             overflow: hidden;
-            transition: background 0.2s ease;
+            transition: all 0.5s ease;
             display: flex;
             flex-direction: column;
+        }
+
+        .v-card.off {
+            background: var(--red-bg);
+            border: 1px solid rgba(255, 61, 87, 0.3);
         }
         
         .v-card:hover { background: var(--glass-highlight); }
@@ -279,7 +288,6 @@
         .v-modello { font-size: 0.6vw; color: var(--text-muted); text-transform: uppercase; display: block; margin: 4px 0; }
         .v-status { font-size: 0.55vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-top: auto; }
 
-        /* SEGNALAZIONI FLOTTA VARIABILE */
         .v-segnalazione {
             font-size: 0.55vw; color: var(--orange);
             margin-top: 6px; font-weight: 600;
@@ -308,9 +316,8 @@
             background: linear-gradient(90deg, transparent, var(--orange), transparent);
         }
 
-        /* CAROSELLO ALERT FOOTER */
         .alert-wrapper {
-            grid-column: 2 / 4; /* Occupa entrambe le colonne centrali del footer */
+            grid-column: 2 / 4; 
             position: relative;
             width: 100%;
             display: flex;
@@ -344,7 +351,7 @@
             letter-spacing: 1px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Centrato per il carosello */
+            justify-content: center; 
             gap: 8px;
         }
         
@@ -391,13 +398,13 @@
         /* ========================================= */
         /* --- AUTO LIGHT MODE (08:00 - 18:00) --- */
         /* ========================================= */
-        
         body.light-mode {
             --bg-base: #e2e8f0;
             --bg-glow: #f8fafc;
             --glass-bg: rgba(255, 255, 255, 0.6);
             --glass-border: rgba(0, 0, 0, 0.08);
             --glass-highlight: rgba(255, 255, 255, 0.9);
+            --red-bg: rgba(217, 38, 59, 0.1);
             
             --blue: #0066cc;
             --tech-cyan: #0088aa;
@@ -422,6 +429,10 @@
         body.light-mode .card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+        }
+
+        body.light-mode .card.status-off {
+            background: linear-gradient(135deg, var(--red-bg) 0%, rgba(217, 38, 59, 0.05) 100%);
         }
 
         body.light-mode .targa {
@@ -490,7 +501,6 @@
                 width: 50%; 
             }
             
-            /* Sovrascrivo le unità vw con rem per renderle leggibili su schermi piccoli */
             .sigla { font-size: 1.5rem; }
             .modello { font-size: 0.8rem; }
             .targa { font-size: 0.85rem; }
@@ -516,7 +526,6 @@
             .ticker { font-size: 0.85rem; }
         }
 
-        /* Adattamento estremo per telefoni molto stretti in verticale */
         @media (max-width: 480px) {
             .var-grid { grid-template-columns: 1fr; }
             .footer { 
@@ -525,7 +534,7 @@
                 text-align: center; 
                 padding: 20px 15px;
             }
-            .blink { display: none; } /* Nascondo i warning giganti per fare spazio al testo */
+            .blink { display: none; } 
             .alert-wrapper { grid-column: 1 / -1; }
         }
 
@@ -549,7 +558,7 @@
         </div>
 
         <div class="col">
-            <div class="col-title">Somma L.do - Sumirago</div>
+            <div class="col-title">Somma L.do - Sumirago - Malpensa T1</div>
             <div id="slot-3"></div>
             <div id="slot-4"></div>
             <div id="slot-5"></div>
@@ -566,16 +575,12 @@
         
         <div class="alert-wrapper">
             <div class="alert-item active">
-                <p class="alert-title">A8 CASTRONNO / SOLBIATE ARNO - TRATTO CHIUSO</p>
-                <p class="alert-desc">Chiuso tra Castronno e Solbiate Arno - Albizzate dalle ore 22:00 alle ore 05:00 dal giorno 27/02/2026 al giorno 28/02/2026 per ripristino incidente. Entrata consigliata verso Milano: Solbiate Arno - Albizzate. Uscita consigliata provenendo da Varese: Castronno.</p>
-            </div>
-            <div class="alert-item">
                 <p class="alert-title">A8 GALLARATE - ENTRATA CHIUSA</p>
                 <p class="alert-desc">Entrata chiusa dalle ore 21:00 del 23/02/2026 alle ore 05:00 del 24/06/2026 in direzione Milano per lavori. Entrata consigliata verso Milano: Busto Arsizio.</p>
             </div>
             <div class="alert-item">
-                <p class="alert-title">CASTELLANZA - ENTRATA CHIUSA (AL KM 18 - DIR. MILANO)</p>
-                <p class="alert-desc">Castellanza in entrata e' chiuso al traffico dalle ore 21:00 alle ore 05:00 dal giorno 24/02/2026 al giorno 28/02/2026 verso Milano per lavori. Entrata consigliata verso Milano: Legnano.</p>
+                <p class="alert-title">GALLARATE - USCITA CHIUSA (AL KM 29.9 - DIREZIONE: VARESE)</p>
+                <p class="alert-desc">L'uscita di Gallarate e' chiusa al traffico dalle ore 21:00 alle ore 05:00 dal giorno 03/03/2026 al giorno 04/03/2026 provenendo da Milano per lavori. Uscita consigliata provenendo da Milano: Busto Arsizio.</p>
             </div>
         </div>
         
@@ -592,7 +597,6 @@
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtO9pbvrr-yz1xMwquFeonWlhrwz6R_01HXu0swxX6tqrNok0Xjr6KRfIdYRnnGx8ZvjIoN_9vMQi/pub?gid=0&single=true&output=csv';
         const conFoto = ["VA11-32", "VA11-34", "VA11-35", "VA11-48", "VA11-49", "VA11-81"];
 
-        // Gestione Rotazione Avvisi Footer
         const alerts = document.querySelectorAll('.alert-item');
         let currentAlertIndex = 0;
         if (alerts.length > 1) {
@@ -600,12 +604,11 @@
                 alerts[currentAlertIndex].classList.remove('active');
                 currentAlertIndex = (currentAlertIndex + 1) % alerts.length;
                 alerts[currentAlertIndex].classList.add('active');
-            }, 8000); // Cambia avviso ogni 8 secondi
+            }, 8000); 
         }
 
         async function update() {
             try {
-                // Controllo automatico Tema (Light Mode dalle 08:00 alle 17:59)
                 const currentHour = new Date().getHours();
                 if (currentHour >= 8 && currentHour < 18) {
                     document.body.classList.add('light-mode');
@@ -638,7 +641,6 @@
                     const sigla = c.m[1].toUpperCase();
                     const status = (c.m[4] || "").toUpperCase();
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
-                    // RECUPERO SEGNALAZIONE (Colonna F / Indice 5)
                     const notes = (c.m[5] || "").trim();
                     
                     let photo = conFoto.includes(sigla) ? 
@@ -665,7 +667,6 @@
                     const isM = s.includes('MANUTENZIONE');
                     const isO = s.includes('OFF');
                     const type = isM ? 'man' : isO ? 'off' : 'ok';
-                    // RECUPERO SEGNALAZIONE FLOTTA VARIABILE (Colonna F / Indice 5)
                     const notes = (d[5] || "").trim();
 
                     document.getElementById('slot-var').innerHTML += `
