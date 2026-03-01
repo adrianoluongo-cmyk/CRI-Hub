@@ -640,7 +640,7 @@
                     if (!c.m) return;
                     const sigla = c.m[1].toUpperCase();
                     const status = (c.m[4] || "").toUpperCase();
-                    const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('OFF') ? 'off' : 'ok';
+                    const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('FUORI SERVIZIO') ? 'off' : 'ok';
                     const notes = (c.m[5] || "").trim();
                     
                     let photo = conFoto.includes(sigla) ? 
@@ -665,7 +665,7 @@
                     if (!sigla || s.includes("GALLARATE") || s.includes("SOMMA") || s.includes("BACKUP") || sigla.includes("11-81") || s.includes("MXP")) return;
                     
                     const isM = s.includes('MANUTENZIONE');
-                    const isO = s.includes('OFF');
+                    const isO = s.includes('FUORI SERVIZIO');
                     const type = isM ? 'man' : isO ? 'off' : 'ok';
                     const notes = (d[5] || "").trim();
 
