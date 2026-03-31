@@ -164,7 +164,7 @@
         .card.status-man::before { background: var(--orange); color: var(--orange); }
         .card.status-off::before { background: var(--red); color: var(--red); }
 
-        .sigla, .modello, .targa, .badge, .backup, .segnalazione {
+        .sigla, .modello, .targa, .badge, .backup {
             position: relative;
             z-index: 5;
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
@@ -211,13 +211,6 @@
             font-weight: 800; 
             letter-spacing: 0.5px;
             font-size: 1vw; 
-        }
-
-        .segnalazione {
-            font-size: 0.75vw; color: var(--orange);
-            margin-top: 8px; font-weight: 600;
-            display: flex; align-items: center; gap: 6px;
-            max-width: 40%; 
         }
 
         /* --- IMMAGINI --- */
@@ -288,13 +281,6 @@
         .v-sigla { font-family: 'Inter', sans-serif; font-size: 1vw; font-weight: 700; display: block; letter-spacing: 0; }
         .v-modello { font-size: 0.6vw; color: var(--text-muted); text-transform: uppercase; display: block; margin: 4px 0; }
         .v-status { font-size: 0.55vw; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-top: auto; }
-
-        .v-segnalazione {
-            font-size: 0.55vw; color: var(--orange);
-            margin-top: 6px; font-weight: 600;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            display: block;
-        }
 
         /* --- TICKER SCORREVOLE CONTINUO (AEROPORTO) --- */
         .ticker {
@@ -401,8 +387,7 @@
         body.light-mode .modello, 
         body.light-mode .targa, 
         body.light-mode .badge, 
-        body.light-mode .backup, 
-        body.light-mode .segnalazione {
+        body.light-mode .backup {
             text-shadow: none;
         }
 
@@ -411,7 +396,7 @@
             filter: contrast(1.1) brightness(1.05) grayscale(0.2) drop-shadow(0 15px 15px rgba(0,0,0,0.2));
             mix-blend-mode: normal; 
         }
-
+        
         body.light-mode .ticker {
             background: #ffffff;
             border-top: 1px solid var(--glass-border);
@@ -463,12 +448,10 @@
             .badge { font-size: 0.75rem; }
             .backup { font-size: 0.9rem; max-width: 60%; }
             .backup strong { font-size: 1rem; }
-            .segnalazione { font-size: 0.85rem; max-width: 60%; }
             
             .v-sigla { font-size: 1.1rem; }
             .v-modello { font-size: 0.8rem; }
             .v-status { font-size: 0.75rem; }
-            .v-segnalazione { font-size: 0.75rem; white-space: normal; }
 
             .ticker { font-size: 0.85rem; }
         }
@@ -558,7 +541,6 @@
                     const sigla = c.m[1].toUpperCase();
                     const status = (c.m[4] || "").toUpperCase();
                     const sType = status.includes('MANUTENZIONE') ? 'man' : status.includes('FUORI SERVIZIO') ? 'off' : 'ok';
-                    const notes = (c.m[5] || "").trim();
                     
                     let photo = conFoto.includes(sigla) ? 
                         `<div class="img-container"><img src="${sigla}.png" class="vehicle-img"></div>` : '';
@@ -570,7 +552,6 @@
                             <div class="modello">${c.m[2] || '---'}</div>
                             <div class="targa">${c.m[3] || '---'}</div>
                             <div class="badge badge-${sType}">${status}</div>
-                            ${notes ? `<div class="segnalazione">⚠️ ${notes}</div>` : ''}
                             ${c.b ? `<div class="backup">BACKUP: <strong>${c.b[1]}</strong></div>` : ''}
                         </div>`;
                 });
@@ -584,14 +565,12 @@
                     const isM = s.includes('MANUTENZIONE');
                     const isO = s.includes('FUORI SERVIZIO');
                     const type = isM ? 'man' : isO ? 'off' : 'ok';
-                    const notes = (d[5] || "").trim();
 
                     document.getElementById('slot-var').innerHTML += `
                         <div class="v-card ${type}">
                             <span class="v-sigla">${sigla}</span>
                             <span class="v-modello">${modello}</span>
                             <span class="v-status" style="color: ${isM ? 'var(--orange)' : isO ? 'var(--red)' : 'var(--green)'}">● ${s}</span>
-                            ${notes ? `<span class="v-segnalazione">⚠️ ${notes}</span>` : ''}
                         </div>`;
                 });
             } catch (e) { console.error(e); }
